@@ -69,5 +69,7 @@
       favicon32x32: "flower.png"
       apple_touch_icon: "flower.png"
       safari_pinned_tab: "flower.png"
-
+ caches:
+  images:
+    dir: :cacheDir/images
 
