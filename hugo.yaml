@@ -1,6 +1,8 @@
  baseURL: "https://flowers-59f.github.io/" # 主站的 URL
  title: 花落为谁念's Blog # 站点标题
- copyright: "[©2025 花落为谁念's Blog](https://flowers-59f.github.io/)" # 网站的版权声明，通常显示在页脚
+ copyright: "[©2025 花落为谁念's Blog]
+              <br>
+              email:2465604425@qq.com" # 网站的版权声明，通常显示在页脚
  theme: PaperMod # 主题
  languageCode: zh-cn # 语言
  
@@ -14,6 +16,13 @@
  pygmentsUseClasses: true
  defaultContentLanguage: zh # 顶部首先展示的语言界面
  defaultContentLanguageInSubdir: false # 是否要在地址栏加上默认的语言代码
+
+ markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  hightlight:
+
 
  languages:
   zh:
@@ -40,7 +49,7 @@
         - name: 搜索
           pageRef: search/
           weight: 20
-        - name: 关于
+        - name: 介绍
           pageRef: about/
           weight: 21
 # https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page
@@ -72,4 +81,7 @@
  caches:
   images:
     dir: :cacheDir/images
+
+ colors:
+    entry: "#ffffff"          # 文章摘要背景色
 
