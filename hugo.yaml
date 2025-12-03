@@ -3,7 +3,8 @@
  copyright: "[©2025 花落为谁念's Blog]
               <br>
               email:2465604425@qq.com
-              <br>" # 网站的版权声明，通常显示在页脚
+              <br>
+              tool" # 网站的版权声明，通常显示在页脚
  theme: PaperMod # 主题
  languageCode: zh-cn # 语言
  
