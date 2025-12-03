@@ -1,10 +1,8 @@
  baseURL: "https://flowers-59f.github.io/" # 主站的 URL
  title: 花落为谁念's Blog # 站点标题
- copyright: "[©2025 花落为谁念's Blog]
+ copyright: " email:2465604425@qq.com
               <br>
-              email:2465604425@qq.com
-              <br>
-              tool" # 网站的版权声明，通常显示在页脚
+              [©2025 花落为谁念's Blog]" # 网站的版权声明，通常显示在页脚
  theme: PaperMod # 主题
  languageCode: zh-cn # 语言
  
