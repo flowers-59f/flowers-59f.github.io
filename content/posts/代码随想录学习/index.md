@@ -271,6 +271,420 @@ public class Main{
     }
 }
 ```
-###### new
+## 链表
+### 理论基础
+![](链表理论基础1.png)
+上图为单链表/单向链表，指针只能指向下一个节点
+![](链表理论基础2.png)
+![](链表理论基础3.png)
 
+![](链表理论基础4.png)
+单向链表定义（java）
+```
+public class ListNode {
+	int val;
 
+    ListNode next;
+
+    ListNode() {}
+
+    ListNode(int val) { this.val = val; }
+
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+```
+双向链表定义（java）
+```
+public class ListNode {
+	int val;
+
+    ListNode next;
+    
+    ListNode prev;
+
+    ListNode() {}
+
+    ListNode(int val) { this.val = val; }
+
+    ListNode(int val, ListNode next, ListNode prev) { 
+    this.val = val; this.next = next; this.prev = prev}
+}
+```
+链表操作
+![](链表理论基础5.png)
+```
+遍历链表到c
+c.next = c.next.next
+``` 
+双向链表删除
+a <-> b <-> c (x)<-> d  删除c
+```
+遍历链表到b
+b.next = d.next.next;
+b.next.prev = b;
+```
+![](链表理论基础6.png)
+```
+遍历链表到c
+ListNode f = new ListNode();
+f.next = c.next;
+c.next = f;
+```
+双向链表添加
+a <-> b <-> c (new) <-> d 新增节点c
+```
+遍历链表到b
+ListNode c = new ListNode();
+c.next = b.next;
+b.next = c;
+c.next.prev = c;
+c.prev = b;
+```
+### 203.移除链表元素
+![](203.png)
+时间81.97%，空间7.45%
+```
+/**
+
+ * Definition for singly-linked list.
+
+ * public class ListNode {
+
+ *     int val;
+
+ *     ListNode next;
+
+ *     ListNode() {}
+
+ *     ListNode(int val) { this.val = val; }
+
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+
+ * }
+
+ */
+
+class Solution {
+
+    public ListNode removeElements(ListNode head, int val) {
+
+        ListNode prev = null;
+
+        ListNode res = head;
+
+        ListNode curr = res;
+
+        while(curr != null){
+
+            if(curr.val == val){
+
+                if(prev == null){
+
+                    res = curr.next;
+
+                }else{
+
+                    prev.next = curr.next;
+
+                }
+
+            }else{
+
+                //如果当前节点被删除了是不用更新prev的
+
+                prev = curr;
+
+            }
+
+            curr = curr.next;
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 707.设计链表
+![](707_1.png)
+![](707_2.png)
+时间95.54%，空间18.23%
+```
+class MyLinkedList {
+
+    //这个类名其实有点提示的，LinkedList的底层实现就是双向链表
+
+    class ListNode{
+
+        int val;
+
+        ListNode prev;
+
+        ListNode next;
+
+        ListNode(){}
+
+        ListNode(int val){this.val = val;}
+
+    }
+
+  
+
+    private ListNode dHead;
+
+    private ListNode dEnd;
+
+    private int length;
+
+  
+
+    public MyLinkedList() {
+
+        dHead = new ListNode();
+
+        dEnd = new ListNode();
+
+        dHead.next = dEnd;
+
+        dEnd.prev = dHead;
+
+        length = 0;
+
+    }
+
+    public int get(int index) {
+
+        if(index >= length){
+
+            return -1;
+
+        }
+
+        ListNode curr = dHead.next;
+
+        for(int i = 0;i < index;i++){
+
+            curr = curr.next;
+
+        }
+
+        return curr.val;
+
+    }
+
+    public void addAtHead(int val) {
+
+        ListNode node = new ListNode(val);
+
+        node.next = dHead.next;
+
+        node.next.prev = node;
+
+        dHead.next = node;
+
+        node.prev = dHead;
+
+        length++;
+
+    }
+
+    public void addAtTail(int val) {
+
+        ListNode node = new ListNode(val);
+
+        node.prev = dEnd.prev;
+
+        node.prev.next = node;
+
+        dEnd.prev = node;
+
+        node.next = dEnd;
+
+        length++;
+
+    }
+
+    public void addAtIndex(int index, int val) {
+
+        if(index > length) return;
+
+        ListNode curr = null;
+
+        if(index <= length / 2){
+
+            curr = dHead.next;
+
+            for(int i = 0;i < index;i++){
+
+                curr = curr.next;
+
+            }
+
+        }else{
+
+            curr = dEnd;
+
+            for(int i = 0;i < length - index;i++){
+
+                curr = curr.prev;
+
+            }
+
+        }
+
+        ListNode node = new ListNode(val);
+
+        curr.prev.next = node;
+
+        node.next = curr;
+
+        node.prev = curr.prev;
+
+        curr.prev = node;
+
+        length++;
+
+    }
+
+    public void deleteAtIndex(int index) {
+
+        if(index >= length) return;
+
+        ListNode curr = null;
+
+        if(index <= length / 2){
+
+            curr = dHead.next;
+
+            for(int i = 0;i < index;i++){
+
+                curr = curr.next;
+
+            }
+
+        }else{
+
+            curr = dEnd;
+
+            for(int i = 0;i < length - index;i++){
+
+                curr = curr.prev;
+
+            }
+
+        }
+
+        curr.prev.next = curr.next;
+
+        curr.next.prev = curr.prev;
+
+        length--;
+
+    }
+
+}
+
+  
+
+/**
+
+ * Your MyLinkedList object will be instantiated and called as such:
+
+ * MyLinkedList obj = new MyLinkedList();
+
+ * int param_1 = obj.get(index);
+
+ * obj.addAtHead(val);
+
+ * obj.addAtTail(val);
+
+ * obj.addAtIndex(index,val);
+
+ * obj.deleteAtIndex(index);
+
+ */
+```
+### 反转链表
+见hot100
+### 24.两两交换链表中的节点
+![](24.png)时间100.00%，空间5.19%
+```
+/**
+
+ * Definition for singly-linked list.
+
+ * public class ListNode {
+
+ *     int val;
+
+ *     ListNode next;
+
+ *     ListNode() {}
+
+ *     ListNode(int val) { this.val = val; }
+
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+
+ * }
+
+ */
+
+class Solution {
+
+    public ListNode swapPairs(ListNode head) {
+
+        if(head == null || head.next == null){
+
+            return head;
+
+        }
+
+        //先把前两个节点交换了，很多东西会方便一点
+
+        ListNode res = head.next;//要返回的头结点
+
+        head.next = res.next;
+
+        res.next = head;
+
+        ListNode curr = head.next;
+
+        ListNode prev = head;
+
+        //两个两个一组交换前后节点
+
+        while(curr != null && curr.next != null){
+
+            //curr curr.next next
+
+            //curr.next curr next
+
+            ListNode next = curr.next.next;
+
+            prev.next = curr.next;
+
+            prev.next.next = curr;
+
+            curr.next = next;
+
+            prev = curr;
+
+            curr = next;
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 19.删除链表的倒数第N个节点
+见hot100
+### 面试题02.07.链表相交
+见hot100->160.相交链表
+### 142.环形链表||
+见hot100
+## 哈希表
+### new
