@@ -1,18 +1,18 @@
 ---
-title : '代码随想录学习' 
-date : 2025-12-02T03:25:53+08:00 
-categories : ["算法"] 
-tags : ["代码随想录"]
+title: 代码随想录学习
+date: 2025-12-04T03:25:53+08:00
+categories:
+  - 算法
+tags:
+  - 代码随想录
 ---
-
 ##### 数组
 ###### 理论基础
-![[image/8c3d6259-f98d-4c3d-8398-964eeb3e730b.png]]
-
-![[image/d69bfbdf-7e49-4579-9c0b-1f14ef35a994.png]]
-![[image/700c5e4a-f4f9-4628-85cb-dbcca18b439d.png]]C++是，java不知道。
+![](31d10808a37ee4fcb0e0bb3102d8a964.png)
+C++是，java不知道。
 ###### 704.二分查找
-![[image/a684b9c1-e5be-4a5f-9712-de77beead440.png]]时间100.00%，空间7.45%
+
+时间100.00%，空间7.45%
 ```
 class Solution {
     public int search(int[] nums, int target) {
@@ -30,7 +30,8 @@ class Solution {
 }
 ```
 ###### 27.移除元素
-![[image/1928e7b4-a882-41be-901a-dc2994750138.png]]![[image/2f4929af-4363-4bc4-a1bd-c435d90b953f.png]]时间100.00，空间5.21%
+ 
+时间100.00，空间5.21%
 ```
 class Solution {
     public int removeElement(int[] nums, int val) {
@@ -51,7 +52,7 @@ class Solution {
 }
 ```
 ###### 977.有序数组的平方
-![[image/411c89f4-8436-42ba-b40f-887cc36f9f9c.png]]
+
 时间100.00%，空间92.25%
 ```
 class Solution {
@@ -107,7 +108,8 @@ class Solution {
 }
 ```
 ###### 209.长度最小的子数组
-![[image/75a28ebf-0713-428b-9a33-8746fcad831c.png]]时间99.78%，空间5.21%
+
+时间99.78%，空间5.21%
 ```
 class Solution {
     public int minSubArrayLen(int target, int[] nums) {
@@ -132,7 +134,8 @@ class Solution {
 }
 ```
 ###### 59.螺旋矩阵||
-![[image/f1164d5b-0ab6-49c8-b745-b72b0b275a93.png]]时间100.00%，空间10.04%
+
+时间100.00%，空间10.04%
 ```
 class Solution {
     public int[][] generateMatrix(int n) {
@@ -190,7 +193,7 @@ class Solution {
 }
 ```
 ###### 区间和
-![[image/d424a5e9-db8c-4924-bb51-437285b55a94.png]]
+
 ```
 import java.util.Scanner;
 
@@ -219,7 +222,7 @@ public class Main {
 }
 ```
 ###### 开发商购买土地
-![[image/f6400aad-be10-476f-a44d-f0570e1b9c94.png]]
+
 ```
 import java.util.Scanner;
 import static java.lang.Math.*;
@@ -266,5 +269,5 @@ public class Main{
 }
 ```
 ###### new
-测试一下
-![](image/86a4eebe-491b-48b6-9cc2-09fd01e18258.png)
+
+

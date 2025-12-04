@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "代码随想录学习.md",
+                "file": "代码随想录学习/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "代码随想录学习"
+              "title": "index"
             }
           }
         ]
@@ -182,28 +182,28 @@
   },
   "active": "cfc3828d4fc178ad",
   "lastOpenFiles": [
-    "image/86a4eebe-491b-48b6-9cc2-09fd01e18258.png",
-    "image/8c3d6259-f98d-4c3d-8398-964eeb3e730b.png",
+    "代码随想录学习/31d10808a37ee4fcb0e0bb3102d8a964.png",
+    "images/2f4929af-4363-4bc4-a1bd-c435d90b953f.png",
+    "images/8c3d6259-f98d-4c3d-8398-964eeb3e730b.png",
+    "images/75a28ebf-0713-428b-9a33-8746fcad831c.png",
+    "images/411c89f4-8436-42ba-b40f-887cc36f9f9c.png",
+    "images/700c5e4a-f4f9-4628-85cb-dbcca18b439d.png",
+    "images/1928e7b4-a882-41be-901a-dc2994750138.png",
+    "images/a684b9c1-e5be-4a5f-9712-de77beead440.png",
+    "images/d69bfbdf-7e49-4579-9c0b-1f14ef35a994.png",
+    "images/d424a5e9-db8c-4924-bb51-437285b55a94.png",
+    "images/f1164d5b-0ab6-49c8-b745-b72b0b275a93.png",
     "代码随想录学习.md",
-    "image/2538aa3f-fc4c-4768-8efb-1e7e6494360f.png",
-    "image/f6400aad-be10-476f-a44d-f0570e1b9c94.png",
+    "images",
     "image/f6400aad-be10-476f-a44d-f0570e1b9c94.png.crdownload",
-    "image/d424a5e9-db8c-4924-bb51-437285b55a94.png",
     "image/d424a5e9-db8c-4924-bb51-437285b55a94.png.crdownload",
-    "image/f1164d5b-0ab6-49c8-b745-b72b0b275a93.png",
     "image/f1164d5b-0ab6-49c8-b745-b72b0b275a93.png.crdownload",
-    "image/75a28ebf-0713-428b-9a33-8746fcad831c.png",
     "image/75a28ebf-0713-428b-9a33-8746fcad831c.png.crdownload",
-    "image/411c89f4-8436-42ba-b40f-887cc36f9f9c.png",
     "image/411c89f4-8436-42ba-b40f-887cc36f9f9c.png.crdownload",
-    "image/2f4929af-4363-4bc4-a1bd-c435d90b953f.png",
     "image/2f4929af-4363-4bc4-a1bd-c435d90b953f.png.crdownload",
-    "image/1928e7b4-a882-41be-901a-dc2994750138.png",
     "image/1928e7b4-a882-41be-901a-dc2994750138.png.crdownload",
-    "image/a684b9c1-e5be-4a5f-9712-de77beead440.png",
     "image/a684b9c1-e5be-4a5f-9712-de77beead440.png.crdownload",
     "image/700c5e4a-f4f9-4628-85cb-dbcca18b439d.png.crdownload",
-    "image/d69bfbdf-7e49-4579-9c0b-1f14ef35a994.png.crdownload",
     "Git.md",
     "my-first/post.md"
   ]
