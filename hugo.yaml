@@ -1,8 +1,8 @@
  baseURL: "https://flowers-59f.github.io/" # 主站的 URL
  title: 花落为谁念's Blog # 站点标题
- copyright: "[©2025 花落为谁念's Blog]
+ copyright: " email:2465604425@qq.com
               <br>
-              email:2465604425@qq.com" # 网站的版权声明，通常显示在页脚
+              [©2025 花落为谁念's Blog]" # 网站的版权声明，通常显示在页脚
  theme: PaperMod # 主题
  languageCode: zh-cn # 语言
  
@@ -75,10 +75,10 @@
    # 首页信息配置
    homeInfoParams:
        Title: "Hi there 👋"
-       Content: "人生万事须自为，跬步江山即寥廓。
-                \n 欢迎来到我的博客，这里是见证我成长的地方。
-                我会分享我在学习和工作中的经验，也会记录我遇到的问题和对应的解决方法，希望能够帮助到你。
-                \n找不到想要内容时可以使用搜索功能哦~祝你生活愉快，越来越靠近理想中的生活。"
+       Content: |
+        人生万事须自为，跬步江山即寥廓。<br>
+        欢迎来到我的博客，这里是见证我成长的地方。我会分享我在学习和工作中的经验，也会记录我遇到的问题和对应的解决方法，希望能够帮助到你。<br>
+        找不到想要内容时可以使用搜索功能哦~祝你生活愉快，越来越靠近理想中的生活。
 
    assets:
       favicon: "flower.png"
