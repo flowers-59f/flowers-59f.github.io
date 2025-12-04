@@ -12,6 +12,19 @@ tags:
 
 写命令的时候别习惯性在符号和单词中间空格
 在git中左键选中，就可以直接右键粘贴这个内容了
+
+push的时候容易push不上去，可以给git也挂个梯子，后面的URL在软件首页看系统代理地址填上去
+```
+设置
+git config --global http.proxy http://127.0.0.1:7897
+git config --global https.proxy http://127.0.0.1:7897
+验证
+git config --global --get http.proxy
+git config --global --get https.proxy
+取消
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+```
 ##### 指令
 ###### 配置用户信息
 刚下载完设置用户信息，打开Git Bash，输入下述指令
