@@ -11,10 +11,14 @@
             "id": "cfc3828d4fc178ad",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Git.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "Git"
             }
           }
         ]
@@ -177,5 +181,9 @@
     }
   },
   "active": "cfc3828d4fc178ad",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "代码随想录学习.md",
+    "Git.md",
+    "my-first/post.md"
+  ]
 }
