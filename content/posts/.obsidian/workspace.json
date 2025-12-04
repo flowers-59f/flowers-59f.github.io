@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "c0ed37800ba6d8d7",
+        "id": "d720ef96606720bc",
         "type": "tabs",
         "children": [
           {
-            "id": "cfc3828d4fc178ad",
+            "id": "970f4a7a97a31298",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "代码随想录学习/index.md",
+                "file": "RabbitMQ/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "e72ca9cd5d02e0d5",
@@ -180,21 +181,21 @@
       "bases:创建新数据库": false
     }
   },
-  "active": "cfc3828d4fc178ad",
+  "active": "970f4a7a97a31298",
   "lastOpenFiles": [
-    "代码随想录学习/24.png",
+    "RabbitMQ/Pasted image 20251204205834.png",
+    "RabbitMQ/Pasted image 20251204204439.png",
+    "RabbitMQ/Pasted image 20251204204128.png",
+    "RabbitMQ/Pasted image 20251204202428.png",
     "RabbitMQ/index.md",
     "代码随想录学习/index.md",
+    "代码随想录学习/24.png",
     "代码随想录学习/707_2.png",
     "代码随想录学习/707_1.png",
     "代码随想录学习/203.png",
     "代码随想录学习/链表理论基础6.png",
     "代码随想录学习/链表理论基础5.png",
     "代码随想录学习/链表理论基础4.png",
-    "代码随想录学习/链表理论基础3.png",
-    "代码随想录学习/链表理论基础3.png",
-    "代码随想录学习/链表理论基础2.png",
-    "代码随想录学习/链表理论基础1.png",
     "代码随想录学习/开发商购买土地.png.crdownload",
     "代码随想录学习/区间和.png.crdownload",
     "代码随想录学习/59.png.crdownload",
