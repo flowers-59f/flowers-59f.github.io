@@ -687,4 +687,175 @@ class Solution {
 ### 142.环形链表||
 见hot100
 ## 哈希表
+### 理论基础
+数组是其底层结构，主要用来等值查询/快速判断一个元素是否出现在集合里
+关键在于元素存储位置的计算，计算过程如下图所示。
+![](哈希表理论基础1.png)
+如果多个学生都映射到了同一个索引，就发生了哈希碰撞。解决哈希碰撞的方法有两种，一个是拉链法，一个是线性探测法。
+拉链法就是数组+链表，计算到同一个索引就挂到这个位置下的链表就行了。这个方法需要选择适当的哈希表的大小，太大了浪费内存，太小的话一个桶下挂了太多节点查询时间会增加。
+线性探测法，发生冲突了就找下一个空的位置存（从该索引开始向后查找，查询的时候也是，从该索引开始查找，直到找到目标键或者空位为止）。
+**总结**，当我们遇到了要快速判断一个元素是否出现集合里的时候，就要考虑哈希法。但是哈希法也是牺牲了空间换取了时间，因为我们要使用额外的数组，set或者是map来存放数据，才能实现快速的查找。如果在做面试题目的时候遇到需要判断一个元素是否出现过的场景也应该第一时间想到哈希法！
+### 242.有效的字母异位词
+![](242.png)时间92.42%，空间45.28%
+```
+class Solution {
+
+    public boolean isAnagram(String s, String t) {
+
+        int sl = s.length();
+
+        int tl = t.length();
+
+        if(sl != tl) return false;
+
+        int[] sCount = new int[26];
+
+        int[] tCount = new int[26];
+
+        for(int i = 0;i < sl;i++){
+
+            sCount[s.charAt(i) - 'a']++;
+
+        }
+
+        for(int i = 0;i < tl;i++){
+
+            tCount[t.charAt(i) - 'a']++;
+
+        }
+
+        for(int i = 0;i < 26;i++){
+
+            if(tCount[i] != sCount[i]){
+
+                return false;
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+}
+```
+### 349.两个数组的交集
+![](349.png)时间90.36%，空间13.07%
+```
+class Solution {
+
+    public int[] intersection(int[] nums1, int[] nums2) {
+
+        //这个交集只是看重复的元素啊，而不是把重复的部分都打出来
+
+        //就是[1,2,2,3,3]交[2,2,3,3]不是[2,2,3,3]而是[2,3]直接哈希表就能做
+
+        Set<Integer> memory = new HashSet<>();//记住nums1中出现的数字
+
+        Set<Integer> resSet = new HashSet<>();//存储结果，用HashSet来去重
+
+        for(int i = 0;i < nums1.length;i++){
+
+            memory.add(nums1[i]);
+
+        }
+
+        for(int i = 0;i < nums2.length;i++){
+
+            if(memory.contains(nums2[i])){
+
+                resSet.add(nums2[i]);
+
+            }
+
+        }
+
+        int[] res = new int[resSet.size()];
+
+        int length = 0;
+
+        for(Integer i:resSet){
+
+            res[length] = i;
+
+            length++;
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### ★★★202.快乐数
+![](202.png)这题虽然是在哈希表下的，但是是用双指针做的，这个思路会更好一点，用哈希表实现也简单的。时间85.80%，空间29.91%
+```
+class Solution {
+
+    public boolean isHappy(int n) {
+
+        //每个数经过一轮轮的变化，可能会有以下三种情况
+
+        //1.最终会得到1 2.最终会进入循环 3.值会越来越大，最后接近无穷大
+
+        //但是实际上每个数经过这样的操作之后都会进入循环，下面是证明
+
+        //9 -> 81   99->162  999->243
+
+        //也就是说三位数经过变化之后不可能操作243，那对于四位数呢，
+
+        //可以验证每个位置上的数平方最大就是81，能得到的最大值就是位数 * 81
+
+        //对于4位及以上的数字，经过一轮这样的变化后都是减小的，最终会被降到3位以内
+
+        //所以任何数最终都会进入到一个循环，可以用快慢指针解决
+
+        //哈希表就是把走过的数都记一下嘛，再走过一次就知道进循环了，直接return false；
+
+        int slow = n;
+
+        int fast = n;
+
+        fast = operation(operation(fast));
+
+        slow = operation(slow);
+
+        while(fast != 1 && slow != 1){
+
+            if(fast == slow) return false;
+
+            fast = operation(operation(fast));
+
+            slow = operation(slow);
+
+        }
+
+        return true;
+
+    }
+
+  
+
+    private int operation(int n){
+
+        int sum = 0;
+
+        while(n > 0){
+
+            int end = n % 10;
+
+            sum += end * end;
+
+            n /= 10;
+
+        }
+
+        return sum;
+
+    }
+
+}
+```
 ### new

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "about.md",
+                "file": "posts/Docker/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "about"
+              "title": "index"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "17ef64b2dd834161",
@@ -183,6 +184,14 @@
       "bases:创建新数据库": false
     }
   },
-  "active": "c236c69be63d2e78",
-  "lastOpenFiles": []
+  "active": "ae867457b860193e",
+  "lastOpenFiles": [
+    "posts/Docker/2f9ac797-54e5-462e-8e66-7d94de45df09.png",
+    "posts/Docker/Pasted image 20251205172337.png",
+    "posts/Docker/Pasted image 20251205170655.png",
+    "Pasted image 20251205170655.png",
+    "posts/RabbitMQ/index.md",
+    "posts/Docker/index.md",
+    "about.md"
+  ]
 }
