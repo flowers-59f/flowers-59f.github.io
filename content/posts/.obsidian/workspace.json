@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "RabbitMQ/index.md",
+                "file": "开源项目学习-novel-cloud/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "e72ca9cd5d02e0d5",
@@ -184,6 +183,12 @@
   "active": "970f4a7a97a31298",
   "lastOpenFiles": [
     "Docker/index.md",
+    "开源项目学习-novel-cloud/index.md",
+    "开源项目学习-novel-cloud/Pasted image 20251213212902.png",
+    "开源项目学习-novel-cloud/Pasted image 20251213212753.png",
+    "开源项目学习-novel-cloud/Pasted image 20251213204813.png",
+    "开源项目学习-novel-cloud/Pasted image 20251213204654.png",
+    "RabbitMQ/index.md",
     "Docker/新建 文本文档.txt",
     "Docker",
     "新建文件夹",
@@ -192,13 +197,8 @@
     "代码随想录学习/349.png",
     "代码随想录学习/242.png",
     "代码随想录学习/哈希表理论基础1.png",
-    "RabbitMQ/index.md",
     "RabbitMQ/Pasted image 20251204205834.png",
     "RabbitMQ/Pasted image 20251204204439.png",
-    "RabbitMQ/Pasted image 20251204204128.png",
-    "RabbitMQ/Pasted image 20251204202428.png",
-    "代码随想录学习/24.png",
-    "代码随想录学习/707_2.png",
     "代码随想录学习/开发商购买土地.png.crdownload",
     "代码随想录学习/区间和.png.crdownload",
     "代码随想录学习/59.png.crdownload",

@@ -858,4 +858,653 @@ class Solution {
 
 }
 ```
+### 1.两数之和
+见hot100
+### ★★★454.四数相加||
+![](454.png)
+时间78.89%，空间38.58%
+```
+class Solution {
+
+    public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+
+        //大概的思路我觉得就是数组两两为一组，然后用两数之和的想法来做
+
+        //key放数组nums1和nums2中元素的和，value是这个和的出现次数
+
+        //那么之后对于每个nums3和nums4中元素的和查找一下加起来就行了
+
+        int n = nums1.length;
+
+        Map<Integer, Integer> AandB = new HashMap<>();
+
+        for(int i = 0;i < n;i++){
+
+            for(int j = 0;j < n;j++){
+
+                int temp = nums1[i] + nums2[j];
+
+                //小小新学一个HashMap的getOrDefault函数
+
+                //有这个key就获取值，没有就给个0
+
+                AandB.put(temp, AandB.getOrDefault(temp, 0) + 1);
+
+            }
+
+        }
+
+        int res = 0;
+
+        for(int i = 0;i < n;i++){
+
+            for(int j = 0;j < n;j++){
+
+                int target = - nums3[i] - nums4[j];
+
+                res += AandB.getOrDefault(target, 0);
+
+            }
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 383.赎金信
+![](383.png)
+时间99.87%，空间33.95%
+```
+class Solution {
+
+    public boolean canConstruct(String ransomNote, String magazine) {
+
+        int l1 = ransomNote.length();
+
+        int l2 = magazine.length();
+
+        if(l1 > l2) return false;
+
+        //其实就是要用magazine中的字符把ransomNote拼出来嘛
+
+        //统计magazine出现的字母及其出现次数（就是可使用的字母及其出现次数）
+
+        //要用的字母没次数了或者本来就是没有就return false，其他true
+
+        //注意这里的hashmap可以用int[26]简化
+
+        int[] count = new int[26];
+
+        for(int i = 0;i < l2;i++){
+
+            count[magazine.charAt(i) - 'a']++;
+
+        }
+
+        for(int i = 0;i < l1;i++){
+
+            if(count[ransomNote.charAt(i) - 'a'] == 0) return false;
+
+            count[ransomNote.charAt(i) - 'a']--;
+
+        }
+
+        return true;
+
+    }
+
+}
+```
+### 15.三数之和
+见hot100
+### 18.四数之和
+![](18.png)
+时间33.62%，空间30.55%
+```
+class Solution {
+
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+
+        Arrays.sort(nums);
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        //其实很好降成三数之和啊我感觉
+
+        //遍历到的当前的数作为第一个数
+
+        //后面找三数之和为target-这个数就行
+
+        int n = nums.length;
+
+        for(int i = 0;i < n - 3;i++){
+
+            if(i > 0 && nums[i] == nums[i - 1]){
+
+                continue;
+
+            }
+
+            for(int j = i + 1;j < n - 2;j++){
+
+                if(j > i + 1 && nums[j] == nums[j - 1]) continue;
+
+                int left = j + 1;
+
+                int right = n - 1;
+
+                while(left < right){
+
+                    int sum = nums[i] + nums[j] + nums[left] + nums[right];
+
+                    //这里是为了处理一个特例，就是加起来溢成负数了
+
+                    if(nums[i] > 0 && nums[j] > 0 && nums[left] > 0 &&
+
+                    nums[right] > 0 && sum < 0){
+
+                        right--;
+
+                        continue;
+
+                    }
+
+                    if(sum == target){
+
+                        List<Integer> temp = new ArrayList<>();
+
+                        temp.add(nums[i]);
+
+                        temp.add(nums[j]);
+
+                        temp.add(nums[left]);
+
+                        temp.add(nums[right]);
+
+                        res.add(temp);
+
+                        left++;
+
+                        while(left < n && nums[left] == nums[left - 1]){
+
+                            left++;
+
+                        }
+
+                        right--;
+
+                        while(right > 0 && nums[right] == nums[right + 1]){
+
+                            right--;
+
+                        }
+
+                    }else if(sum > target){
+
+                        right--;
+
+                    }else{
+
+                        left++;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+## 字符串
+### 344.反转字符串
+![](344.png)
+时间100.00%，空间29.81%
+```
+class Solution {
+
+    public void reverseString(char[] s) {
+
+        int left = 0;
+
+        int right = s.length - 1;
+
+        while(left < right){
+
+            char temp = s[left];
+
+            s[left] = s[right];
+
+            s[right] = temp;
+
+            left++;
+
+            right--;
+
+        }
+
+    }
+
+}
+```
+### 541.反转字符串||
+![](541.png)
+时间18.94%，空间36.06%
+先是自己写的，这里找每个反转位置(第2k个数)的时候不用一个个遍历然后判断，直接每次让i+2k就行了，可以优化。
+```
+class Solution {
+
+    public String reverseStr(String s, int k) {
+
+        char[] sArray = s.toCharArray();
+
+        int sl = sArray.length;
+
+        for(int i = 0;i < sl;i++){
+
+            int count = (i + 1) % (2 * k);
+
+            if(i == sl - 1){
+
+                if(count < k){
+
+                    reverse(sArray, i - count + 1, i);
+
+                }else if(count >= k && count < 2 * k){
+
+                    reverse(sArray, i - count + 1, i - count + k);
+
+                }
+
+            }
+
+            if(count == 0){
+
+                reverse(sArray, i - 2 * k + 1, i - k);
+
+            }
+
+        }
+
+        return new String(sArray);
+
+    }
+
+  
+
+    private void reverse(char[] sArray, int begin, int end){
+
+        int left = begin;
+
+        int right = end;
+
+        while(left < right){
+
+            char temp = sArray[left];
+
+            sArray[left] = sArray[right];
+
+            sArray[right] = temp;
+
+            left++;
+
+            right--;
+
+        }
+
+    }
+
+}
+```
+时间93.18%，空间14.21%
+```
+class Solution {
+
+    public String reverseStr(String s, int k) {
+
+        char[] sArray = s.toCharArray();
+
+        int sl = sArray.length;
+
+        for(int i = 0;i < sl;i += 2 * k){
+
+            //这样每次移动都是到新的一组的开头
+
+            //如果这一组数少于k个，全部反转
+
+            if(i + k >= sl){
+
+                reverse(sArray, i, sl - 1);
+
+                break;
+
+            }
+
+            //这组数完整(能凑到2k)或者 2k > length > =k 反转前k个
+
+            reverse(sArray, i, i + k - 1);
+
+        }
+
+        return new String(sArray);
+
+    }
+
+  
+
+    private void reverse(char[] sArray, int begin, int end){
+
+        int left = begin;
+
+        int right = end;
+
+        while(left < right){
+
+            char temp = sArray[left];
+
+            sArray[left] = sArray[right];
+
+            sArray[right] = temp;
+
+            left++;
+
+            right--;
+
+        }
+
+    }
+
+}
+```
+### LCR 122.路径加密
+![](LCR%20122.png)
+时间100.00%，空间11.55%
+```
+class Solution {
+
+    public String pathEncryption(String path) {
+
+        char[] pathArray = path.toCharArray();
+
+        for(int i = 0;i < pathArray.length;i++){
+
+            if(pathArray[i] == '.') pathArray[i] = ' ';
+
+        }
+
+        return new String(pathArray);
+
+    }
+
+}
+```
+### 151.反转字符串中的单词
+![](151.png)
+时间5.67%，空间5.03%
+```
+class Solution {
+
+    public String reverseWords(String s) {
+
+        //后进先出 -> 用栈
+
+        //把每个单词都摘出来然后入栈
+
+        //然后依次出栈即可
+
+        List<String> words = new LinkedList<>();
+
+        int first = 0;
+
+        for(int i = 0;i < s.length();i++){
+
+            //如果前面是空格当前是字符，这个位置就是当前单词的头
+
+            //i > 0放心加，first初值是0，如果0是头的话那么这个会到下个单词才生效
+
+            if(i > 0 && s.charAt(i) != ' ' && s.charAt(i - 1) == ' ') first = i;
+
+            //当前是空格然后前面一个是字符，前一个位置位置就是当前单词的尾
+
+            if(i > 0 && s.charAt(i) == ' ' && s.charAt(i - 1) != ' '){
+
+                words.addFirst(s.substring(first, i));
+
+            }
+
+            //不过到最后可能没有空格，也是到尾了要结算一下
+
+            if(i == s.length() - 1 && s.charAt(i) != ' '){
+
+                words.addFirst(s.substring(first, i + 1));
+
+            }
+
+        }
+
+        String res = new String();
+
+        for(String word : words){
+
+            res = res + word + " ";
+
+        }
+
+        return res.substring(0, res.length() - 1);
+
+    }
+
+}
+```
+改进：时间82.28%，空间20.11%
+```
+class Solution {
+
+    public String reverseWords(String s) {
+
+        s = s.trim();//删除首尾空格
+
+        //通过双指针定位单词的首尾 i左指针 j 右指针
+
+        int j = s.length() - 1;
+
+        List<String> words = new LinkedList<>();
+
+        for(int i = s.length() - 1;i >= 0;i--){
+
+            //i向左移动直到找到第一个空格
+
+            if(s.charAt(i) == ' '){
+
+                //那么第一个空格的后一个字符到j就是当前单词，加入到列表里
+
+                words.addLast(s.substring(i + 1,j + 1));
+
+                //把对应的分隔符也给带上
+
+                words.addLast(" ");
+
+                //跳过其他空格，如果有的话
+
+                while(s.charAt(i) == ' '){
+
+                    i--;
+
+                }
+
+                //跳完之后i来到了下一个单词的末尾，把j赋值过来
+
+                j = i;
+
+            }
+
+            //i到边界的情况，也结束了
+
+            if(i == 0){
+
+                words.addLast(s.substring(0,j + 1));
+
+            }
+
+        }
+
+        StringBuilder res = new StringBuilder();
+
+        for(String word : words){
+
+            res.append(word);
+
+        }
+
+        return res.toString();
+
+    }
+
+}
+```
+### 右旋字符串
+![](右旋字符串.png)
+借助字符串数组实现
+```
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        //读右旋转的位数k
+        int k = scanner.nextInt();
+        //读取待操作的字符串
+        String s = scanner.next();
+        int sl = s.length();
+        char[] resArray = new char[sl];
+        //右旋你其实可以把每个字符旋转完的坐标算出来
+        //然后直接创一个新字符数组放在对应的位置
+        //影响就是空间复杂度为O(n)
+        for(int i = 0;i < sl;i++){
+            int index = (i + k) % sl;
+            resArray[index] = s.charAt(i);
+        }
+        System.out.println(new String(resArray));
+    }
+}
+```
+不用创建字符串数组，不过耗时比上面的那个久了一点，空间用的是少了一点
+```
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        //读右旋转的位数k
+        int k = scanner.nextInt();
+        //读取待操作的字符串
+        String s = scanner.next();
+        int sl = s.length();
+        System.out.println(s.substring(sl - k, sl)
+        + s.substring(0, sl - k));
+    }
+}
+```
+### ★★★28.找出字符串中第一个匹配项的下标
+自己写的，差不多纯暴力的写法。时间2.77%，空间22.62%
+```
+class Solution {
+    public int strStr(String haystack, String needle) {
+        for(int i = 0;i < haystack.length();i++){
+            if(haystack.charAt(i) == needle.charAt(0)){
+                //第一个字符相同进入匹配
+                int j = 1;
+                while(j < needle.length() && i + j < haystack.length()
+                && haystack.charAt(i + j) == needle.charAt(j)){
+                    j++;
+                }
+                if(j == needle.length()) return i;
+            }
+        }
+        return -1;
+    }
+}
+```
+优化：KMP算法。时间55.65%，空间7.02%
+上面的算法是每次遇到开头相同的就进入匹配，一直匹配到不一致或者结束为止，当出现了不一致，回退到上次开头的下一个再继续匹配。那么这个匹配的过程中其实两边都在往后走，我们肯定是得到了一些信息的，能不能利用这些信息避免回退呢。
+方法就是KMP算法。它首先是有一个next数组。下标i处的值就代表了到这的子串的最长相同的前后缀长度。
+![](KMP_1.png)
+这有什么意义呢，就比如下图是在匹配串的A位置出现了不一致（该位置记为j，原串的对应位置记为i），不想回退，就要从i往前看，然后从匹配串的开头往后看，看i前面的有哪些字符和匹配串前面的字符是相同的（当然这个是要小于j的，不然你移动一下不是还是原样嘛），这样我们直接从相同的位置之后再开始匹配就好了。找下次开始的位置就是通过next数组实现的。
+```
+j = next[j - 1] 
+```
+![](KMP_2.png)
+![](KMP_3.png)
+next数组的构建过程(摘自这题的题解) 
+i是后缀末尾，j是前缀的末尾，也代表了当前相同前后缀的长度。
+如果i和j位置上的字符相同，相同的部分就+1，前后缀指针都往后移动一个位置，同时把这个位置相同前后缀的长度赋值一下。
+如果i和j位置上的字符不同，说明当前的前缀尾和后缀尾不同了，相同部分加不了了，同时收缩后缀和前缀，收缩后缀你看不太到就是，因为后缀尾是不变的，收缩前缀怎么收呢，也是每次
+```
+j = next[j - 1] 
+```
+目前是知道0到j-1是和i-j到i-1是相同的，就是不断收缩前面的，看能不能让收缩完的前缀尾等于这个b（如果相等的话 b前面和前缀尾前面的都是相同的嘛，按这样收缩的话，长度就可以从这开始加了）不能就继续回退，直到j = 0。
+![](KMP_4.png)
+![](KMP_5.png)
+![](KMP_6.png)
+![](KMP_7.png)
+```
+class Solution {
+
+    public int strStr(String haystack, String needle) {
+
+        char[] h = haystack.toCharArray();
+
+        char[] n = needle.toCharArray();
+
+        int hl = h.length;
+
+        int nl = n.length;
+
+        //构建next数组
+
+        int[] next = new int[nl];
+
+        for(int i = 1, j = 0;i < nl;i++){
+
+            //如果n[j] != n[i] -> j = next[j - 1]  循环进行，直到j == 0 或者二者相等
+
+            //如果j == 0 二者还是不相等，那么next[i] = 0，i往后移动，j不变
+
+            while(j > 0 && n[i] != n[j]) j = next[j - 1];
+
+            //如果n[j] ==n[i] -> (1)next[i] = j + 1  (2)i和j同时后移（循环进行）
+
+            if(n[i] == n[j]) j++;//循环完i就+1了
+
+            next[i] = j;//next[i] = j + 1
+
+        }
+
+        for(int i = 0, j = 0;i < hl;i++){
+
+            while(j > 0 && h[i] != n[j]) j = next[j - 1];
+
+            //匹配成功往后移动
+
+            if(h[i] == n[j]) j++;
+
+            //一整段匹配成功，直接返回下标
+
+            if(j == nl) return i - nl + 1;
+
+        }
+
+        return -1;
+
+    }
+
+}
+```
 ### new
