@@ -42,6 +42,30 @@ ORDER BY id
 SELECT tweet_id FROM Tweets WHERE length(content) > 15
 ```
 ### 连接
+#### 各种JOIN介绍
+```
+FROM A 
+JOIN B 
+ON   XXX
+```
+普通JOIN就是 A中的每条数据拿出来，到B中找符合ON条件的显示出来
+```
+FROM A 
+LEFT JOIN B 
+ON   XXX
+```
+LEFT JOIN 就是在B中哪怕找不到符合ON条件的配对的记录，也会把A中的这条数据显示出来，B表的相关数据置为NULL
+```
+FROM A 
+RIGHT JOIN B 
+ON   XXX
+```
+RIGHT JOIN和LEFT JOIN相似，就是在A中哪怕找不到符合ON条件的配对记录，也会把B中的这条数据显示出来，A表中的相关数据置为NULL
+```
+FROM A 
+CROSS JOIN B 
+```
+CROSS JOIN是求A和B的笛卡尔积
 #### 1378.使用唯一标识码替换员工ID
 ![](1378_1.png)
 ![](1378_2.png)
@@ -126,4 +150,117 @@ SELECT ADDDATE('2023-03-11', INTERVAL 7 DAY);
 
 SELECT SUBDATE('2023-03-11', INTERVAL 7 DAY); 
 -- 在日期上减去指定的天数 示例输出: 2023-03-04
+```
+#### 1661.每台机器的进程平均运行时间
+![](1661_1.png)
+![](1161_2.png)
+```
+#ROUND 可以指定保留的小数点位数（基于四舍五入）
+
+SELECT a1.machine_id as machine_id,
+
+ROUND(AVG(a1.timestamp - a2.timestamp),3) as processing_time
+
+FROM Activity a1
+
+INNER JOIN Activity a2
+
+ON a1.machine_id = a2.machine_id AND a1.process_id = a2.process_id
+
+Where a1.activity_type = 'end' AND a2.activity_type = 'start'
+
+GROUP BY a1.machine_id
+```
+#### 577.员工奖金
+![](577_1.png)
+![](577_2.png)
+```
+SELECT name, bonus
+
+FROM Employee
+
+LEFT JOIN Bonus
+
+ON Employee.empId = Bonus.empId
+
+WHERE bonus IS NULL OR bonus < 1000
+```
+#### 1280.学生们参加各科测试的次数
+![](1280_1.png)
+![](1280_2.png)
+```
+SELECT Students.student_id, Students.student_name, Subjects.subject_name, count(Examinations.subject_name) AS attended_exams
+
+FROM Students
+
+#是想统计每个学生参加每个科目的次数，没有的话也要显示0
+
+#所以每个学生 x 每个科目都要显示出来 是笛卡尔积  用CROSS JOIN或者不带条件的JOIN
+
+JOIN Subjects
+
+#然后再和学生具体参加了那些考试关联起来，因为没有参加也要记0嘛，前面的条目不能少，这里用LEFT JOIN
+
+LEFT JOIN Examinations
+
+ON Students.student_id = Examinations.student_id
+
+#这时候Examinations 中id（n）和前面id（3）相同的每个都能匹配上（3 * n） 要ON筛一下
+
+AND Subjects.subject_name = Examinations.subject_name
+
+GROUP BY Students.student_id, Subjects.subject_name
+
+ORDER BY Students.student_id, Subjects.subject_name
+```
+#### 570.至少有5名直接下属的经理
+![](570_1.png)
+![](570_2.png)
+```
+SELECT e1.name
+
+FROM Employee AS e1
+
+JOIN Employee AS e2
+
+ON e1.id = e2.managerId
+
+GROUP BY e1.id
+
+HAVING count(*) >= 5
+```
+#### 1934.确认率
+![](1934_1.png)
+
+![](1934_2.png)
+```
+# SUM() 计算某列的总和
+
+# IF() 根据表达式的结果 返回不同的值
+
+# 这里其实就是对action这列值换成1/0并求和了，然后除操作总数
+
+SELECT
+
+    Signups.user_id AS user_id ,
+
+    ROUND(SUM(IF(action = 'confirmed', 1, 0)) / COUNT(*), 2)
+
+    AS confirmation_rate
+
+FROM
+
+    Signups
+
+LEFT JOIN
+
+    Confirmations
+
+ON
+
+    Signups.user_id = Confirmations.user_id
+
+GROUP BY
+
+    user_id
 ```
