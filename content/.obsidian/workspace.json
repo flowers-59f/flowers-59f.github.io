@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "91807a66546041b4",
+            "id": "fe0970395883b308",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "posts/代码随想录学习/index.md",
+                "file": "about.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "about"
             }
           }
         ]
@@ -183,8 +183,13 @@
       "bases:创建新数据库": false
     }
   },
-  "active": "91807a66546041b4",
+  "active": "fe0970395883b308",
   "lastOpenFiles": [
+    "未命名.base",
+    "posts/代码随想录学习/index.md",
+    "posts/代码随想录学习/替换数字.png",
+    "posts/代码随想录学习/459.png",
+    "posts/代码随想录学习/28.png",
     "posts/代码随想录学习/KMP_7.png",
     "posts/代码随想录学习/KMP_6.png",
     "posts/代码随想录学习/KMP_5.png",
@@ -194,11 +199,6 @@
     "posts/代码随想录学习/KMP_1.png",
     "posts/开源项目学习-novel-cloud/index.md",
     "posts/SQL题/index.md",
-    "posts/SQL题/197.png",
-    "posts/代码随想录学习/541.png",
-    "posts/SQL题/1581_3.png",
-    "posts/SQL题/1581_2.png",
-    "posts/代码随想录学习/index.md",
     "posts/RabbitMQ/index.md",
     "posts/Git.md",
     "posts/开源项目学习-novel-cloud/新建 文本文档.txt",

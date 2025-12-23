@@ -1413,6 +1413,7 @@ public class Main {
 }
 ```
 ### ★★★28.找出字符串中第一个匹配项的下标
+![](28.png)
 自己写的，差不多纯暴力的写法。时间2.77%，空间22.62%
 ```
 class Solution {
@@ -1507,4 +1508,446 @@ class Solution {
 
 }
 ```
-### new
+### ★★★459.重复的子字符串
+![](459.png)
+时间92.72%，空间46.57%（不过时间复杂度高，是n^2）
+```
+class Solution {
+
+    public boolean repeatedSubstringPattern(String s) {
+
+        int sl = s.length();
+
+        boolean res = false;
+
+        for(int i = 1;i <= sl / 2 && !res;i++){
+
+            //假设可以由长度为i的子串构成
+
+            //如果sl != n * i 不可能由长度为i的子串构成，跳过
+
+            if(sl % i != 0) continue;
+
+            //如果可以由长度为i的子串构成，那么
+
+            //第1个到第i个字符，每隔i肯定都会重复，不满足就不是
+
+            boolean flag = true;
+
+            for(int j = 1;j <= i;j++){
+
+                //记录一下第一个字符
+
+                char a = s.charAt(j - 1);
+
+                int k = j - 1 + i;
+
+                while(k < sl){
+
+                   if(s.charAt(k) != a) break;
+
+                   k+=i;
+
+                }
+
+                if(k < sl){
+
+                    flag = false;
+
+                    break;
+
+                }
+
+            }
+
+            res = flag;
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+通过KMP算法里面的Next数组实现
+如果最长相等前后缀不包含的子串的长度不等于0且该长度可以被字符串s的长度整除，那么不包含的子串就是s的最小重复子串。否则就找不到子串重复可以构成原串。
+时间99.47%，空间21.72%
+```
+class Solution {
+
+    public boolean repeatedSubstringPattern(String s) {
+
+        int sl = s.length();
+
+        int[] next = new int[sl];
+
+        char[] sArray = s.toCharArray();
+
+        for(int i = 1, j = 0;i < sl;i++){
+
+            while(j > 0 && sArray[i] != sArray[j]) j = next[j - 1];
+
+            if(sArray[i] == sArray[j]) j++;
+
+            next[i] = j;
+
+        }
+
+        return next[sl - 1] > 0 && sl % (sl - next[sl - 1]) == 0;
+
+    }
+
+}
+```
+## 双指针法
+
+### 27.移除元素
+做过了
+### 344.反转字符串
+做过了
+### 替换数字
+![](替换数字.png)
+暴力解法，用的不是双指针，感觉双指针还更麻烦
+```
+import java.util.Scanner;
+
+public class Main{
+
+    public static void main(String[] args){
+
+        Scanner scanner = new Scanner(System.in);
+
+        String s = scanner.next();
+
+        StringBuilder res = new StringBuilder();
+
+        //新开一个StringBuilder，遍历原串的每个字符
+
+        //是字母就原样加上去，是数字就替换
+
+        for(int i = 0;i < s.length();i++){
+
+            char now = s.charAt(i);
+
+            if(now >= '0' && now <= '9'){
+
+                res.append("number");
+
+            }else{
+
+                res.append(now);
+
+            }
+
+        }
+
+        System.out.println(res);
+
+    }
+
+}
+```
+### 151.反转字符串中的单词
+做过了
+### 206.反转链表
+见hot100
+### 19.删除链表的倒数第N个节点
+见hot100
+### 142.环形链表||
+见hot100
+### 15.三数之和
+见hot100
+### 18.四数之和
+做过了
+## 栈与队列
+### 理论基础
+![](队列理论基础1.png)
+栈：后进先出
+队列：先进先出
+### 232.用栈实现队列
+![](232.png)
+时间100.00%，空间5.05%
+```
+class MyQueue {
+
+    //搞一个输入栈和一个输出栈
+
+    //输入的话就依次进入到输入栈里面
+
+    //要输出或者要看头部元素的时候，把输入栈的元素倒到输出栈里面（输出栈为空）
+
+    //这样输出栈里面的元素就是按最前到最后排列了，做对应的操作即可
+
+    //输出完或者看完顶部元素是不用把输出栈的元素倒回输入栈的
+
+    //只要在输出栈空了之后再倒元素过来，那么输出栈里面的一直就是最前面的元素
+
+    //输入一直补到输入栈就行
+
+    List<Integer> inStack;
+
+    List<Integer> outStack;
+
+    public MyQueue() {
+
+        inStack = new LinkedList<>();
+
+        outStack = new LinkedList<>();
+
+    }
+
+    public void push(int x) {
+
+        inStack.addFirst(x);
+
+    }
+
+    public int pop() {
+
+        if(outStack.isEmpty()){
+
+            transfer();
+
+        }
+
+        return outStack.removeFirst();
+
+    }
+
+    public int peek() {
+
+        if(outStack.isEmpty()){
+
+            transfer();
+
+        }
+
+        return outStack.getFirst();
+
+    }
+
+    public boolean empty() {
+
+        return inStack.isEmpty() && outStack.isEmpty();
+
+    }
+
+  
+
+    private void transfer(){
+
+        while(!inStack.isEmpty()){
+
+            outStack.addFirst(inStack.removeFirst());
+
+        }
+
+    }
+
+}
+
+  
+
+/**
+
+ * Your MyQueue object will be instantiated and called as such:
+
+ * MyQueue obj = new MyQueue();
+
+ * obj.push(x);
+
+ * int param_2 = obj.pop();
+
+ * int param_3 = obj.peek();
+
+ * boolean param_4 = obj.empty();
+
+ */
+```
+### 225.用队列实现栈
+![](225.png)
+时间100.00%，空间5.10%
+```
+class MyStack {
+
+    //利用两个队列就和用栈实现队列一样
+
+    //要出的时候把输入队列里面的倒入到输出队列里面就行了（输出队列非空）
+
+    //只用一个队列实现的话就是每次入队列的时候，先统计一下队列的元素个数n
+
+    //然后把新元素入队列，然后把前面n个元素出队列再进来就好了
+
+    List<Integer> queue;
+
+  
+
+    public MyStack() {
+
+        //addLast + removeFirst + getFirst
+
+        queue = new LinkedList<>();
+
+    }
+
+    public void push(int x) {
+
+        int n = queue.size();
+
+        queue.addLast(x);
+
+        for(int i = 0;i < n;i++){
+
+            queue.addLast(queue.removeFirst());
+
+        }
+
+    }
+
+    public int pop() {
+
+        return queue.removeFirst();
+
+    }
+
+    public int top() {
+
+        return queue.getFirst();
+
+    }
+
+    public boolean empty() {
+
+        return queue.isEmpty();
+
+    }
+
+}
+
+  
+
+/**
+
+ * Your MyStack object will be instantiated and called as such:
+
+ * MyStack obj = new MyStack();
+
+ * obj.push(x);
+
+ * int param_2 = obj.pop();
+
+ * int param_3 = obj.top();
+
+ * boolean param_4 = obj.empty();
+
+ */
+```
+### 20.有效的括号
+见hot100
+### 1047.删除字符串中的所有相邻重复项
+![](1047.png)
+时间72.31%，空间41.30%
+```
+class Solution {
+
+    public String removeDuplicates(String s) {
+
+        //是用栈的思想实现的，最后整理答案的时候要倒序出
+
+        //所以用了双端队列，核心部分是栈
+
+        //就是依次入栈，每个字符进来的时候看看当前字符和栈顶是不是相同的
+
+        //是就相消了，不是就入栈
+
+        List<Character> deque = new LinkedList<>();
+
+        for(int i = 0;i < s.length();i++){
+
+            char c = s.charAt(i);
+
+            if(!deque.isEmpty() && c == deque.getFirst()){
+
+                deque.removeFirst();
+
+            }else{
+
+                deque.addFirst(c);
+
+            }
+
+        }
+
+        StringBuilder res = new StringBuilder();
+
+        while(!deque.isEmpty()){
+
+            res.append(deque.removeLast());
+
+        }
+
+        return res.toString();
+
+    }
+
+}
+```
+### 150.逆波兰表达式求值
+![](150.png)
+时间30.89%，空间14.82%
+```
+class Solution {
+
+    public int evalRPN(String[] tokens) {
+
+        //逆波兰表达式：把运算符写在操作数后
+
+        //2  1  + 就是2 + 1
+
+        //2  1  + 3 * 就是先2 + 1 然后再 * 3  
+
+        List<Integer> stack = new LinkedList<>();
+
+        for(int i = 0;i < tokens.length;i++){
+
+            if(tokens[i].equals("+") || tokens[i].equals("-")
+
+            || tokens[i].equals("*") || tokens[i].equals("/")){
+
+                int num2 = stack.removeFirst();
+
+                int num1 = stack.removeFirst();
+
+                switch(tokens[i]){
+
+                    case "+":stack.addFirst(num1 + num2);break;
+
+                    case "-":stack.addFirst(num1 - num2);break;
+
+                    case "*":stack.addFirst(num1 * num2);break;
+
+                    default :stack.addFirst(num1 / num2);break;
+
+                }
+
+            }else{
+
+                stack.addFirst(Integer.parseInt(tokens[i]));
+
+            }
+
+        }
+
+        return stack.getFirst();
+
+    }
+
+}
+```
+### 239.滑动窗口最大值
+见hot100
+### 347.前K个高频元素
+见hot100
+## 二叉树
+
