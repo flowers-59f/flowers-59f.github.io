@@ -1950,4 +1950,760 @@ class Solution {
 ### 347.前K个高频元素
 见hot100
 ## 二叉树
+### 理论基础
+#### 题目分类
+![](二叉树理论基础1.png)
+#### 二叉树的种类
+满二叉树：如果一颗二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这颗二叉树为满二叉树。
+![](二叉树理论基础2.png)
+当其深度为k时，节点数目为2<sup>k</sup>-1
+
+完全二叉树：在完全二叉树中，除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的结点都集中在该层最左边的若干位置。若最底层为第h层，则该层包含1-2<sup>h-1</sup>个节点
+![](二叉树理论基础3.png)
+二叉搜索树：
+是一个有序树。若它的左子树不空，则左子树上所有节点的值均小于它的根节点的值；若它的右子树不空，则右子树上所有节点的值均大于它的根节点的值；它的左、右子树也分别为二叉排序树。
+![](二叉树理论基础4.png)
+平衡二叉搜索树：
+它是一颗空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一颗平衡二叉树。
+![](二叉树理论基础5.png)
+#### 二叉树的存储方式
+链式存储
+![](二叉树理论基础6.png)
+顺序存储
+![](二叉树理论基础7.png)
+要求是完全二叉树。此时如果父节点的数组下标是i，那么它的左孩子就是i\*2+1，右孩子就是i\*2 +2。
+#### 二叉树的遍历方式
+深度优先遍历：先往深走，遇到叶子节点再往回走
+	前序遍历：根左右；递归法、迭代法
+	中序遍历：左根右；递归法、迭代法
+	后续遍历：左右根；递归法、迭代法
+![](二叉树理论基础8.png)
+广度优先遍历：一层一层的去遍历
+	层次遍历：迭代法、借助栈实现
+#### 二叉树的定义
+```
+public class TreeNode{
+	int val;
+	TreeNode left;
+	TreeNode right;
+	
+	TreeNode(){}
+	TreeNode(int val){this.val = val;}
+	TreeNode(int val, TreeNode left, TreeNode right){
+		this.val = val;
+		this.left = left;
+		this.right = right;
+	}
+}
+```
+#### 二叉树的递归遍历
+递归三要素：
+	1.确定递归函数的参数和返回值：确定哪些参数是递归的过程中需要处理的，那么就在递归函数里加上这个参数，并且还要明确每次递归的返回值是什么进而确定递归函数的返回类型。
+	2.确定终止条件
+	3.确定单层递归的逻辑：确定每一层递归需要处理的信息。在这里也就会重复调用自己来实现递归的过程。
+```
+// 前序遍历·递归·LC144_二叉树的前序遍历
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<Integer>();
+        preorder(root, result);
+        return result;
+    }
+
+    public void preorder(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        result.add(root.val);
+        preorder(root.left, result);
+        preorder(root.right, result);
+    }
+}
+// 中序遍历·递归·LC94_二叉树的中序遍历
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        inorder(root, res);
+        return res;
+    }
+
+    void inorder(TreeNode root, List<Integer> list) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left, list);
+        list.add(root.val);             // 注意这一句
+        inorder(root.right, list);
+    }
+}
+// 后序遍历·递归·LC145_二叉树的后序遍历
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        postorder(root, res);
+        return res;
+    }
+
+    void postorder(TreeNode root, List<Integer> list) {
+        if (root == null) {
+            return;
+        }
+        postorder(root.left, list);
+        postorder(root.right, list);
+        list.add(root.val);             // 注意这一句
+    }
+}
+```
+#### 二叉树的迭代遍历
+前序遍历：
+入栈顺序为根、右、左，根节点出栈了再把右、左子节点放进去，结合栈的特性，出栈顺序就是根、左、右了。这里因为第一个操作的是根节点，带来了很大便利，至于为什么后面会说。
+```
+class Solution {
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+
+        List<Integer> res = new ArrayList<>();
+
+        if(root == null) return res;
+
+        Stack<TreeNode> stack = new Stack();
+
+        stack.push(root);
+
+        while(!stack.isEmpty()){
+
+            TreeNode node = stack.pop();
+
+            res.add(node.val);
+
+            if(node.right != null){
+
+                stack.push(node.right);
+
+            }
+
+            if(node.left != null){
+
+                stack.push(node.left);
+
+            }
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+后续遍历：
+基于前序遍历实现，先构建一个顺序为根、右、左的二叉树，然后反转结果。这对应的入栈顺序为根|左、右
+```
+class Solution {
+
+    public List<Integer> postorderTraversal(TreeNode root) {
+
+        List<Integer> res = new ArrayList<>();
+
+        Stack<TreeNode> stack = new Stack();
+
+        if(root == null) return res;
+
+        stack.push(root);
+
+        while(!stack.isEmpty()){
+
+            TreeNode node = stack.pop();
+
+            res.add(node.val);
+
+            if(node.left != null){
+
+                stack.push(node.left);
+
+            }
+
+            if(node.right != null){
+
+                stack.push(node.right);
+
+            }
+
+        }
+
+        Collections.reverse(res);
+
+        return res;
+
+    }
+
+}
+```
+中序遍历
+迭代的过程中涉及到两个操作，一个是遍历节点（访问），一个是把节点的值放到数组里（处理）。访问的话其实都是要先访问根节点再访问左右子节点的，在前序遍历中，处理顺序也是这样的，所以这里访问顺序和处理顺序是一样的就简单一点，而中序遍历的处理顺序和访问顺序是不一致的，需要借助指针来实现。通过指针的遍历来帮助访问节点，栈则用来处理节点上的元素。
+```
+class Solution {
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+
+        List<Integer> res = new ArrayList<>();
+
+        if(root == null) return res;
+
+        Stack<TreeNode> stack = new Stack<>();
+
+        TreeNode curr = root;
+
+        while(curr != null || !stack.isEmpty()){
+
+            if(curr != null){
+
+                //一直往左走，一路添加根节点
+
+                stack.push(curr);
+
+                curr = curr.left;
+
+            }else{
+
+                //左边走到底了，该回头处理另外一边了
+
+                //每次出的是根节点，它的左子节点就是前面处理的根节点
+
+                //已经搞完了
+
+                curr = stack.pop();
+
+                res.add(curr.val);//根（左）
+
+                curr = curr.right;//右
+
+            }
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+#### 层序遍历
+```
+// 102.二叉树的层序遍历
+class Solution {
+    public List<List<Integer>> resList = new ArrayList<List<Integer>>();
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        //checkFun01(root,0);
+        checkFun02(root);
+
+        return resList;
+    }
+
+    //BFS--递归方式
+    public void checkFun01(TreeNode node, Integer deep) {
+        if (node == null) return;
+        deep++;
+
+        if (resList.size() < deep) {
+            //当层级增加时，list的Item也增加，利用list的索引值进行层级界定
+            List<Integer> item = new ArrayList<Integer>();
+            resList.add(item);
+        }
+        resList.get(deep - 1).add(node.val);
+
+        checkFun01(node.left, deep);
+        checkFun01(node.right, deep);
+    }
+
+    //BFS--迭代方式--借助队列
+    public void checkFun02(TreeNode node) {
+        if (node == null) return;
+        Queue<TreeNode> que = new LinkedList<TreeNode>();
+        que.offer(node);
+
+        while (!que.isEmpty()) {
+            List<Integer> itemList = new ArrayList<Integer>();
+            int len = que.size();
+
+            while (len > 0) {
+                TreeNode tmpNode = que.poll();
+                itemList.add(tmpNode.val);
+
+                if (tmpNode.left != null) que.offer(tmpNode.left);
+                if (tmpNode.right != null) que.offer(tmpNode.right);
+                len--;
+            }
+
+            resList.add(itemList);
+        }
+
+    }
+}
+```
+### 107.二叉树的层序遍历||
+![](107.png)
+时间95.48%，空间5.23%
+```
+class Solution {
+
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+
+        //这正常的层序遍历 + 逆序一下不就行了
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        if(root == null) return res;
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+
+            List<Integer> temp = new ArrayList<>();
+
+            int length = queue.size();
+
+            for(int i = 0;i < length;i++){
+
+                TreeNode node = queue.poll();
+
+                temp.add(node.val);
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+            }
+
+            res.add(temp);
+
+        }
+
+        Collections.reverse(res);
+
+        return res;
+
+    }
+
+}
+```
+### 199.二叉树的右视图
+![](199.png)
+时间79.70%，空间35.92%
+```
+class Solution {
+
+    public List<Integer> rightSideView(TreeNode root) {
+
+        //其实就是返回每一层最右侧的节点
+
+        //就正常用队列层序遍历，只把每层最后一个节点加到res中就行
+
+        List<Integer> res = new ArrayList<>();
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        if(root == null) return res;
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+
+            int length = queue.size();
+
+            for(int i = 0;i < length;i++){
+
+                TreeNode node = queue.poll();
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+                if(i == length - 1){
+
+                    res.add(node.val);
+
+                }
+
+            }
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 637.二叉树的层平均值
+![](637.png)
+时间97.73%，空间14.85%
+```
+class Solution {
+
+    public List<Double> averageOfLevels(TreeNode root) {
+
+        List<Double> res = new ArrayList<>();
+
+        if(root == null) return res;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+
+            double sum = 0;
+
+            int n = queue.size();
+
+            for(int i = 0;i < n;i++){
+
+                TreeNode node = queue.poll();
+
+                sum += node.val;
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+            }
+
+            res.add(sum / n);
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 429.N叉树的层序遍历
+![](429.png)
+时间92.65%，空间33.32%
+```
+/*
+
+// Definition for a Node.
+
+class Node {
+
+    public int val;
+
+    public List<Node> children;
+
+  
+
+    public Node() {}
+
+  
+
+    public Node(int _val) {
+
+        val = _val;
+
+    }
+
+  
+
+    public Node(int _val, List<Node> _children) {
+
+        val = _val;
+
+        children = _children;
+
+    }
+
+};
+
+*/
+
+  
+
+class Solution {
+
+    public List<List<Integer>> levelOrder(Node root) {
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        if(root == null) return res;
+
+        Queue<Node> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+
+            List<Integer> temp = new ArrayList<>();
+
+            int n = queue.size();
+
+            for(int i = 0;i < n;i++){
+
+                Node node = queue.poll();
+
+                temp.add(node.val);
+
+                for(Node subNode:node.children){
+
+                    queue.offer(subNode);
+
+                }
+
+            }
+
+            res.add(temp);
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 515.在每个树行中找最大值
+![](515.png)
+时间93.37%，空间23.25%
+```
+class Solution {
+
+    public List<Integer> largestValues(TreeNode root) {
+
+        List<Integer> res = new ArrayList<>();
+
+        if(root == null) return res;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+
+            int max = Integer.MIN_VALUE;
+
+            int n = queue.size();
+
+            for(int i = 0;i < n;i++){
+
+                TreeNode node = queue.poll();
+
+                max = Math.max(max, node.val);
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+            }
+
+            res.add(max);
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 116.填充每个节点的下一个右侧节点
+![](116.png)
+时间82.18%，空间40.93%
+```
+/*
+
+// Definition for a Node.
+
+class Node {
+
+    public int val;
+
+    public Node left;
+
+    public Node right;
+
+    public Node next;
+
+  
+
+    public Node() {}
+
+    public Node(int _val) {
+
+        val = _val;
+
+    }
+
+  
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+
+        val = _val;
+
+        left = _left;
+
+        right = _right;
+
+        next = _next;
+
+    }
+
+};
+
+*/
+
+  
+
+class Solution {
+
+    public Node connect(Node root) {
+
+        if(root == null) return root;
+
+        Queue<Node> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        //这里稍微改一下每一层的顺序，改成从右到左
+
+        //这样遍历的时候把当前节点指向前一个节点就行了
+
+        while(!queue.isEmpty()){
+
+            int n = queue.size();
+
+            Node next = null;
+
+            for(int i = 0;i < n;i++){
+
+                Node node = queue.poll();
+
+                node.next = next;
+
+                next = node;
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+            }
+
+        }
+
+        return root;
+
+    }
+
+}
+```
+### 117.填充每个节点的下一个右侧节点指针||
+同116
+### 104.二叉树的最大深度
+见hot100
+### 111.二叉树的最小深度
+![](111.png)
+时间98.46%，空间6.98%
+```
+class Solution {
+
+    public int minDepth(TreeNode root) {
+	    //其实就是找层数最低的叶子节点
+
+        //还是照样层序遍历 遍历每个节点
+
+        //找到第一个叶子节点时，返回当前深度
+
+        List<Integer> res = new ArrayList<>();
+
+        if(root == null) return 0;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        int depth = 0;
+
+        while(!queue.isEmpty()){
+
+            depth++;
+
+            int n = queue.size();
+
+            for(int i = 0;i < n;i++){
+
+                TreeNode node = queue.poll();
+
+                if(node.left == null && node.right == null){
+
+                    return depth;
+
+                }
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+            }
+
+        }
+
+        return -1;
+
+    }
+
+}
+```
+### new
 

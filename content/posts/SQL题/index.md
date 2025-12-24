@@ -264,3 +264,285 @@ GROUP BY
 
     user_id
 ```
+### 聚合函数
+#### 常见聚合函数
+```
+# COUNT() - 统计数量
+COUNT(*)              -- 统计所有行（包括 NULL）
+COUNT(column_name)    -- 统计指定列的非 NULL 行数
+-- 统计员工总数
+SELECT COUNT(*) FROM employee;
+-- 统计有工资记录的员工数（过滤 NULL）
+SELECT COUNT(salary) FROM employee;
+
+# SUM() - 求和函数
+SUM(column_name)
+-- 所有员工工资总和
+SELECT SUM(salary) FROM employee;
+-- 每个部门的总工资
+SELECT department, SUM(salary)
+FROM employee
+GROUP BY department;
+
+# AVG - 平均值函数
+AVG(column_name)
+-- 所有员工的平均工资
+SELECT AVG(salary) FROM employee;
+-- 每个部门的平均工资
+SELECT department, AVG(salary)
+FROM employee
+GROUP BY department;
+
+# MAX - 最大值函数
+MAX(column_name)
+-- 查询最高工资
+SELECT MAX(salary) FROM employee;
+-- 每个部门的最高工资
+SELECT department, MAX(salary)
+FROM employee
+GROUP BY department;
+
+# MIN - 最小值函数
+MIN(column_name)
+-- 查询最低工资
+SELECT MIN(salary) FROM employee;
+-- 每个部门的最低工资
+SELECT department, MIN(salary)
+FROM employee
+GROUP BY department;
+
+# GROUP_CONCAT() - 字符串拼接函数
+GROUP_CONCAT(column [SEPARATOR '分隔符'])
+-- 把所有员工的名字拼接成一行
+SELECT GROUP_CONCAT(name) FROM employee;
+-- 每个部门的员工名字拼接展示
+SELECT department, GROUP_CONCAT(name)
+FROM employee
+GROUP BY department;
+-- 自定义分隔符为 " | "
+SELECT GROUP_CONCAT(name SEPARATOR ' | ')
+FROM employee;
+```
+#### 620.有趣的电影
+![](620.png)
+```
+SELECT id, movie, description, rating
+
+FROM cinema
+
+WHERE id % 2 = 1 AND description != 'boring'
+
+ORDER BY rating DESC
+
+# id % 2 = 1可以用 mod(id, 2) = 1代替，效率好像略微高点
+
+# != 好像也用<>好一点 不太懂
+```
+#### 1251.平均售价
+![](1251_1.png)
+![](1251_2.png)
+```
+SELECT
+
+    Prices.product_id AS product_id,
+
+    IFNULL(ROUND(SUM(Prices.price * UnitsSold.units)
+
+    / SUM(UnitsSold.units), 2), 0) AS average_price
+
+FROM
+
+    Prices
+
+LEFT JOIN
+
+    UnitsSold
+
+ON  
+
+    Prices.product_id = UnitsSold.product_id
+
+    AND UnitsSold.purchase_date >= Prices.start_date
+
+    AND UnitsSold.purchase_date <= Prices.end_date
+
+GROUP BY
+
+    Prices.product_id
+```
+#### 1075.项目员工I
+![](1075_1.png)
+![](1075_2.png)
+```
+SELECT
+
+    Project.project_id AS project_id,
+
+    ROUND(AVG(Employee.experience_years), 2) AS average_years
+
+FROM
+
+    Project
+
+JOIN
+
+    Employee
+
+ON  
+
+    Project.employee_id = Employee.employee_id
+
+GROUP BY
+
+    Project.project_id
+```
+#### 1633.各赛事的用户注册率
+![](1633_1.png)
+![](1633_2.png)
+```
+SELECT
+
+    contest_id,
+
+    ROUND(COUNT(*)/(SELECT COUNT(*) FROM Users)* 100, 2) AS percentage
+
+FROM
+
+    Register
+
+GROUP BY
+
+    contest_id
+
+ORDER BY
+
+    percentage DESC,
+
+    contest_id
+```
+#### 1211.查询结果的质量和占比
+![](1211_1.png)
+![](1211_2.png)
+```
+SELECT
+
+    query_name,
+
+    ROUND(AVG(rating / position), 2) AS quality,
+
+    ROUND(SUM(IF(rating < 3, 1, 0)) / COUNT(*) * 100, 2)
+
+    AS poor_query_percentage
+
+FROM
+
+    Queries
+
+GROUP BY
+
+    query_name
+```
+#### 1193.每月交易I
+![](1193.png)
+```
+SELECT
+
+    DATE_FORMAT(trans_date, '%Y-%m') AS month,
+
+    country,
+
+    COUNT(*) AS trans_count,
+
+    SUM(IF(state = 'approved', 1, 0)) AS approved_count,
+
+    SUM(amount) AS trans_total_amount,
+
+    SUM(IF(state = 'approved', amount, 0)) AS approved_total_amount
+
+FROM
+
+    Transactions
+
+GROUP BY
+
+    month, country
+```
+#### 1174.即时食物配送II
+![](1174.png)
+```
+SELECT
+
+    ROUND(SUM(
+
+        IF(order_date = customer_pref_delivery_date, 1, 0)
+
+    )/COUNT(*) * 100, 2) AS immediate_percentage
+
+FROM
+
+    Delivery
+
+WHERE
+
+    (customer_id, order_date) in
+
+    (SELECT
+
+        customer_id,
+
+        MIN(order_date)
+
+    FROM
+
+        Delivery
+
+    GROUP BY
+
+        customer_id)
+```
+#### 550.游戏玩法分析 IV
+![](550.png)
+```
+SELECT
+
+    ROUND(COUNT(*) /
+
+    (SELECT COUNT(DISTINCT player_id) FROM Activity), 2)
+
+    AS fraction
+
+FROM
+
+    Activity
+
+WHERE
+
+    (player_id, event_date) in
+
+    (SELECT
+
+        player_id,
+
+        ADDDATE(MIN(event_date), INTERVAL 1 DAY)
+
+    FROM
+
+        Activity
+
+    GROUP BY
+
+        player_id)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
