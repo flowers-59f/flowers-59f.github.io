@@ -2705,5 +2705,773 @@ class Solution {
 
 }
 ```
-### new
+### ★★★222.完全二叉树的节点个数
+![](222.png)
+时间100.00%，空间12.42%
+```
+class Solution {
+
+    //返回传入节点的节点数
+
+    public int countNodes(TreeNode root) {
+
+        //先通过递归判断以当前节点为根节点的树
+
+        //是不是满二叉树
+
+        //判断依据：向左递归的深度 = 向右递归的深度
+
+        //是的话直接可以返回节点数了，不是的话
+
+        //继续递归左右子节点，返回它们的节点数和 + 1
+
+        int[] depth = judge(root);
+
+        if(depth[0] != depth[1]){
+
+            return countNodes(root.left)
+
+            + countNodes(root.right) + 1;
+
+        }else{
+
+            return (int)Math.pow(2, depth[0]) - 1;
+
+        }
+
+    }
+
+    //返回向左、向右递归的深度
+
+    //上层可以很容易的判断是否为满二叉树
+
+    //是的话可以进一步得到深度
+
+    private int[] judge(TreeNode root){
+
+        if(root == null) return new int[]{0, 0};
+
+        int left = 0;
+
+        int right = 0;
+
+        TreeNode leftCurr = root;
+
+        TreeNode rightCurr = root;
+
+        while(leftCurr != null){
+
+            left++;
+
+            leftCurr = leftCurr.left;
+
+        }
+
+        while(rightCurr != null){
+
+            right++;
+
+            rightCurr = rightCurr.right;
+
+        }
+
+        return new int[]{left, right};
+
+    }
+
+}
+```
+### 110.平衡二叉树
+![](110.png)
+时间69.63%，空间39.01%
+```
+class Solution {
+
+  
+
+    private boolean res = true;
+
+  
+
+    public boolean isBalanced(TreeNode root) {
+
+        calDepth(root);
+
+        return res;
+
+    }
+
+  
+
+    //返回以当前节点为根节点的树的深度
+
+    private int calDepth(TreeNode root){
+
+        //遍历每个节点
+
+        //比较左右子树深度，如果不满足要求就置res = false
+
+        //满足就把自己的深度返回让上层判断
+
+        if(root == null) return 0;
+
+        int left = calDepth(root.left);
+
+        int right = calDepth(root.right);
+
+        if(Math.abs(left - right) > 1){
+
+            res = false;
+
+        }
+
+        return Math.max(left, right) + 1;
+
+    }
+
+}
+```
+### 257.二叉树的所有路径
+![](257.png)
+时间65.33%，空间50.32%
+```java
+class Solution {
+
+    public List<String> binaryTreePaths(TreeNode root) {
+
+        List<String> res = new ArrayList<>();
+
+        dfs(root, new ArrayList<>(), res);
+
+        return res;
+
+    }
+  
+  
+
+    //这题的思路很简单，就是边遍历边记住走过的节点，然后到叶子节点就把当前的路径加到res里
+
+    //不过中间处理记住节点的地方有很多可以改进的
+
+    //一种是边走边拼接，拼接的时候借助StringBuilder，略快一点
+
+    //一种是搞一个List<Integer> Path来记住走过的节点，到叶子节点了统一拼接字符串然后加到res里
+
+    private void dfs(TreeNode root, List<Integer> path, List<String> res){
+
+        if(root == null) return;
+
+        path.add(root.val);
+
+        if(root.left == null && root.right == null){
+
+            StringBuilder sb = new StringBuilder();
+
+            for(int i = 0;i < path.size() - 1;i++){
+
+                sb.append(path.get(i));
+
+                sb.append("->");
+
+            }
+
+            sb.append(path.get(path.size() - 1));
+
+            res.add(sb.toString());
+
+        }else{
+
+            dfs(root.left, path, res);
+
+            dfs(root.right, path, res);
+
+        }
+
+        path.remove(path.size() - 1);
+
+    }
+  
+}
+```
+### 404.左叶子之和
+![](404.png)
+时间100.00%，空间5.03%
+```java
+class Solution {
+
+    public int sumOfLeftLeaves(TreeNode root) {
+
+        if(root == null) return 0;
+
+        //一个数的左叶子之和 = 左子树左叶子之和/左叶子的值 + 右子树叶子之和
+
+        int sum = 0;
+
+        if(root.left != null && root.left.left == null &&root.left.right == null){
+
+            sum += root.left.val;
+
+        }
+
+        sum += sumOfLeftLeaves(root.left);
+
+        sum += sumOfLeftLeaves(root.right);
+
+        return sum;
+
+    }
+
+}
+```
+### 513.找树左下角的值
+![](513.png)
+时间16.35%，空间54.58%
+```java
+class Solution {
+
+    public int findBottomLeftValue(TreeNode root) {
+
+        //左右逆一下的层序遍历，最后一个节点就是所求
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+
+            int n = queue.size();
+
+            for(int i = 0;i < n;i++){
+
+                TreeNode node = queue.poll();
+
+                if(n == 1){
+
+                    if(node.left == null && node.right == null){
+
+                        return node.val;
+
+                    }
+
+                }
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+                if(i == n - 1 && queue.isEmpty()){
+
+                    return node.val;
+
+                }
+
+            }
+
+        }
+
+        return -1;
+
+    }
+
+}
+```
+在判断是否是最后一个节点上在每次循环都用了2个if，有点低效了，用一个变量记住当前节点的值就好了，然后遍历完返回就行。
+时间58.81%，空间65.10%
+```java
+class Solution {
+
+    public int findBottomLeftValue(TreeNode root) {
+
+        //左右逆一下的层序遍历，最后一个节点就是所求
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        int res = -1;
+
+        while(!queue.isEmpty()){
+
+            int n = queue.size();
+
+            for(int i = 0;i < n;i++){
+
+                TreeNode node = queue.poll();
+
+                if(node.right != null){
+
+                    queue.offer(node.right);
+
+                }
+
+                if(node.left != null){
+
+                    queue.offer(node.left);
+
+                }
+
+                res = node.val;
+
+            }
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+用dfs好像更快啊，不过时间复杂度是一样的（空间复杂度也是一样的）
+时间98.76%，空间13.71%
+```java
+class Solution {
+
+  
+
+    private int maxDepth = 0;
+
+    private int res = 0;
+
+  
+
+    public int findBottomLeftValue(TreeNode root) {
+
+        //用dfs一直往左下，到最深一层时更新一下记录的值，遍历完返回就行了
+
+        dfs(root, 1);
+
+        return res;
+
+    }
+
+    private void dfs(TreeNode root, int depth){
+
+        if(root == null) return;
+
+        if(depth > maxDepth){
+
+            res = root.val;
+
+            maxDepth = depth;
+
+        }
+
+        dfs(root.left, depth + 1);
+
+        dfs(root.right, depth + 1);
+
+    }
+
+}
+```
+### 112.路径总和
+![](112.png)
+时间100.00%，空间7.81%
+```java
+class Solution {
+
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+
+        return dfs(root, targetSum, 0);
+
+    }
+
+  
+
+    private boolean dfs(TreeNode root, int targetSum, int pathSum){
+
+        if(root == null) return false;
+
+        pathSum += root.val;
+
+        if(pathSum == targetSum && root.left == null && root.right == null) return true;
+
+        return dfs(root.left, targetSum, pathSum) || dfs(root.right, targetSum, pathSum);
+
+    }
+
+}
+```
+### 106.从中序遍历与后序遍历序列构造二叉树
+![](106.png)
+时间98.36%，空间21.74%
+```java
+class Solution {
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+
+        //中序 左根右  后序 左右根
+
+        //根据后序遍历的最后一个可以找到根节点
+
+        //根据这个根节点在中序遍历中的位置可以确定出左子树和右子树
+
+        Map<Integer, Integer> queryRootIndex = new HashMap<>();
+
+        int n = inorder.length;
+
+        for(int i = 0;i < n;i++){
+
+            queryRootIndex.put(inorder[i], i);
+
+        }
+
+        return buildTreeInRange(inorder, 0, n - 1, postorder, 0, n - 1, queryRootIndex);
+
+    }
+
+  
+
+    private TreeNode buildTreeInRange(int[] inorder, int iBegin, int iEnd,
+
+    int[] postorder, int pBegin, int pEnd, Map<Integer, Integer> queryRootIndex){
+
+        if(iBegin > iEnd || pBegin > pEnd) return null;
+
+        int rootVal = postorder[pEnd];
+
+        int rootIndexIninorder = queryRootIndex.get(rootVal);
+
+        TreeNode root = new TreeNode(rootVal);
+
+        int leftLength = rootIndexIninorder - iBegin;
+
+        int rightLength = iEnd - rootIndexIninorder;
+
+        root.left = buildTreeInRange(inorder, iBegin, rootIndexIninorder - 1, postorder, pBegin, pBegin + leftLength - 1, queryRootIndex);
+
+        root.right = buildTreeInRange(inorder, rootIndexIninorder + 1, iEnd,
+
+        postorder, pBegin + leftLength, pBegin + leftLength + rightLength - 1, queryRootIndex);
+
+        return root;
+
+    }
+
+}
+```
+### 654.最大二叉树
+![](654.png)
+时间99.58%，空间5.07%
+```java
+class Solution {
+
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+
+        return constructTreeInRange(nums, 0, nums.length - 1);
+
+    }
+
+  
+
+    private TreeNode constructTreeInRange(int[] nums, int begin, int end){
+
+        if(begin > end) return null;
+
+        int maxIndex = 0;
+
+        int maxValue = -1;
+
+        for(int i = begin;i <= end;i++){
+
+            if(nums[i] > maxValue){
+
+                maxValue = nums[i];
+
+                maxIndex = i;
+
+            }
+
+        }
+
+        TreeNode root = new TreeNode(maxValue);
+
+        root.left = constructTreeInRange(nums, begin, maxIndex - 1);
+
+        root.right = constructTreeInRange(nums, maxIndex + 1, end);
+
+        return root;
+
+    }
+
+}
+```
+### 617.合并二叉树
+见hot100
+### 700.二叉搜索树中的搜索
+![](700.png)
+时间100.00%，空间40.86%
+```java
+class Solution {
+
+  
+
+    TreeNode res = null;
+
+  
+
+    public TreeNode searchBST(TreeNode root, int val) {
+
+        //知道二叉搜索树，比当前节点小的在左子树，大的在右子树就行
+
+        dfs(root, val);
+
+        return res;
+
+    }
+
+  
+
+    private void dfs(TreeNode root, int val){
+
+        if(root == null) return;
+
+        if(root.val == val){
+
+            res = root;
+
+            return;
+
+        }else if(val < root.val) dfs(root.left, val);
+
+        else dfs(root.right, val);
+
+    }
+
+}
+```
+### 98.验证二叉搜索树
+见hot100
+### 530.二叉搜索树的最小绝对差
+![](530.png)
+时间100.00%，空间8.38%
+```java
+class Solution {
+
+  
+
+    private int prev = -1;
+
+    private int res = Integer.MAX_VALUE;
+
+  
+
+    public int getMinimumDifference(TreeNode root) {
+
+        //二叉搜索树的中序遍历就是升序遍历，最小绝对差一定出现在两两之间嘛
+
+        //边遍历边统计就行了
+
+        dfs(root);
+
+        return res;
+
+    }
+
+  
+
+    private void dfs(TreeNode root){
+
+        if(root == null) return;
+
+        dfs(root.left);
+
+        if(prev != -1) res = Math.min(root.val - prev, res);
+
+        prev = root.val;
+
+        dfs(root.right);
+
+    }
+
+}
+```
+### 501.二叉搜索树中的众数
+![](501.png)
+纯暴力，时间24.05%，空间65.97%
+```java
+class Solution {
+
+    private int max = 0;
+
+  
+
+    public int[] findMode(TreeNode root) {
+
+        //暴力：用HashMap统计出各个数出现次数和最大次数，再遍历一遍HashMap得到结果
+
+        HashMap<Integer, Integer> count = new HashMap<>();
+
+        count(root, count);
+
+        List<Integer> resList = new ArrayList<>();
+
+        count.forEach((k, v) ->{
+
+            if(v == max){
+
+                resList.add(k);
+
+            }
+
+        });
+
+        int n = resList.size();
+
+        int[] res = new int[n];
+
+        for(int i = 0;i < n;i++){
+
+            res[i] = resList.get(i);
+
+        }
+
+        return res;
+
+    }
+
+  
+
+    private void count(TreeNode root, HashMap<Integer, Integer> count){
+
+        if(root == null) return;
+
+        int nowCount = count.getOrDefault(root.val, 0) + 1;
+
+        max = Math.max(nowCount, max);
+
+        count.put(root.val, nowCount);
+
+        count(root.left, count);
+
+        count(root.right, count);
+
+    }
+
+}
+```
+优化了一下，时间100.00%，空间15.16%
+```java
+class Solution {
+
+    private List<Integer> resList;
+
+    private int maxCount;
+
+    private int prev = Integer.MAX_VALUE;
+
+    private int count;
+
+  
+
+    public int[] findMode(TreeNode root) {
+
+        //还是中序遍历（小->大）边遍历边统计当前数的出现次数
+
+        //通过prev记住前面出现的数，如果和prev不一样就是出现新的数了嘛
+
+        //prev如果出现次数等于当前最大值，就把它添加到resList里面去
+
+        //如果大于，那么更新最大值，清空resList再放进去
+
+        resList = new ArrayList<>();
+
+        maxCount = 0;
+
+        count = 0;
+
+        dfs(root);
+
+        if(count == maxCount) resList.add(prev);
+
+        else if(count > maxCount){
+
+            resList = new ArrayList<>();
+
+            maxCount = count;
+
+            resList.add(prev);
+
+        }
+
+        int n = resList.size();
+
+        int[] res = new int[n];
+
+        for(int i = 0;i < resList.size();i++){
+
+            res[i] = resList.get(i);
+
+        }
+
+        return res;
+
+    }
+
+  
+
+    private void dfs(TreeNode root){
+
+        if(root == null) return;
+
+        dfs(root.left);
+
+        if(root.val != prev){
+
+            if(count == maxCount) resList.add(prev);
+
+            else if(count > maxCount){
+
+                resList = new ArrayList<>();
+
+                maxCount = count;
+
+                resList.add(prev);
+
+            }
+
+            count = 1;
+
+            prev = root.val;
+
+        }else{
+
+            count++;
+
+        }
+
+        dfs(root.right);
+
+    }
+
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

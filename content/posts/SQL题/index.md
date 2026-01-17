@@ -533,6 +533,84 @@ WHERE
 
         player_id)
 ```
+### 排序和分组
+#### 2356.每位教师所教授的科目种类的数量
+![](2356.png)
+```
+SELECT
+
+    teacher_id,
+
+    COUNT(DISTINCT subject_id) AS cnt
+
+FROM
+
+    Teacher
+
+GROUP BY
+
+    teacher_id
+```
+#### 1141.查询近30天活跃用户数
+![](1141.png)
+```
+SELECT
+
+    activity_date AS day,
+
+    COUNT(DISTINCT user_id) AS active_users
+
+FROM
+
+    Activity
+
+WHERE
+
+    activity_date >= SUBDATE('2019-07-27', INTERVAL 29 DAY)
+
+    AND activity_date <= '2019-07-27'
+
+GROUP BY
+
+    day
+
+ORDER BY
+
+    day
+```
+#### 1084.销售分析III
+![](1084_1.png)
+![](1084_2.png)
+```
+SELECT
+
+    Product.product_id,
+
+    Product.product_name
+
+FROM
+
+    Sales
+
+JOIN
+
+    Product
+
+ON  
+
+    Product.product_id = Sales.product_id
+
+GROUP BY
+
+    Sales.product_id
+
+HAVING
+
+    SUM(Sales.sale_date BETWEEN "2019-01-01" AND "2019-03-31")
+
+    = COUNT(*)
+```
+
 
 
 
