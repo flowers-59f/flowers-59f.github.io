@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "90816d5757e0e69a",
+        "id": "c7910baa55995ff5",
         "type": "tabs",
         "children": [
           {
-            "id": "374c01883e6cf0dd",
+            "id": "efc714bf2c451505",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "meld-encrypted-view",
               "state": {
-                "file": "Git.md",
+                "file": "实习工作总结/index.mdenc",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Git"
+              "title": "index"
             }
           }
         ]
@@ -177,11 +177,22 @@
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false
+      "command-palette:打开命令面板": false,
+      "meld-encrypt:New encrypted note": false,
+      "meld-encrypt:Lock and Close all open encrypted notes": false,
+      "meld-encrypt:Convert to or from an Encrypted note": false,
+      "meld-encrypt:Encrypt Selection": false,
+      "meld-encrypt:Decrypt at Cursor": false
     }
   },
-  "active": "374c01883e6cf0dd",
+  "active": "efc714bf2c451505",
   "lastOpenFiles": [
+    "实习工作总结/index.mdenc",
+    "实习工作总结/未命名.base",
+    "Git.md",
+    "实习工作总结/新建 文本文档.txt",
+    "实习工作总结",
+    "新建文件夹",
     "代码随想录学习/index.md",
     "代码随想录学习/47.png",
     "代码随想录学习/491.png",
@@ -193,21 +204,16 @@
     "代码随想录学习/216.png",
     "代码随想录学习/77.png",
     "代码随想录学习/回溯算法理论基础1.png",
-    "Git.md",
     "Docker/index.md",
     "开源项目学习-novel-cloud/index.md",
     "SQL题/index.md",
     "RabbitMQ/index.md",
     "Docker/新建 文本文档.txt",
     "Docker",
-    "新建文件夹",
     "代码随想录学习/开发商购买土地.png.crdownload",
     "代码随想录学习/区间和.png.crdownload",
     "代码随想录学习/59.png.crdownload",
     "代码随想录学习/209.png.crdownload",
-    "代码随想录学习/977.png.crdownload",
-    "代码随想录学习/27_2.png.crdownload",
-    "代码随想录学习/27_1.png.crdownload",
     "代码随想录学习.md",
     "my-first/post.md"
   ]
