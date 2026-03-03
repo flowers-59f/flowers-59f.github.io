@@ -3455,6 +3455,1085 @@ class Solution {
 
 }
 ```
+### 236.二叉树的最近公共祖先
+见hot100
+### 235.二叉搜索树的最近公共祖先
+![](235.png)
+时间100.00%，空间9.57%
+```java
+class Solution {
+
+  
+
+    TreeNode res = null;
+
+  
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+        flag(root, p, q);
+
+        return res;
+
+    }
+
+  
+
+    //返回自己是否是其中一个节点的祖先
+
+    //那么如果两个子节点都是某个节点的公共祖先/一个子节点 + 自己是另外一个节点
+
+    //那么它就是最近公共祖先
+
+    //此外还要用上二叉搜索树的性质
+
+    private boolean flag(TreeNode root, TreeNode p, TreeNode q){
+
+        if(root == null) return false;
+
+        if(res != null) return false;
+
+        if(p.val < root.val && q.val < root.val){
+
+            return flag(root.left,  p, q);
+
+        }else if(p.val > root.val && q.val > root.val){
+
+            return flag(root.right,  p, q);
+
+        }else{
+
+            boolean left = flag(root.left,  p, q);
+
+            boolean right = flag(root.right, p, q);
+
+            if((left && right) ||((left || right) && (root == p || root == q))){
+
+                res = root;
+
+            }
+
+            return left || right || root == p || root == q;
+
+        }
+
+    }
+
+}
+```
+### 701.二叉搜索树中的插入操作
+![](701.png)
+时间100.00%，空间55.39%
+```java
+class Solution {
+
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+
+        //插入方式为：插入到符合的叶子节点中
+
+        //如果val比当前节点的值小，那么它应该插入到左子树中
+
+        //递归的调用insertIntoBST，比当前节点的值大也是相应的
+
+        //如果当前节点为空，那么这个就是属于它的位置
+
+        if(root == null) return new TreeNode(val);
+
+        if(val < root.val) root.left = insertIntoBST(root.left, val);
+
+        else root.right = insertIntoBST(root.right, val);
+
+        return root;
+
+    }
+
+}
+```
+### 450.删除二叉搜索树中的节点
+![](450.png)
+时间100.00%，空间33.58%
+```java
+class Solution {
+
+    public TreeNode deleteNode(TreeNode root, int key) {
+
+        //删除一个节点后，把它的左节点接到右节点的左边
+
+        //或者把右节点接到左节点的右边，不过也得找个合适的地方插入
+
+        //至于怎么找和701.二叉搜索树中的插入操作一样
+
+        if(root == null) return null;
+
+        if(key < root.val) root.left = deleteNode(root.left, key);
+
+        else if(key > root.val) root.right = deleteNode(root.right, key);
+
+        else{
+
+            if(root.left == null) return root.right;
+
+            if(root.right == null) return root.left;
+
+            return insertIntoBST(root.left, root.right);
+
+        }
+
+        return root;
+
+    }
+
+    private TreeNode insertIntoBST(TreeNode root, TreeNode toBeInsert){
+
+        if(root == null) return toBeInsert;
+
+        if(toBeInsert.val < root.val) root.left = insertIntoBST(root.left, toBeInsert);
+
+        else root.right = insertIntoBST(root.right, toBeInsert);
+
+        return root;
+
+    }
+
+}
+```
+### 669.修剪二叉搜索树
+![](669.png)
+时间100.00%，空间26.17%
+```java
+class Solution {
+
+    public TreeNode trimBST(TreeNode root, int low, int high) {
+
+        //遇到一个该删的节点类似450删了就行
+
+        if(root == null) return null;
+
+        root.left = trimBST(root.left, low, high);
+
+        root.right = trimBST(root.right, low, high);
+
+        if(root.val < low || root.val > high){
+
+            if(root.left == null) return root.right;
+
+            if(root.right == null) return root.left;
+
+            return insertIntoBST(root.left, root.right);
+
+        }
+
+        return root;
+
+    }
+
+  
+
+    private TreeNode insertIntoBST(TreeNode root, TreeNode toBeInsert){
+
+        if(root == null) return toBeInsert;
+
+        if(toBeInsert.val < root.val) root.left = insertIntoBST(root.left, toBeInsert);
+
+        else root.right = insertIntoBST(root.right, toBeInsert);
+
+        return root;
+
+    }
+
+}
+```
+### 108.将有序数组转换为二叉搜索树
+![](108.png)
+时间100.00%，空间53.72%
+```java
+class Solution {
+
+    public TreeNode sortedArrayToBST(int[] nums) {
+
+        //其实都没有在意实现这个平衡，这样写就实现了
+
+        //应该和root的取法有关？尽量取在中间
+
+        //两边的节点数尽量的平均，就可以达到平衡了？
+
+        return sortedArrayToBSTInRange(nums, 0, nums.length - 1);
+
+    }
+
+  
+
+    private TreeNode sortedArrayToBSTInRange(int[] nums, int begin, int end){
+
+        if(begin == end) return new TreeNode(nums[begin]);
+
+        if(begin > end) return null;
+
+        int mid = (begin + end) / 2;
+
+        TreeNode root = new TreeNode(nums[mid]);
+
+        root.left = sortedArrayToBSTInRange(nums, begin, mid - 1);
+
+        root.right = sortedArrayToBSTInRange(nums, mid + 1, end);
+
+        return root;
+
+    }
+
+}
+```
+### 538.把二叉搜索树转换为累加树
+见hot100
+## 回溯算法
+### 理论基础
+回溯是递归的副产品，只要有递归就会有回溯。
+回溯并不是什么高效的算法，本质是穷举，穷举所有可能，然后选出想要的答案。
+回溯法一般可以解决如下几种问题：
+	组合问题：N个数里面按一定规则找出k个数的集合
+	切割问题：一个字符串按一定规则有几种切割方式
+	子集问题：一个N个数的集合里有多少符合条件的子集
+	排列问题：N个数按一定规则全排列，有几种排列方式
+	棋盘问题：N皇后，解数独等等
+组合无序，排列有序
+回溯法解决的问题都可以抽象为树形结构，回溯法解决的都是在集合中递归查找子集，集合的大小就构成了树的宽度，递归的深度就构成了树的深度。递归就要有终止条件，所以必然是一颗高度有限的树（N叉树）。
+回溯三部曲：
+	回溯函数模版返回值以及参数：返回值一般为void，参数边写边确定
+	回溯函数终止条件：找到一种组合or当前组合中的数已经不满足要求了
+	回溯搜索的遍历过程
+	![](回溯算法理论基础1.png)
+回溯算法模版框架
+```
+void backtracking(参数) {
+    if (终止条件) {
+        存放结果;
+        return;
+    }
+
+    for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
+        处理节点;
+        backtracking(路径，选择列表); // 递归
+        回溯，撤销处理结果
+    }
+}
+```
+### 77.组合
+![](77.png)
+时间51.71%，空间20.08%
+```java
+class Solution {
+
+  
+
+    private List<List<Integer>> res;
+
+  
+
+    public List<List<Integer>> combine(int n, int k) {
+
+        res = new ArrayList<>();
+
+        backTracking(n, k, new ArrayList<>(), 1);
+
+        return res;
+
+    }
+
+  
+
+    private void backTracking(int n, int k, List<Integer> temp, int begin){
+
+        if(temp.size() == k){
+
+            res.add(new ArrayList<>(temp));
+
+            return;
+
+        }
+
+        for(int i = begin;i <= n;i++){
+
+            temp.add(i);
+
+            backTracking(n, k, temp, i + 1);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }
+
+}
+```
+是可以通过剪枝优化的，时间94.35%，空间54.38%
+```java
+class Solution {
+
+  
+
+    private List<List<Integer>> res;
+
+  
+
+    public List<List<Integer>> combine(int n, int k) {
+
+        res = new ArrayList<>();
+
+        backTracking(n, k, new ArrayList<>(), 1);
+
+        return res;
+
+    }
+
+  
+
+    private void backTracking(int n, int k, List<Integer> temp, int begin){
+
+        int size = temp.size();
+
+        if(size == k){
+
+            res.add(new ArrayList<>(temp));
+
+            return;
+
+        }
+
+        //剪枝优化，当前层之后还需要的元素个数为k - size - 1
+
+        //然后这里有个begin嘛，每次会限制后续数的选择空间
+
+        //如果后续都没有k - size - 1这么多元素可选，就没必要再继续了
+
+        //后续元素个数 = n - i
+
+        //应该有n - i >= k - size - 1
+
+        //得i <= n - k + size + 1
+
+        for(int i = begin;i <= n - k + size + 1;i++){
+
+            temp.add(i);
+
+            backTracking(n, k, temp, i + 1);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }
+
+}
+```
+### 216.组合总和III
+![](216.png)
+时间100.00%，空间35.55%
+```java
+class Solution {
+
+  
+
+    List<List<Integer>> res;
+
+  
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+
+        res = new ArrayList<>();
+
+        find(k, n, new ArrayList<>(), 0, 1);
+
+        return res;
+
+    }
+
+  
+
+    private void find(int k, int n, List<Integer> temp, int sum, int begin){
+
+        int size = temp.size();
+
+        if(sum == n && size == k){
+
+            res.add(new ArrayList<>(temp));
+
+            return;
+
+        }
+
+        if(size >= k) return;
+
+        //包括当前还要找k - size个数，后面的数肯定都大于i的
+
+        //那么应该有(k - size) * i <= n - sum
+
+        //得i < (n - sum) / (k - size) && i <= 9
+
+        for(int i = begin;i <= (n - sum) / (k - size) && i <= 9;i++){
+
+            temp.add(i);
+
+            find(k, n, temp, sum + i, i + 1);
+
+            temp.remove(size);
+
+        }
+
+    }
+
+}
+```
+### 17.电话号码的字母组合
+见hot100
+### 39.组合总和
+见hot100
+### 40.组合总和II
+![](40.png)
+时间80.71%，空间46.03%
+```java
+class Solution {
+
+  
+
+    List<List<Integer>> res;
+
+  
+
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+
+        res = new ArrayList<>();
+
+        Arrays.sort(candidates);
+
+        backTracking(candidates, target, new ArrayList<>(), 0, 0);
+
+        return res;
+
+    }
+
+  
+
+    private void backTracking(int[] candidates, int target, List<Integer> temp,
+
+     int begin, int sum){
+
+        if(sum == target){
+
+            res.add(new ArrayList<>(temp));
+
+            return;
+
+        }
+
+        for(int i = begin;i < candidates.length;i++){
+
+            if(sum + candidates[i] > target) break;
+
+            //元素不能重复使用，用begin这个变量可以做到
+
+            //但是由于candidates中有相同的元素，如果同层使用多次相同的元素
+
+            //这时候其实只要取同层的相同元素的第一个的结果就好了，后续可以跳过
+
+            //同层后续的结果一定是第一个的真子集的
+
+            //然后注意要是i > begin而不是i > 0不然会把当前层第一个给跳过了后面的时候
+
+            if(i > begin && candidates[i] == candidates[i - 1]) continue;
+
+            temp.add(candidates[i]);
+
+            backTracking(candidates, target, temp, i + 1, sum + candidates[i]);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }
+
+}
+```
+### ★★★131.分割回文串
+![](131.png)
+
+基本思路，时间25.82%，空间13.33%
+![](131思路.png)
+```java
+class Solution {
+
+  
+
+    List<List<String>> res;
+
+  
+
+    public List<List<String>> partition(String s) {
+
+        res = new ArrayList<>();
+
+        backTracking(s, new ArrayList<>());
+
+        return res;
+
+    }
+
+  
+
+    //每次对当前字符串进行所有可能的裁剪，看裁剪出来的部分是不是回文串
+
+    //是的话，就继续对剩余子串进行裁剪，能裁到空就是找到一种组合了
+
+    //这里是带有一点剪枝的
+
+    private void backTracking(String s, List<String> temp){
+
+        if(s.isEmpty()){
+
+            res.add(new ArrayList<>(temp));
+
+            return;
+
+        }
+
+        int length = s.length();
+
+        for(int i = 1;i <= length;i++){
+
+            if(!judge(s.substring(0, i))) continue;
+
+            temp.add(s.substring(0, i));
+
+            backTracking(s.substring(i, length), temp);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }  
+
+  
+
+    //判断一个字符串是否是回文串
+
+    private boolean judge(String s){
+
+        int left = 0;
+
+        int right = s.length() - 1;
+
+        while(left <= right){
+
+            if(s.charAt(left) != s.charAt(right)) return false;
+
+            left++;
+
+            right--;
+
+        }
+
+        return true;
+
+    }
+
+}
+```
+优化，判断所有子串是不是回文串可以用动态规划先提前判断好，其他相应的还要改一下代码
+时间87.56%，空间56.64%
+```java
+class Solution {
+
+  
+
+    List<List<String>> res;
+
+  
+
+    public List<List<String>> partition(String s) {
+
+        res = new ArrayList<>();
+
+        int length = s.length();
+
+        //dp[i][j]表示s中第i个字符到第j个字符是否为回文串
+
+        boolean[][] dp = new boolean[length][length];
+
+        //通过中心扩展法来计算dp中的值
+
+        for(int i = 0;i < 2 * length;i++){
+
+            int left = i / 2;
+
+            int right = left + i % 2;
+
+            while(left >= 0 && right < length && s.charAt(left) == s.charAt(right)){
+
+                dp[left][right] = true;
+
+                left--;
+
+                right++;
+
+            }
+
+        }
+
+        backTracking(s, new ArrayList<>(), 0, dp);
+
+        return res;
+
+    }
+
+  
+
+    //每次对当前字符串进行所有可能的裁剪，看裁剪出来的部分是不是回文串
+
+    //是的话，就继续对剩余子串进行裁剪，能裁到空就是找到一种组合了
+
+    //这里是带有一点剪枝的
+
+    //param begin代表当前子串的开头字符索引
+
+    private void backTracking(String s, List<String> temp, int begin, boolean[][] dp){
+
+        if(begin == s.length()){
+
+            res.add(new ArrayList<>(temp));
+
+            return;
+
+        }
+
+        int length = s.length();
+
+        for(int i = begin;i < length;i++){
+
+            //i为裁剪的末尾字符索引
+
+            if(!dp[begin][i]) continue;
+
+            temp.add(s.substring(begin, i + 1));
+
+            backTracking(s, temp, i + 1, dp);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }  
+
+}
+```
+### 93.复原IP地址
+![](93.png)
+暴力，时间5.76%，空间5.04%
+```java
+class Solution {
+
+  
+
+    private List<String> res;
+
+  
+
+    public List<String> restoreIpAddresses(String s) {
+
+        res = new ArrayList<>();
+
+        backTracking(s, new ArrayList<>(), 0);
+
+        return res;
+
+    }
+
+  
+
+    private void backTracking(String s, List<String> temp, int begin){
+
+        if(temp.size() == 4 && begin == s.length()){
+
+            combineAndPut(temp);
+
+            return;
+
+        }
+
+        String now = new String();
+
+        //在每一层尝试各种可能的分割：取后面1位，2位或者3位
+
+        for(int i = begin;i < begin + 3 && i < s.length();i++){
+
+            now += s.charAt(i);
+
+            //如果3位了要看看是否小于255
+
+            if(now.length() == 3 && !judge(now)) break;
+
+            temp.add(now);
+
+            backTracking(s, temp, i + 1);
+
+            temp.remove(temp.size() - 1);
+
+            //如果第一位是0，后面就不用再取了，因为不能有前导0
+
+            if(now.length() == 1 && now.charAt(0) == '0') break;
+
+        }
+
+    }
+
+  
+
+    private void combineAndPut(List<String> temp){
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0;i < 3;i++){
+
+            sb.append(temp.get(i));
+
+            sb.append(".");
+
+        }
+
+        sb.append(temp.get(3));
+
+        res.add(sb.toString());
+
+    }
+
+  
+
+    private boolean judge(String s){
+
+        int num = 0;
+
+        for(int i = 0;i < 3;i++){
+
+            num += (s.charAt(i) - '0') * Math.pow(10, 2 - i);
+
+        }
+
+        return num <= 255;
+
+    }
+
+}
+```
+稍微优化了一下，时间35.26%，空间10.35%
+```java
+class Solution {
+
+  
+
+    List<String> res;
+
+  
+
+    public List<String> restoreIpAddresses(String s) {
+
+        int length = s.length();
+
+        res = new ArrayList<>();
+
+        //如果数字个数小于4或者大于12，都无法构成合法的IP段，直接return个空
+
+        if(length < 4 || length > 12) return res;
+
+        backTracking(s, new ArrayList<>(), 0);
+
+        return res;
+
+    }  
+
+  
+
+    private void backTracking(String s, List<String> temp, int begin){
+
+        int n = s.length();
+
+        //找到四个字符串了就可以return了
+
+        if(temp.size() == 4){
+
+            if(begin == n){
+
+                //如果字符全部用完了，那么这就是一个正确的结果了，放入res中
+
+                combineAndPut(temp);
+
+                return;
+
+            } else return;
+
+        }
+
+        //每一个节点截取的方法只有3种，截1/2/3位
+
+        String now = new String();
+
+        for(int i = begin;i < begin + 3 && i < n;i++){
+
+            //第一位是0后面就不能加东西了
+
+            if(i > begin && s.charAt(begin) == '0') break;
+
+            //剩余位数太少了就break了
+
+            if(n - i - 1 < (4 - temp.size() - 1)) break;
+
+            now += s.charAt(i);
+
+            //剩余位数太多了就continue，给当前多安排几位
+
+            if(n - i - 1 > (4 - temp.size() - 1) * 3) continue;
+
+            //3位了要看看是否小于等于255
+
+            if(i == begin + 2 && judge(now)) break;
+
+            temp.add(now);
+
+            backTracking(s, temp, i + 1);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }
+
+  
+
+    private void combineAndPut(List<String> temp){
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0;i < 3;i++){
+
+            sb.append(temp.get(i));
+
+            sb.append(".");
+
+        }
+
+        sb.append(temp.get(3));
+
+        res.add(sb.toString());
+
+    }
+
+  
+
+    //判断三位字符串是否合法，不合法返回true，合法返回false
+
+    private boolean judge(String sb){
+
+        return sb.charAt(0) > '2' || (sb.charAt(0) == '2' && sb.charAt(1) > '5')
+
+        || (sb.charAt(0) == '2' && sb.charAt(1) == '5' && sb.charAt(2) > '5');
+
+    }
+
+}
+```
+### 78.子集
+见hot100
+无序就用begin，每次从begin开始。有序用flag标识一下，没用过的都可以，然后从0开始。
+### 90.子集II
+![](90.png)
+时间85.94%，空间40.82%
+```java
+class Solution {
+
+  
+
+    private List<List<Integer>> res;
+
+  
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+
+        // 和子集的区别就是其中可能包含重复元素，那么就不只要从begin开始
+
+        // 还要把前面相同的有的给跳过。why？同样位置后面再取重复的元素一定是
+
+        // 前面取这个元素的子集，前面都多一个相同元素可以选了嘛。
+
+        Arrays.sort(nums);
+
+        res = new ArrayList<>();
+
+        res.add(new ArrayList<>());// 加入空集
+
+        backTracking(0, new ArrayList<>(), nums);
+
+        return res;
+
+    }
+
+  
+
+    private void backTracking(int begin, List<Integer> temp, int[] nums){
+
+        for(int i = begin;i < nums.length;i++){
+
+            if(i > begin && nums[i] == nums[i - 1]) continue;
+
+            temp.add(nums[i]);
+
+            res.add(new ArrayList<>(temp));
+
+            backTracking(i + 1, temp, nums);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }
+
+}
+```
+### 491.非递减子序列
+![](491.png)
+时间90.66%，空间44.18%
+```java
+class Solution {
+
+  
+
+    List<List<Integer>> res;
+
+  
+
+    public List<List<Integer>> findSubsequences(int[] nums) {
+
+        // 每轮放进来一个数，然后找以当前数为始的非递减子序列
+
+        // 也要用上begin，因为要找子序列不能找前面的数
+
+        // 然后除了begin之外，同层也要把后面的相同的数给跳过了
+
+        // 这里因为不能排序，不能通过和前面相等来跳过
+
+        // 只能通过哈希表来判断当前数是否使用过
+
+        // 后面的只要大于等于前一个数就行了
+
+        res = new ArrayList<>();
+
+        backTracking(nums, 0, new ArrayList<>(), -101);
+
+        return res;
+
+    }
+
+  
+
+    private void backTracking(int[] nums, int begin, List<Integer> temp, int band){
+
+        Set<Integer> tool = new HashSet<>();
+
+        for(int i = begin;i < nums.length;i++){
+
+            if(tool.contains(nums[i]) || nums[i] < band)continue;
+
+            tool.add(nums[i]);
+
+            temp.add(nums[i]);
+
+            if(temp.size() > 1) res.add(new ArrayList<>(temp));
+
+            backTracking(nums, i + 1, temp, nums[i]);
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }
+
+}
+```
+### 46. 全排列
+见hot100
+### 47.全排列II
+![](47.png)
+时间80.51%，空间62.81%
+```java
+class Solution {
+
+  
+
+    private List<List<Integer>> res;
+
+  
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+
+        // 全排列的过程中去重一下就是，怎么去重呢
+
+        // 同层后面的和前面相同的元素不用放
+
+        Arrays.sort(nums);
+
+        res = new ArrayList<>();
+
+        backTrackging(nums, new ArrayList<>(), 0);
+
+        return res;
+
+    }
+
+  
+
+    private void backTrackging(int[] nums, List<Integer> temp, int length){
+
+        if(length == nums.length){
+
+            res.add(new ArrayList<>(temp));
+
+            return;
+
+        }
+
+        for(int i = 0;i < nums.length;i++){
+
+            if(i > 0 && nums[i] == nums[i - 1]) continue;
+
+            if(nums[i] == -11) continue;
+
+            temp.add(nums[i]);
+
+            int tempInt = nums[i];
+
+            nums[i] = -11;
+
+            backTrackging(nums, temp, length + 1);
+
+            nums[i] = tempInt;
+
+            temp.remove(temp.size() - 1);
+
+        }
+
+    }
+
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
