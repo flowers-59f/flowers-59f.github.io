@@ -4521,6 +4521,120 @@ class Solution {
 
 }
 ```
+### N皇后
+![](51.png)
+时间52.23%，空间96.41%
+```java
+class Solution {
+
+    private List<int[]> tool; // 用来记住各种摆放方式/pos n个一组
+
+  
+
+    public List<List<String>> solveNQueens(int n) {
+
+        tool = new ArrayList<>();
+
+        backTracking(n, 0, new int[n]);
+
+        List<List<String>> res = new ArrayList<>();
+
+        char[] tempCharArray = new char[n]; // 用来存放每一行的摆法
+
+        // 初始化为全. "...." 到时候Q选个位置放进去就好了
+
+        for(int i = 0;i < n;i++){
+
+            tempCharArray[i] = '.';
+
+        }
+
+        for(int[] nums : tool){
+
+            List<String> tempList = new ArrayList<>();
+
+            for(int i = 0;i < n;i++){
+
+                tempCharArray[nums[i]] = 'Q';
+
+                tempList.add(new String(tempCharArray));
+
+                tempCharArray[nums[i]] = '.';
+
+            }
+
+            res.add(tempList);
+
+        }
+
+        return res;
+
+    }
+
+  
+
+    // n -> 个数n,,count -> 放好的皇后数,pos -> 用来记住一轮中n个皇后的位置
+
+    private void backTracking(int n, int count, int[] pos){
+
+        // 放好了全部皇后
+
+        if (count == n) {
+
+            tool.add(Arrays.copyOf(pos, pos.length));
+
+            return;
+
+        }
+
+        // 一行一行的遍历，每次找到当前行可以放置的位置
+
+        // 当前行肯定不用判断了，没有放，需要判断斜线和当前列
+
+        for(int j = 0;j < n;j++){
+
+            if (judge(n, count, j, pos)) {
+
+                pos[count] = j;
+
+                backTracking(n, count + 1, pos);
+
+            }
+
+        }
+
+    }
+
+  
+
+    private boolean judge(int n, int i, int j, int[] pos){
+
+        // 列
+
+        for(int k = 0;k < i;k++){
+
+            if(pos[k] == j) return false;
+
+        }
+
+        // 斜线:看上n行左右n个位置有没有放
+
+        for(int k = 0;k < i;k++){
+
+            int diff = i - k;
+
+            if(j - diff >= 0 && pos[k] == j - diff) return false;
+
+            if(j + diff < n && pos[k] == j + diff) return false;
+
+        }
+
+        return true;
+
+    }
+
+}
+```
 
 
 
