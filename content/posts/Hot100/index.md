@@ -15,6 +15,13 @@ Arrays.sort(数组, (o1, o2) -> {
 	return o1[0] - o2[0]
 })
 ```
+队列
+```java
+Queue<String> queue = new LinkedList<String>();
+queue.offer("a");// 添加元素
+queue.poll();// 删除并返回队列的头部元素
+queue.peek();返回队列的头部元素
+```
 ## Easy
 ### 160.相交链表
 题目：
@@ -1500,6 +1507,479 @@ class Solution {
         backTracking(board, word, length + 1, i, j + 1);
 
         board[i][j] = temp;
+
+    }
+
+}
+```
+### 96.不同的二叉搜索树
+题目：
+![](96.png)
+时空：时间100.00%，空间45.12%
+思路：动态规划，设dp\[i]为i个结点构成的二叉搜索树的种类，记f(i,j)表示共有i个结点，然后以其中节点值为j的节点为顶点的二叉树种类。那么f(i,j) = dp\[j - 1] \*dp\[i - j - 1]（左子树种类 \* 右子树种类）。然后j取遍1-i然后加起来就可以了。
+代码：
+```java
+class Solution {
+
+    public int numTrees(int n) {
+
+        if (n == 0) return 0;
+
+        if (n == 1) return 1;
+
+        int[] dp = new int[n + 1];
+
+        dp[1] = 1;
+
+        for(int i = 2;i <= n;i++){
+
+            int sum = 0;
+
+            // 子节点全在一边的时候记得特殊处理一下，不然 * 个0变成0了
+
+            sum += 2 * dp[i - 1];
+
+            for(int j = 1;j < i;j++){
+
+                sum += dp[j - 1] * dp[i - j];
+
+            }
+
+            dp[i] = sum;
+
+        }
+
+        return dp[n];
+
+    }
+
+}
+```
+### 98.验证二叉搜索树
+题目：
+![](98.png)
+时空：时间100.00%，空间99.83%
+思路：性质：节点的左子树只包含严格小于当前节点的数，右子树只包含严格大于当前节点的数。那么一个节点如果位于某个节点的左子树，那么它的值就一定要小于这个节点，位于右子树同理。那么一个节点可能既是某个节点的左子树，也同时是另外一个节点的右子树（当然也可能是左子树），那么这个节点的值就会被限定在一个范围内，看看每个节点符不符合要求就行了。
+代码：
+```java
+/**
+
+ * Definition for a binary tree node.
+
+ * public class TreeNode {
+
+ *     int val;
+
+ *     TreeNode left;
+
+ *     TreeNode right;
+
+ *     TreeNode() {}
+
+ *     TreeNode(int val) { this.val = val; }
+
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+
+ *         this.val = val;
+
+ *         this.left = left;
+
+ *         this.right = right;
+
+ *     }
+
+ * }
+
+ */
+
+class Solution {
+
+  
+
+    private boolean res;
+
+  
+
+    public boolean isValidBST(TreeNode root) {
+
+        res = true;
+
+        // 一开始对节点应该是没限制的，用最大的值限制，题目中的节点值的范围用Integer限制包不住，用Long
+
+        judge(root, Long.MIN_VALUE, Long.MAX_VALUE);
+
+        return res;
+
+    }
+
+  
+
+    private void judge(TreeNode root, Long min, Long max){
+
+        if (!res) return;
+
+        if (root == null) return;
+
+        if (root.val <= min || root.val >= max) {
+
+            res = false;
+
+            return;
+
+        }
+
+        judge(root.left, min, Math.min(max, root.val));
+
+        judge(root.right, Math.max(min, root.val), max);
+
+    }
+
+}
+```
+### 102.二叉树的层序遍历
+题目：
+![](102.png)
+时空：时间99.99%，空间10.97%
+思路：没啥好说的，基础
+代码：
+```java
+/**
+
+ * Definition for a binary tree node.
+
+ * public class TreeNode {
+
+ *     int val;
+
+ *     TreeNode left;
+
+ *     TreeNode right;
+
+ *     TreeNode() {}
+
+ *     TreeNode(int val) { this.val = val; }
+
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+
+ *         this.val = val;
+
+ *         this.left = left;
+
+ *         this.right = right;
+
+ *     }
+
+ * }
+
+ */
+
+class Solution {
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        if(root == null) return res;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.offer(root);
+
+        while(!queue.isEmpty()){
+
+            int currLayerSize = queue.size();
+
+            List<Integer> temp = new ArrayList<>();
+
+            for(int i = 0;i < currLayerSize;i++){
+
+                TreeNode node = queue.poll();
+
+                temp.add(node.val);
+
+                if(node.left != null) queue.add(node.left);
+
+                if(node.right != null )queue.add(node.right);
+
+            }
+
+            res.add(temp);
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 105.从前序与中序遍历序列构造二叉树
+题目：
+![](105.png)
+补一个条件：二叉树中每个节点值都不同
+时空：时间99.11%，空间77.46%
+思路：从前序遍历可以找到二叉树的根节点，然后知道了根节点，在中序遍历中就可以找到左右子树，得到其节点个数。然后再递归的构造左右子树就可以了。
+代码：
+```java
+/**
+
+ * Definition for a binary tree node.
+
+ * public class TreeNode {
+
+ *     int val;
+
+ *     TreeNode left;
+
+ *     TreeNode right;
+
+ *     TreeNode() {}
+
+ *     TreeNode(int val) { this.val = val; }
+
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+
+ *         this.val = val;
+
+ *         this.left = left;
+
+ *         this.right = right;
+
+ *     }
+
+ * }
+
+ */
+
+class Solution {
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+
+        Map<Integer, Integer> queryIndex = new HashMap<>();
+
+        int n = inorder.length;
+
+        for(int i = 0;i < n;i++){
+
+            queryIndex.put(inorder[i], i);
+
+        }
+
+        return buildTreeInRange(preorder, 0, n, inorder, 0, n, queryIndex);
+
+    }
+
+  
+
+    private TreeNode buildTreeInRange(int[] preorder, int pBegin, int pEnd,
+
+    int[] inorder, int iBegin, int iEnd, Map<Integer, Integer> queryIndex){
+
+        // 加一个pBegin >= inorder.length 防止溢出（构建左子树时传的pBegin + 1，而且后面还要用）
+
+        if(pBegin > pEnd || iBegin > iEnd || pBegin >= inorder.length) return null;
+
+        int rootVal = preorder[pBegin];
+
+        int indexInInorder = queryIndex.get(rootVal);
+
+        int leftSize = indexInInorder - iBegin;
+
+        TreeNode node = new TreeNode(rootVal);
+
+        node.left = buildTreeInRange(preorder, pBegin + 1, pBegin + leftSize
+
+        , inorder, iBegin, indexInInorder - 1, queryIndex);
+
+        node.right = buildTreeInRange(preorder, pBegin + leftSize + 1, pEnd
+
+        , inorder, indexInInorder + 1, iEnd, queryIndex);
+
+        return node;
+
+    }
+
+}
+```
+### 114.二叉树展开为链表
+题目：
+![](114.png)
+时空：时间100.00%，空间31.45%
+思路：先把左右子树分别展开，然后把左子树接到右边，再把右子树节点接到原来这个左子树的最右边就行了。
+代码：
+```java
+/**
+
+ * Definition for a binary tree node.
+
+ * public class TreeNode {
+
+ *     int val;
+
+ *     TreeNode left;
+
+ *     TreeNode right;
+
+ *     TreeNode() {}
+
+ *     TreeNode(int val) { this.val = val; }
+
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+
+ *         this.val = val;
+
+ *         this.left = left;
+
+ *         this.right = right;
+
+ *     }
+
+ * }
+
+ */
+
+class Solution {
+
+    public void flatten(TreeNode root) {
+
+        function(root);
+
+    }
+
+  
+
+    public TreeNode function(TreeNode root) {
+
+        if(root == null) return null;
+
+        // 右子树为空
+
+        if(root.right == null){
+
+            // 展开左子树，然后接到右边
+
+            root.right = function(root.left);
+
+            root.left = null;
+
+            return root;
+
+        }
+
+        // 左子树为空
+
+        if(root.left == null){
+
+            root.right = function(root.right);
+
+            return root;
+
+        }
+
+        // 都不为空
+
+        // 展开右子树
+
+        TreeNode temp = function(root.right);
+
+        // 展开左子树，然后接到右边
+
+        root.right = function(root.left);
+
+        root.left = null;
+
+        // 把右子树接到之前左子树的最右边
+
+        TreeNode curr = root.right;
+
+        while(curr.right != null) curr = curr.right;
+
+        curr.right = temp;
+
+        return root;
+
+    }
+
+}
+```
+### 128.最长连续序列
+题目：
+![](128.png)
+时空：时间86.70%，空间37.87%
+思路：用一个HashSet把每个数字都存一下，然后可以这样找连续序列，对于每个数，找有没有比它大1的数，有的话就继续找，没有了之后记录连续的长度，更新最大值。然后如果有比它小1的数，可以跳过，因为后面小1的那个数会来找它的，它的长度肯定是更长的。
+代码：
+```java
+class Solution {
+
+    public int longestConsecutive(int[] nums) {
+
+        int n = nums.length;
+
+        int max = 0;
+
+        Set<Integer> memory = new HashSet<>();
+
+        for(int i = 0;i < n;i++){  
+
+            memory.add(nums[i]);
+
+        }
+
+        for(Integer num:memory){
+
+            if(memory.contains(num - 1)) continue;
+
+            int curr = num;
+
+            while(memory.contains(curr)){
+
+                curr++;
+
+            }
+
+            max = Math.max(max, curr - num);
+
+        }
+
+        return max;
+
+    }
+
+}
+```
+### 139.单词拆分
+题目：![](139.png)
+时空：时间62.84%，空间18.17%
+思路：动态规划，
+代码：
+```java
+class Solution {
+
+    public boolean wordBreak(String s, List<String> wordDict) {
+
+        int sl = s.length();
+
+        boolean[] dp = new boolean[sl + 1];// dp[i]表示s的前i个字符能不能用字典中的单词拼出来
+
+        dp[0] = true;
+
+        for(int i = 1;i <= sl;i++){
+
+            for(int j = 0;j < i;j++){
+
+                if(dp[j] && wordDict.contains(s.substring(j, i))){
+
+                    dp[i] = true;
+
+                    break;
+
+                }
+
+            }
+
+        }
+
+        return dp[sl];
 
     }
 

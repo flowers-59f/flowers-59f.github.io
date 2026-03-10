@@ -4635,9 +4635,113 @@ class Solution {
 
 }
 ```
+### ★★★37.解数独
+![](37_1.png)
+![](37_2.png)
+![](37_3.png)
+时间69.37%，空间55.68%
+```java
+class Solution {
 
+    public void solveSudoku(char[][] board) {
 
+        boolean[][] row = new boolean[9][10]; // 标记各行中数字1-9有没有使用过
 
+        boolean[][] column = new boolean[9][10]; // 标记各列中数字1-9有没有使用过
+
+        boolean[][] area = new boolean[9][10]; // 标记各3x3宫内数字1-9有没有使用过
+
+        // 宫格依次编号为
+
+        // 0 1 2
+
+        // 3 4 5
+
+        // 6 7 8
+
+        // 计算方式 行号/3 * 3 + 列号/3
+
+        // 把已经填好的数字标记一下
+
+        for(int i = 0;i < 9;i++){
+
+            for(int j = 0;j < 9;j++){
+
+                if(board[i][j] == '.') continue;
+
+                int num = board[i][j] - '0';
+
+                row[i][num] = true;
+
+                column[j][num] = true;
+
+                area[(i / 3) * 3 + j / 3][num] = true;
+
+            }
+
+        }
+
+        backTracking(board, row, column, area, 0, 0);
+
+    }
+
+  
+
+    // 就是一个大号的回溯，一格格的填、标记，不行了就回退
+
+    private boolean backTracking(char[][] board, boolean[][] row, boolean[][] column, boolean[][] area, int i, int j){
+
+        // i = 9就是找到一种解法了，可以返回true结束了
+
+        if(i == 9) return true;
+
+        // 计算下一格坐标
+
+        int nextJ = (j + 1) % 9;
+
+        int nextI = i + (j == 8 ? 1:0);
+
+        // 之前已经填好了，往下一格走
+
+        if(board[i][j] != '.') return backTracking(board, row, column, area, nextI, nextJ);
+
+        // 尝试填数字
+
+        int areaIndex = (i / 3) * 3 + j / 3;
+
+        for(int k = 1;k <= 9;k++){
+
+            if(row[i][k] || column[j][k] || area[areaIndex][k]) continue;
+
+            board[i][j] = (char) (k + '0');
+
+            row[i][k] = true;
+
+            column[j][k] = true;
+
+            area[areaIndex][k] = true;
+
+            if(backTracking(board, row, column, area, nextI, nextJ)) return true;
+
+            area[areaIndex][k] = false;
+
+            column[j][k] = false;
+
+            row[i][k] = false;
+
+            board[i][j] = '.';
+
+        }
+
+        // 到这说明这个格子填1-9都不行，前面填错了，返回false回溯
+
+        return false;
+
+    }
+
+}
+```
+### x.xx
 
 
 
