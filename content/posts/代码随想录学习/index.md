@@ -4741,7 +4741,202 @@ class Solution {
 
 }
 ```
-### x.xx
+## 贪心算法
+### 理论基础
+通过每轮局部最优 -> 全局最优
+例子：有一堆钞票，可以拿走十张，想要达到最大的金额就可以每次都拿当前最大面额的钞票。
+如果手动模拟一下感觉可以局部最优推出整体最优，而且想不到反例，那么就试一试贪心。
+做题的时候需要考虑的是“局部最优”是怎么样的，如何由局部最优 -> 全局最优。
+### 455.分发饼干
+![](455.png)
+时间99.93%，空间40.38%
+```java
+class Solution {
+
+    public int findContentChildren(int[] g, int[] s) {
+
+        // 先满足胃口小的孩子，并且用最小尺寸的饼干来满足，由此即可达到最优
+
+        Arrays.sort(g);
+
+        Arrays.sort(s);
+
+        int passed = 0;
+
+        int satisfied = 0;
+
+        while(satisfied < g.length && passed < s.length){
+
+            while(passed < s.length && s[passed] < g[satisfied]){
+
+                passed++;
+
+            }
+
+            if(passed != s.length){
+
+                passed++;
+
+                satisfied++;
+
+            }
+
+        }
+
+        return satisfied;
+
+    }
+
+}
+```
+### 376.摆动序列
+![](376.png)
+一开始用的回溯写的，就是每个数尝试选或者不选（如果当前数和前面构不成摆动序列则只能不选），然后遍历所有情况找到最大值。不过超时了，代码如下。
+```java
+class Solution {
+
+  
+
+    private int maxLength = 0;
+
+  
+
+    public int wiggleMaxLength(int[] nums) {
+
+        backTracking(nums, 0, 0, 0, false, true, false);
+
+        return maxLength;
+
+    }
+
+  
+
+    // true -> +  false -> -
+
+    private void backTracking(int[] nums, int i, int length, int pre, boolean preSign, boolean isFirst, boolean isSecond){
+
+        // 剪枝：如果之后的所有数加上，长度都没已知最好的长，那么直接return就行了
+
+        if(nums.length - i + length < maxLength) return;
+
+        maxLength = Math.max(length, maxLength);
+
+        if(i >= nums.length) return;
+
+        if(isFirst){
+
+            // 选
+
+            backTracking(nums, i + 1, length + 1, nums[i], false, false, true);
+
+            // 不选
+
+            backTracking(nums, i + 1, length, 0, false, true, false);
+
+            return;
+
+        }
+
+        boolean currSign = nums[i] - pre > 0;
+
+        if ((currSign && ! preSign) || (!currSign && preSign) || isSecond) {
+
+            // 第二个数特殊情况
+
+            if(isSecond && nums[i] == pre){
+
+                backTracking(nums, i + 1, length, pre, preSign, false, false);
+
+                return;
+
+            }
+
+            // 选
+
+            backTracking(nums, i + 1, length + 1, nums[i], currSign, false, false);
+
+            // 不选
+
+            backTracking(nums, i + 1, length, pre, preSign, false, false);
+
+        } else {
+
+            // 不选
+
+            backTracking(nums, i + 1, length, pre, preSign, false, false);
+
+        }
+
+    }
+
+}
+```
+基于贪心写的
+![](376_mind_1.png)
+实际操作上，其实连删除的操作都不用做，因为题目要求的是最长摆动子序列的长度，所以只需要统计数组的峰值数量就可以了。
+判断峰值：
+```java
+frontDiff * backDiff < 0 
+```
+不过会遇到一些情况影响峰值的判断，首先是平坡。
+![](376_mind_2.png)
+像这张图中，按之前的逻辑，4个2都不会被认为是极值点。但是删除其中3个2明显可以构成一个3个点的摆动序列，所以平坡中删去一些点后可能会有极值点，删的话就是留两边中的一个就可以了，我是留最后一个。
+找到平坡的最后一个：
+```java
+frontDiff == 0 && backDiff != 0
+```
+但是平坡的最后一个一定是极值点嘛，其实是不一定的。就像上面这个图的最后一个1，如果换成3，是往上翘的，最后一个2就不是极值点。所以这里还需要补一个条件，就是进入平坡和离开平坡那个变化的趋势要不同的。条件变成下面这样
+```java
+if(frontDiff == 0 && backDiff != 0 && (diffBeforePlane * backDiff < 0))
+```
+其中diffBeforePlane就是进入平坡前的变化趋势，通过下面代码可以得到
+```java
+if(backDiff == 0 && frontDiff != 0) diffBeforePlane = frontDiff;
+```
+第一次backDiff为0时，那么就开始进入平坡了，需要记住变化趋势，不过在平坡走的过程中backDiff总是为0，diffBeforePlane会被覆盖，所以这里还要加一个判断frontDiff不等于0。
+时间100.00%，空间10.77%
+```java
+class Solution {
+
+    public int wiggleMaxLength(int[] nums) {
+
+        int n = nums.length;
+
+        int peakCount = 0;
+
+        int diffBeforePlane = 0;
+
+        for(int i = 1;i < n - 1;i++){
+
+            int frontDiff = nums[i] - nums[i - 1]; // 当前数和前面一个数的差值
+
+            int backDiff = nums[i + 1] - nums[i]; // 后面一个数和当前数的差值
+
+            if(backDiff == 0 && frontDiff != 0) diffBeforePlane = frontDiff;
+
+            if(frontDiff == 0 && backDiff != 0 && (diffBeforePlane * backDiff < 0)){
+
+                peakCount++;
+
+            }
+
+            if(frontDiff * backDiff < 0){
+
+                peakCount++;
+
+            }
+
+        }
+
+        if(peakCount == 0 && nums[0] == nums[n - 1]) return 1;
+
+        return peakCount + 2;
+
+    }
+
+}
+```
+### x.xxx
 
 
 
