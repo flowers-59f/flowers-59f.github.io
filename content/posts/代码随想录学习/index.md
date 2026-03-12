@@ -4936,9 +4936,630 @@ class Solution {
 
 }
 ```
-### x.xxx
+### 53.最大子数组和
+见hot100
+### 122.买卖股票的最佳时机II
+![](122.png)
+时间100.00%，空间14.71%
+```java
+class Solution {
 
+    public int maxProfit(int[] prices) {
 
+        int n = prices.length;
+
+        // 最后能获得的最大利润肯定和前面能获得的利润和买入、卖出情况有关
+
+        // 所以想到动态规划，规定dp[i][j]如下
+
+        // dp[i][0]表示截止到第i天且第i天卖出股票所能获得的最大利润
+
+        // dp[i][1]表示截止到第i天且第i天买入股票所能获得的最大利润
+
+        // 递推关系
+
+        // dp[i][0] = 从前面买入中的最大利润 + 当天股票价格
+
+        // dp[i][1] = 从前面卖出中的最大利润 - 当天股票价格
+
+        // 然后因为都只要记住最大值，这个代码可以简化成下面这样
+
+        int sellMax = 0;
+
+        int buyMax = -prices[0];
+
+        for(int i = 1;i < n;i++){
+
+            sellMax = Math.max(sellMax, buyMax + prices[i]);
+
+            buyMax = Math.max(buyMax, sellMax - prices[i]);
+
+        }
+
+        return sellMax;
+
+    }
+
+}
+```
+### 55.跳跃游戏
+见hot100
+### 45.跳跃游戏II
+![](45.png)
+时间99.65%，空间21.93%
+```java
+class Solution {
+
+    public int jump(int[] nums) {
+
+        // 以 2 3 1 2 4 2 3为例
+
+        // 一开始可以到2，这时候一步可达的索引为1,2
+
+        // 通过它们可以更新处两步可达的最远处，通过两步可达的地方可以更新处三步可达的最远处
+
+        // 当第一次可达的最远处超过n - 1返回步数就好了。
+
+        // 下一步走到哪是不知道的，但是我们会遍历下一步能走的所有格，更新能走到的最远的地方
+
+        // （相当于走最远的那一步了）这就是贪心
+
+        int n = nums.length;
+
+        if(n == 1) return 0;
+
+        int canReach = 0;
+
+        int end = 0;
+
+        int step = 0;
+
+        for(int i = 0;i < n;i++){
+
+            if(canReach >= n - 1) return step + 1;
+
+            if(i > end){
+
+                // 走出下一步
+
+                step += 1;
+
+                end = canReach;
+
+            }
+
+            canReach = Math.max(canReach, i + nums[i]);
+
+        }
+
+        return -1;
+
+    }
+
+}
+```
+### 1005.K次取反后最大化的数组和
+![](1005.png)
+时间66.42%，空间21.41%
+```java
+class Solution {
+
+    public int largestSumAfterKNegations(int[] nums, int k) {
+
+        // 尽量把变号用在小的负数上，先把数组排序一下
+
+        // 然后按序遍历数组，如果是负数，并且变号次数没用完，那么给它变成正的就是当下最赚的
+
+        // (当前负数就是最小的负数了)，如果到了正数，变号次数还没用完，这时候其实我们就不想用了
+
+        // 得精打细算，如果是偶数，那么对一个数反复变号就可以了，不会变小。
+
+        // 如果是奇数，那么找个绝对值最小的加是最爽的
+
+        Arrays.sort(nums);
+
+        int n = nums.length;
+
+        int absMin = Integer.MAX_VALUE;
+
+        int sum = 0;
+
+        for(int i = 0;i < n;i++){
+
+            absMin = Math.min(absMin, Math.abs(nums[i]));
+
+            if(nums[i] < 0 && k > 0){
+
+                nums[i] = -nums[i];
+
+                k--;
+
+            }
+
+            sum += nums[i];
+
+        }
+
+        // 这一步就相当于是k没用完且是奇数，然后找个绝对值最小的加负号
+
+        // 没用完或者用完了就直接返回了
+
+        if(k % 2 != 0){
+
+            sum -= 2 * absMin;
+
+        }
+
+        return sum;
+
+    }
+
+}
+```
+### ★★★134.加油站
+![](134.png)
+时间100.00%，空间9.21%
+太难了，真想不明白，下面给几个结论记住这题先把。
+gas之和大于等于cost之和，一定有解。
+gas之和小于cost之和，一定没解。
+对gas\[i] - cost\[i]求和，记录最低点。
+如果有解，那么解就是最低点的下一个。
+```java
+class Solution {
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+
+        int res = 0;
+
+        int min = 0; // 最小油量
+
+        int storage = 0;
+
+        for(int i = 0;i < gas.length;i++){
+
+            storage = storage + gas[i] - cost[i];
+
+            if(storage < min){
+
+                min = storage;
+
+                res = i + 1;
+
+            }
+
+        }
+
+        return storage >= 0 ? res:-1;
+
+    }
+
+}
+```
+### ★★★135.分发糖果
+![](135.png)
+时间33.62%，空间16.22%
+```java
+class Solution {
+
+    public int candy(int[] ratings) {
+
+        // 规则：相邻的两个孩子中，评分更高的需要获得更多的糖果
+
+        // 拆分成左规则和右规则 设有学生A -> B
+
+        // 左规则：B > A B的糖要多
+
+        // 右规则：A > B A的糖要多
+
+        // 每个学生既要满足左规则也要满足右规则
+
+        // 那么可以这样实现
+
+        // 定义两个数组(left和right)，先给每个学生分配初始的1颗糖
+
+        // 然后从左往右遍历left，如果当前学生得分比左边高，给它比左边多一个，这样left中所有人都满足左规则
+
+        // 接着从右往左遍历right，如果当前学生得分比右边高，给它比右边多一个，这样right中所有人都满足右规则
+
+        // 然后每个人给left和right中的最大值，就可以同时满足左右规则，并且这就是最优解
+
+        // why? 很难理解清楚说实话。先记把，left和right分别是满足左右规则要求的最小值
+
+        // 取它们中的最大值就是同时满足左右规则的最小值
+
+        int n = ratings.length;
+
+        int[] left = new int[n];
+
+        Arrays.fill(left, 1);
+
+        int[] right = new int[n];
+
+        Arrays.fill(right, 1);
+
+        for(int i = 1;i < n;i++){
+
+            if(ratings[i] > ratings[i - 1]) left[i] = left[i - 1] + 1;
+
+        }
+
+        int res = left[n - 1];
+
+        for(int i = n - 2;i >=0;i--){
+
+            if(ratings[i] > ratings[i + 1]) right[i] = right[i + 1] + 1;
+
+            res += Math.max(left[i], right[i]);
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 860.柠檬水找零
+![](860.png)
+时间100.00%，空间42.46%
+```java
+class Solution {
+
+    public boolean lemonadeChange(int[] bills) {
+
+        // 就是给20找零的时候尽量先用10
+
+        int fiveNum = 0;
+
+        int TenNum = 0;
+
+        for(int i = 0;i < bills.length;i++){
+
+            if (bills[i] == 5) {
+
+                fiveNum++;
+
+            } else if(bills[i] == 10){
+
+                if(fiveNum == 0) return false;
+
+                fiveNum--;
+
+                TenNum++;
+
+            } else {
+
+                if(fiveNum == 0) return false;
+
+                if(TenNum == 0 && fiveNum < 3) return false;
+
+                if(TenNum > 0){
+
+                    TenNum--;
+
+                    fiveNum--;
+
+                } else {
+
+                    fiveNum -= 3;
+
+                }
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+}
+```
+### 406.根据身高重建队列
+见hot100
+### 452.用最少数量的箭引爆气球
+时间74.69%，空间45.57%
+```java
+class Solution {
+
+    public int findMinArrowShots(int[][] points) {
+
+        // 把points看作一个个区间，这个问题翻译一下，就是有重叠的区间都取交集只射一次就好了。
+
+        // 不过一个区间可能和多个区间都有交集，那么应该合到哪个区间去呢。
+
+        // 应该合到前面的区间，前面总是要浪费一次的，不合到前面那一次也要用。
+
+        // 合到后面的话，可能导致区间缩小，原本下一个可以去和别人合并的现在不行了。
+
+        // 所以按区间开头排序一下，尽量和前面的合并就好了。
+
+        Arrays.sort(points, (point1, point2) -> {return Integer.compare(point1[0], point2[0]);});
+
+        int begin = points[0][0];
+
+        int end = points[0][1];
+
+        int areaCount = 0;
+
+        for(int i = 1;i < points.length;i++){
+
+            if (points[i][0] > end) {
+
+                // 无交集
+
+                areaCount ++;
+
+                begin = points[i][0];
+
+                end = points[i][1];
+
+            } else {
+
+                // 有交集取交集
+
+                begin = points[i][0];
+
+                end = Math.min(end, points[i][1]);
+
+            }
+
+        }
+
+        return areaCount + 1;
+
+    }
+
+}
+```
+### 435.无重叠区间
+![](435.png)
+时间63.83%，空间7.28%
+```java
+class Solution {
+
+    public int eraseOverlapIntervals(int[][] intervals) {
+
+        // 交集情况:1.A包B，删A  2.两个相交，删任意一个都可以 3.多个相交，删中间的嘛
+
+        // 2,3合并一下其实就是，按顺序判断后面的区间和前面有没有交集，有的话删除后面那个  1的话还要单独判断一下
+
+        // 没交集更新一下当前区间
+
+        Arrays.sort(intervals, (int[] interval1, int[] interval2) -> {
+
+            return Integer.compare(interval1[0], interval2[0]);
+
+        });
+
+        int begin = intervals[0][0];
+
+        int end = intervals[0][1];
+
+        int toBeremoved = 0;
+
+        for(int i = 1;i < intervals.length;i++){
+
+            if(intervals[i][0] < end){
+
+                // 和前面的区间有交集，删了
+
+                if(intervals[i][1] <= end){
+
+                    // 1.A包B的情况，把大的删了
+
+                    begin = intervals[i][0];
+
+                    end = intervals[i][1];
+
+                }
+
+                toBeremoved++;
+
+            } else {
+
+                // 无交集，更新当前区间
+
+                begin = intervals[i][0];
+
+                end = intervals[i][1];
+
+            }
+
+        }
+
+        return toBeremoved;
+
+    }
+
+}
+```
+### 763.划分字母区间
+![](763.png)
+先是按自己的想法写的
+时间56.01%，空间16.98%
+```java
+class Solution {
+
+    public List<Integer> partitionLabels(String s) {
+
+        // 统计每个字母出现的区间，然后把这些区间给合并了，统计一下区间数就是最后的结果了。
+
+        // 为什么会这样想呢，一个字母只能出现在一个片段中，所以一个字母出现的首末位置很重要。对于一个字母来说，
+
+        // 最贪的划分就是区间 = 出现的首末位置嘛，但是如果有别的字母在这个区间，还要把它考虑上，方式就是合并。
+
+        int[][] areaOfEachChar = new int[26][2];
+
+        boolean[] isFirst = new boolean[26];// 判断这个字母是不是第一次出现
+
+        int charCount = 0;// 统计有几个字母出现过了
+
+        for(int i = 0;i < s.length();i++){
+
+            int index = s.charAt(i) - 'a';
+
+            if (!isFirst[index]) {
+
+                // 是第一次出现
+
+                areaOfEachChar[index][0] = i;
+
+                // 末尾也先赋这个值，后面出现反正会覆盖
+
+                areaOfEachChar[index][1] = i;
+
+                isFirst[index] = true;
+
+                charCount++;
+
+            } else {
+
+                // 不是第一次出现
+
+                areaOfEachChar[index][1] = i;
+
+            }
+
+        }
+
+        int[][] intervals = new int[charCount][2];
+
+        charCount = 0; // 复用一下，用来记一下多少个区间放好了
+
+        for(int i = 0;i < 26;i++){
+
+            if (isFirst[i]) {
+
+                intervals[charCount][0] = areaOfEachChar[i][0];
+
+                intervals[charCount][1] = areaOfEachChar[i][1];
+
+                charCount++;
+
+            }
+
+        }
+
+        Arrays.sort(intervals, (int[] interval1, int[] interval2) -> {
+
+            return Integer.compare(interval1[0], interval2[0]);
+
+        });
+
+        // 合并区间
+
+        List<int[]> merged = new ArrayList<>();
+
+        int begin = intervals[0][0];
+
+        int end = intervals[0][1];
+
+        for (int i = 1;i < intervals.length;i++) {
+
+            int currBegin = intervals[i][0];
+
+            int currEnd = intervals[i][1];
+
+            if (currBegin > end){
+
+                merged.add(new int[]{begin, end});
+
+                begin = currBegin;
+
+                end = currEnd;
+
+            } else {
+
+                end = Math.max(end, currEnd);
+
+            }
+
+        }
+
+        merged.add(new int[]{begin, end});
+
+        List<Integer> res = new ArrayList<>();
+
+        for(int[] intervalBeenMerged : merged){
+
+            res.add(intervalBeenMerged[1] - intervalBeenMerged[0] + 1);
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+题解
+时间56.01%，空间75.26%
+```java
+class Solution {
+
+    public List<Integer> partitionLabels(String s) {
+
+        // 同一个字母的第一次出现的下标位置和最后一次出现的下标位置必须出现在同一个片段。
+
+        // 那么可以先遍历一次字符串，得到每个字母最后一次出现的下标位置。
+
+        // 然后开始划分区间:先初始化当前片段的首尾为[0,0]，然后再遍历当前片段的过程中
+
+        // 对于每个访问到的字母，当前的片段末尾一定是要包括这个字母最后出现的下标位置的
+
+        // ，不然就不符合要求。 据此更新当前片段的末尾，如果走到了片段末尾，那么该片段就完整了。
+
+        // 把长度添加进结果里就好了。这个操作的含义是什么呢，首先初始化为[0, 0].没毛
+
+        // 我们希望每一个字符都能分。我们是希望这个片段尽量短的，我们每次更新片段的末尾
+
+        // 都是在不得不更新的情况下才更新的。这样的做法当然可以找到最优解。
+
+        int[] endIndex = new int[26]; // 记录每个字符最后出现的位置
+
+        for(int i = 0;i < s.length();i++){
+
+            endIndex[s.charAt(i) - 'a'] = i;
+
+        }
+
+        int begin = 0;
+
+        int end = 0;
+
+        List<Integer> res = new ArrayList<>();
+
+        for(int i = 0;i < s.length();i++){
+
+            // 更新片段末尾
+
+            end = Math.max(end, endIndex[s.charAt(i) - 'a']);
+
+            // 走到末尾了
+
+            if(i == end){
+
+                res.add(end - begin + 1);
+
+                begin = end + 1;
+
+                end = begin;
+
+            }
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### xx.xxx
+```java
+
+```
 
 
 
