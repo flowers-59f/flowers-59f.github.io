@@ -5556,11 +5556,826 @@ class Solution {
 
 }
 ```
+### 56.合并区间
+见hot100
+### 738.单调递增的数字
+![](738.png)
+时间100.00%，空间17.33%
+```java
+class Solution {
+
+    public int monotoneIncreasingDigits(int n) {
+
+        // 我们可以从个位开始遍历当前数，两位两位的看，高位一定是要小于等于低位的，如果不满足
+
+        // 那么我们可以把高位-1，然后把后面的低位都置为9，这样就可以跳到符合要求的最大的数了
+
+        // 然后置9这个操作其实可以等到最后一位不符合要求的再做
+
+        int pos = 0; // 表示当前操作的位数，0 -> 个位 1 -> 十位
+
+        int pre = 10;
+
+        int curr = n;
+
+        while(curr > 0){
+
+            int temp = curr % 10; // 当前位置的数
+
+            curr /= 10;
+
+            if (temp > pre){
+
+                // 高位大于低位了，把高位-1，然后后面全置9
+
+                n = n - (int)Math.pow(10, pos);
+
+                n = n - n % (int)Math.pow(10, pos) + (int)Math.pow(10, pos) - 1;
+
+                pre = temp - 1;
+
+            } else {
+
+                pre = temp;
+
+            }
+
+            pos++;
+
+        }
+
+        return n;
+
+    }
+
+}
+```
+### ★★★968.监控二叉树
+看了一个动态规划的题解
+时间25.21%，空间10.58%
+```java
+/**
+
+ * Definition for a binary tree node.
+
+ * public class TreeNode {
+
+ *     int val;
+
+ *     TreeNode left;
+
+ *     TreeNode right;
+
+ *     TreeNode() {}
+
+ *     TreeNode(int val) { this.val = val; }
+
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+
+ *         this.val = val;
+
+ *         this.left = left;
+
+ *         this.right = right;
+
+ *     }
+
+ * }
+
+ */
+
+class Solution {
+
+    public int minCameraCover(TreeNode root) {
+
+        // 一个节点有几种状态呢，装or不装，覆盖or没被覆盖，组合一下是有三种
+
+        // 因为装的话这个节点一定会被覆盖的，少了一种组合
+
+        // 定义 状态0：当前节点安装相机的时候，需要的最少相机数
+
+        // 状态1：当前节点不安装相机，但是能被覆盖到的时候，需要的最少相机数
+
+        // 状态2：当前节点不安装相机，也不能被覆盖到的时候，需要的最少相机数
+
+        // 三种状态都应保证子节点被覆盖，这时回到根节点的时候选0,1整个树就会被覆盖了
+
+        // 不然的话再往上走管不到了都
+
+        // 0，1状态中的最小值就是所求了（全集 - 不符合要求的集合中的最小值）
+
+        // dp[0] = left 三种状态最小 + right 三种状态最小
+
+        // dp[1] = 左装 + 右 0，1中的最小；右装，左0,1中的最小； 取这两种情况的最小值
+
+        // dp[2] = left 1 + right 1
+
+        int[] res = dfs(root);
+
+        return Math.min(res[0], res[1]);
+
+    }
+
+  
+
+    private int[] dfs(TreeNode root){
+
+        // 如果当前节点为空，那么它的状态应该是没装且被覆盖了
+
+        // 那么另外两个状态应该尽量设得大点，让后续不会考虑它们
+
+        if(root == null) return new int[]{Integer.MAX_VALUE / 2, 0, Integer.MAX_VALUE / 2};
+
+        int[] dp = new int[3];
+
+        int[] left = dfs(root.left);
+
+        int[] right = dfs(root.right);
+
+        dp[0] = Math.min(Math.min(left[0], left[1]), left[2]) + Math.min(Math.min(right[0], right[1]), right[2]) + 1;
+
+        dp[1] = Math.min(left[0] + Math.min(right[0], right[1]), right[0] + Math.min(left[0], left[1]));
+
+        dp[2] = left[1] + right[1];
+
+        return dp;
+
+    }
+
+}
+```
+看了一个0ms的示例，贪心做的
+思路就是能不装就不装（被覆盖就不装），二叉树的递归是从下往上的，如果子节点有一个没被覆盖，那么当前节点就一定要装了，不然后面管不到了。如果子节点都被覆盖了，那么我这个就不装了，让后面再看怎么装。有一个子节点装了就返回被覆盖了，然后也不装。
+```java
+/**
+
+ * Definition for a binary tree node.
+
+ * public class TreeNode {
+
+ *     int val;
+
+ *     TreeNode left;
+
+ *     TreeNode right;
+
+ *     TreeNode() {}
+
+ *     TreeNode(int val) { this.val = val; }
+
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+
+ *         this.val = val;
+
+ *         this.left = left;
+
+ *         this.right = right;
+
+ *     }
+
+ * }
+
+ */
+
+  
+
+//0:无覆盖
+
+//1：摄像头
+
+//2：有覆盖
+
+class Solution {
+
+    int res = 0;
+
+    public int minCameraCover(TreeNode root) {
+
+        if(Tracking(root) == 0){
+
+            res++;
+
+        }
+
+        return res;
+
+    }
+
+  
+
+    private int Tracking(TreeNode node){
+
+        if(node == null){
+
+            return 2;
+
+        }
+
+        int left = Tracking(node.left);
+
+        int right = Tracking(node.right);
+
+        if(right == 2 && left == 2){
+
+            return 0;
+
+        }else if(right == 0 || left == 0){
+
+            res++;
+
+            return 1;
+
+        }else{
+
+            return 2;
+
+        }
+
+    }
+
+}
+```
+## 动态规划
+### 理论基础
+动态规划：从前一个步的多个状态（or最优状态）推导当前步骤的多个状态（or最优状态）
+贪心：一直选择局部最优
+我觉得，如果一个问题可以由子问题一步步推来，那么就用贪心或者动态规划，如果只需要一直选最优就是贪心，每一步的多个状态都需要考虑就用动态规划。
+步骤：
+1.确定dp数组（dp table）以及下标的含义
+2.确定递推公式
+3.dp数组如何初始化
+4.确定遍历顺序
+5.举例推导dp数组
+debug：打印dp数组，看看推导的过程对不对
+### 509.斐波那契数
+![](509.png)
+时间100.00%，空间87.15%
+```java
+class Solution {
+
+    public int fib(int n) {
+
+        if(n < 2) return n;
+
+        int[] dp = new int[n + 1];
+
+        dp[0] = 0;
+
+        dp[1] = 1;
+
+        for(int i = 2;i <= n;i++){
+
+            dp[i] = dp[i - 1] + dp[i - 2];
+
+        }
+
+        return dp[n];
+
+    }
+
+}
+```
+### 70.爬楼梯
+见hot100
+### 746.使用最小花费爬楼梯
+![](746.png)
+时间100.00%，空间32.79%
+```java
+class Solution {
+
+    public int minCostClimbingStairs(int[] cost) {
+
+        int n = cost.length;
+
+        if(n < 2) return 0;
+
+        // dp[i] 表示爬到第i个楼梯所需的最小花费
+
+        // dp[i] = Math.min(dp[i - 2] + cost[i - 2], dp[i - 1] + cost[i - 1])
+
+        int[] dp = new int[n + 1];
+
+        for(int i = 2;i <= n;i++){
+
+            dp[i] = Math.min(dp[i - 2] + cost[i - 2], dp[i - 1] + cost[i - 1]);
+
+        }
+
+        return dp[n];
+
+    }
+
+}
+```
+### 62.不同路径
+见hot100
+### 63.不同路径II
+![](63.png)
+时间100.00%，空间39.01%
+```java
+class Solution {
+
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+
+        int m = obstacleGrid.length;
+
+        int n = obstacleGrid[0].length;
+
+        int[][] dp = new int[m][n];
+
+        // dp[i][j] 表示走到(i, j)不同的路径数
+
+        // dp[i][j] = 上 + 左
+
+        // 障碍物直接置0就可以了，其他不用变
+
+        int preM = 0;
+
+        // 初始化，第一行的各个格子只能从左边过来，障碍物之前的都是可达的置1
+
+        // 障碍物之后的都不可达，放0，第一列同理
+
+        for(int i = 0;i < m;i++){
+
+            if(obstacleGrid[i][0] == 1) break;
+
+            dp[i][0] = 1;
+
+        }
+
+        for(int j = 0;j < n;j++){
+
+            if(obstacleGrid[0][j] == 1) break;
+
+            dp[0][j] = 1;
+
+        }
+
+        for(int i = 1;i < m;i++){
+
+            for(int j = 1;j < n;j++){
+
+                if(obstacleGrid[i][j] == 1){
+
+                    dp[i][j] = 0;
+
+                    continue;
+
+                }
+
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+
+            }
+
+        }
+
+        return dp[m - 1][n - 1];
+
+    }
+
+}
+```
+### 343.整数拆分
+```java
+class Solution {
+
+    public int integerBreak(int n) {
+
+        if(n == 2) return 1;
+
+        if(n == 3) return 2;
+
+        // dp[i]表示对正整数i操作后可以得到的最大乘积
+
+        // i 可以拆分为两数之和或者多数之和
+
+        // 但是这样考虑太麻烦了，你可以先把它拆成两数之和p + q
+
+        // 如果进一步拆分能更大的话，那么一定是用dp[p]替换掉p
+
+        // 或者dp[q]替换掉q，或者都替换，选其中最大的就可以了
+
+        int[] dp = new int[n + 1];
+
+        dp[1] = 1; // 是无意义的，补充一下后面好用就是
+
+        dp[2] = 1;
+
+        dp[3] = 2;
+
+        for(int i = 4;i <= n;i++){
+
+            for(int j = 1;j <= i / 2;j++){
+
+                dp[i] = Math.max(Math.max(j, dp[j]) * Math.max(i - j, dp[i - j]), dp[i]);
+
+            }
+
+        }
+
+        return dp[n];
+
+    }
+
+}
+```
+### 96.不同的二叉搜索树
+见hot100
+### 0-1背包理论基础
+题目：有n件物品和一个最多能背重量为w的背包。第i件物品的重量是weight\[i]，得到的价值是value\[i] 。每件物品只能用一次，求解将哪些物品装入背包里物品价值总和最大。
+思路：定义dp\[i]\[j]表示从下标\[0-i]的物品里任意取，放进容量为j的背包，价值总和最大是多少。
+dp\[i]\[j] = Math.max(dp\[i - 1]\[j], dp\[i - 1]\[j - weight\[i] + value\[i]])
+其实就是考虑当前物品放or不放
+放的话要把当前物品的位置给留出来
+初始化：
+```java
+for (int i = 1; i < weight.size(); i++) {  // 当然这一步，如果把dp数组预先初始化为0了，这一步就可以省略，但很多同学应该没有想清楚这一点。
+    dp[i][0] = 0;
+}
+// 正序遍历
+for (int j = weight[0]; j <= bagweight; j++) {
+    dp[0][j] = value[0];
+}
+```
+然后从递推公式中可以看出，每一个状态只依赖于前一个状态，那么用一维数组其实就可以了。
+改为如下：
+dp\[j]表示，截止到当前，容量为j的背包，所背的物品价值最大是多少
+dp\[j] = Math.max(dp\[j], dp\[j - weight\[i] + value\[i]])
+然后不用初始化等后面一起填也是可以的
+
+### 416.分割等和子集
+见hot100
+### ★★★1049.最后一块石头的重量II
+时间79.55%，空间33.41%
+```java
+class Solution {
+
+    public int lastStoneWeightII(int[] stones) {
+
+        // 这题其实只要尽量的均分石头为两堆，然后返回它们之间的差就好了
+
+        // 因为两堆石头它们碰来碰去，最后碰撞的结果就会是它们的差值的
+
+        // 转化成背包问题就是，定义一个大小为总重量一半的背包，尽量把它装满
+
+        // 这时候重量 = 价值
+
+        int sum = 0;
+
+        for(int stone:stones){
+
+            sum += stone;
+
+        }
+
+        int target = sum / 2;
+
+        int[] dp = new int[target + 1];
+
+        for(int i = 0;i < stones.length;i++){
+
+            // 注意这里应该用的是倒序
+
+            // 要用到的dp[j]和dp[j - stones[i]]应该都是上一轮的数据
+
+            // 所以填当前轮次的时候，比j小的应该还没变
+
+            // 所以应该是倒序遍历
+
+            for(int j = target;j >= stones[i];j--){
+
+                dp[j] = Math.max(dp[j], dp[j - stones[i]] + stones[i]);
+
+            }
+
+        }
+
+        return sum - 2 * dp[target];
+
+    }
+
+}
+```
+### 494.目标和
+见hot100
+### 474.一和零
+![](474.png)
+时间60.07%，空间69.79%
+```java
+class Solution {
+
+    public int findMaxForm(String[] strs, int m, int n) {
+
+        int sl = strs.length;
+
+        // 就是背包问题，物体就是字符串，价值就是1个子集
+
+        // 体积就是1和0的个数，是个二维的消耗
+
+        // dp[j][k]表示当前最多有j个0和k个1时，最大子集数
+
+        // 省了一维i，整体是表示从[0,i]中任选字符串，不超过容量要求下的最大值
+
+        // dp[j][k] = dp[j][k] + dp[j - count0][k - count1]
+
+        // 就是看要不要选当前字符串
+
+        int[][] dp = new int[m + 1][n + 1];
+
+        for(int i = 0;i < sl;i++){
+
+            int count0 = 0;
+
+            int count1 = 0;
+
+            for(char c : strs[i].toCharArray()){
+
+                if(c == '0') count0++;
+
+                else count1++;
+
+            }
+
+            for(int j = m;j >= count0;j--){
+
+                for(int k = n;k >= count1;k--){
+
+                    dp[j][k] = Math.max(dp[j][k], dp[j - count0][k - count1] + 1);
+
+                }
+
+            }
+
+        }
+
+        return dp[m][n];
+
+    }
+
+}
+```
+### 完全背包理论基础
+题目：有N件物品和一个最多能背重量为W的背包。第i件物品的重量是weight\[i]，得到的价值是value\[i] 。每件物品都有无限个（也就是可以放入背包多次），求解将哪些物品装入背包里物品价值总和最大。
+思路：完全背包和01背包问题唯一不同的地方就是，每种物品有无限件。
+dp\[i]\[j]表示从下标为\[0-i]的物品，每个物品可以取无限次，放进容量为j的背包，价值总和最大是多少。
+dp\[i]\[j] = max(dp\[i - 1]\[j], dp\[i]\[j - weight\[i]] + value\[i]);
+也是每一轮决定要不要放下标为i的这个物品，不过区别就是后面的从dp\[i - 1]\[j - weight\[i]] + value\[i] -> dp\[i]\[j - weight\[i]] + value\[i]，含义就是因为当前每个物品是无限个的，放了一个之后后续还可以继续选。
+初始化：
+```java
+for (int i = 1; i < weight.size(); i++) {  // 当然这一步，如果把dp数组预先初始化为0了，这一步就可以省略，但很多同学应该没有想清楚这一点。
+    dp[i][0] = 0;
+}
+
+// 正序遍历，如果能放下就一直装物品0
+for (int j = weight[0]; j <= bagWeight; j++){
+    dp[0][j] = dp[0][j - weight[0]] + value[0];
+}
+```
+一维形式
+dp\[j]表示一直到当前的物品，每个物品可以取无限次，放进容量为j的背包，价值总和最大是多少。
+dp\[j] = max(dp\[j], dp\[j - weight\[i]] + value\[i]);
+不用初始化什么可以
+注意j要从小往大，因为dp\[j]要用的是之前的，这个无关顺序一定用的是之前的，而dp\[j - weight\[i]]用的是当前的比较小的，所以小的要先更新
+### 518.零钱兑换II
+![](518.png)
+时间100.00%，空间94.37%
+```java
+class Solution {
+
+    public int change(int amount, int[] coins) {
+
+        // 定义dp[i][j]表示在[0-i]中任选硬币能凑到面额j的组合数
+
+        // dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i]]
+
+        // 转成一维dp[j] 、 dp[j] +=  dp[j - coins[i]]
+
+        int[] dp = new int[amount + 1];
+
+        // 初始化
+
+        dp[0] = 1;// 当j = coins[i]时要用到dp[0]，这时候就是多一种
+
+        // 用这一个硬币达成目标的组合，所以搞个1，这个本身是无意义的
+
+        for(int i = 0;i < coins.length;i++){
+
+            for(int j = coins[i];j <= amount;j++){
+
+                    dp[j] += dp[j - coins[i]];
+
+            }
+
+        }
+
+        return dp[amount];
+
+    }
+
+}
+```
+### ★★★377.组合总和IV
+![](377.png)
+这一题可以和上面一题对照起来看，本质上都是装满背包的问题
+递推公式
+dp\[i] += dp\[i - nums\[j]]
+初始化
+dp\[0] = 1;
+但是一个是求组合（不考虑顺序），一个是求排列（考虑顺序），区别总结如下
+如果求组合数就是外层for循环遍历物品，内层for遍历背包。
+如果求排列数就是外层for遍历背包，内层for循环遍历物品。
+物品放外层的话，那么物品肯定都是按顺序放的
+放内层的话，外层是背包容量然后内层是物品，结合递推公式dp\[j] += dp\[j - nums\[i]]，这时候其实就是，对于每个背包容量，最后一个放nums\[i]都试了一下，所以可以得到各种排列。
+时间92.80%，空间58.50%
+```java
+class Solution {
+
+    public int combinationSum4(int[] nums, int target) {
+
+        // dp[j] 表示在[0,i]中任选数能凑到j的组合数
+
+        // dp[j] += dp[j - nums[i]]
+
+        int[] dp = new int[target + 1];
+
+        dp[0] = 1;
+
+        for(int j = 0;j <= target;j++){
+
+            for(int i = 0;i < nums.length;i++){
+
+                if(j >= nums[i]) dp[j] += dp[j - nums[i]];
+
+            }
+
+        }
+
+        return dp[target];
+
+    }
+
+}
+```
+### 322.零钱兑换
+见hot100
+### 279.完全平方数
+见hot100
+### 139.单词拆分
+见hot100
+### 多重背包理论基础
+题目：有N种物品和一个容量为V 的背包。第i种物品最多有Mi件可用，每件耗费的空间是Ci ，价值是Wi 。求解将哪些物品装入背包可使这些物品的耗费的空间 总和不超过背包容量，且价值总和最大。
+思路：每件物品最多有Mi件可用，把Mi件摊开，其实就是一个01背包问题了。01背包里面在加一个for循环遍历一个每种商品的数量就可以了。
+```java
+//先遍历物品再遍历背包，作为01背包处理
+        for (int i = 0; i < n; i++) {
+            for (int j = bagWeight; j >= weight[i]; j--) {
+                //遍历每种物品的个数
+                for (int k = 1; k <= nums[i] && (j - k * weight[i]) >= 0; k++) {
+                    dp[j] = Math.max(dp[j], dp[j - k * weight[i]] + k * value[i]);
+                }
+            }
+        }
+```
+### 198.打家劫舍
+见hot100
+### 213.打家劫舍II
+![](213.png)
+时间100.00%，空间34.41%
+```java
+class Solution {
+
+    public int rob(int[] nums) {
+
+        // dp[i][j] 表示在[0, i]中偷(j = 0)/不偷(j = 1)当前房屋能获得的最高金额
+
+        // dp[i][0] = dp[i - 1][1] + nums[i]
+
+        // dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1])
+
+        // 和I的区别就在于最后一个位置，它需要同时考虑两边的情况
+
+        // 最后一个位置偷，那么第一个就不能偷，这个在一步步往后算的过程中是限制不住的
+
+        // 所以只能在一开始就定死，第一个要么偷，要么不偷，这里分类讨论一下
+
+        int n = nums.length;
+
+        if(n == 1) return nums[0];
+
+        int[][] dp = new int[n][2];
+
+        // 偷第一个
+
+        dp[0][0] = nums[0];
+
+        dp[1][1] = nums[0];
+
+        for(int i = 2;i < n;i++){
+
+            if(i == n - 1){
+
+                dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1]);  
+
+                continue;
+
+            }
+
+            dp[i][0] = dp[i - 1][1] + nums[i];
+
+            dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+
+        }
+
+        int temp = dp[n - 1][1];
+
+        // 不偷第一个
+
+        dp[1][0] = nums[1];
+
+        dp[1][1] = 0;
+
+        for(int i = 2;i < n;i++){
+
+            dp[i][0] = dp[i - 1][1] + nums[i];
+
+            dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+
+        }
+
+        return Math.max(Math.max(dp[n - 1][0], dp[n - 1][1]), temp);
+
+    }
+
+}
+```
+### 337.打家劫舍III
+见hot100
+### 121.买卖股票的最佳时机
+见hot100
+### 122.买卖股票的最佳时机II
+见贪心算法
+### ★★★123.买卖股票的最佳时机III
+![](123.png)
+时间97.13%，空间75.85%
+```java
+class Solution {
+
+    public int maxProfit(int[] prices) {
+
+        // 每一天可能是下面五种状态之一，记住每天处于每个状态的利润最大值
+
+        // 返回最后一天进行卖出操作的利润最大值（第一次卖出也可以的）就好了
+
+        // 1.什么都没操作过  恒为0
+
+        // 2.第一次买入   max(buy1, -prices[i]) 如果前面买的更便宜，今天这个就不用记住了，按前面的来操作
+
+        // 3.第一次卖出   max(sell1, buy1 + prices[i]) 同理
+
+        // 4.第二次买入   max(buy2, sell1 - prices[i])
+
+        // 5.第二次卖出   max(sell2, buy2 + prices[i])
+
+        // 通过上面的操作就可以得到每一步在哪里坐是最优的
+
+        // 初始化 sell 设置为0就好了，影响不到后面的，有大于0的就覆盖了
+
+        // 小于0的那些被挤掉也无所谓，不如不操作
+
+        // buy1 也很简单，buy2也可以设为第一天，如果它影响到了后面，那么就只要做一次买卖嘛
+
+        // 这时候1 2应该是相同的
+
+        int buy1 = -prices[0];
+
+        int sell1 = 0;
+
+        int buy2 = -prices[0];
+
+        int sell2 = 0;
+
+        for(int i = 1;i < prices.length;i++){
+
+            buy1 = Math.max(buy1, -prices[i]);
+
+            sell1 = Math.max(sell1, buy1 + prices[i]);
+
+            buy2 = Math.max(buy2, sell1 - prices[i]);
+
+            sell2 = Math.max(sell2, buy2 + prices[i]);
+
+        }
+
+        return Math.max(sell1, sell2);
+
+    }
+
+}
+```
 ### xx.xxx
 ```java
 
 ```
-
 
 
 
