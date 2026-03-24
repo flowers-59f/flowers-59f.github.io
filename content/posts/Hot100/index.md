@@ -29,6 +29,13 @@ queue.offer("a");// 添加元素
 queue.poll();// 删除并返回队列的头部元素
 queue.peek();返回队列的头部元素
 ```
+栈
+```java
+Stack<Integer> stack = new Stack<>();
+stack.push(10); // 往栈顶添加元素
+stack.peek(); // 查看栈顶元素
+stack.pop();  // 移除栈顶元素
+```
 ## Easy
 ### 160.相交链表
 题目：

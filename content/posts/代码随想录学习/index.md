@@ -6372,10 +6372,741 @@ class Solution {
 
 }
 ```
-### xx.xxx
+### 188.买卖股票的最佳时间IV
+![](188.png)
+时间85.52%，空间70.07%
 ```java
+class Solution {
 
+    public int maxProfit(int k, int[] prices) {
+
+        // 参考II的思路做的
+
+        // 对于每天，可能处于的状态就是 不做任何操作or处于第j次买卖中
+
+        // 用dp[j - 1][0/1]记住第j次买/卖能获得的最大利润
+
+        // dp[j][0] = Math.max(dp[j][0], dp[j - 1][1] - prices[i]);
+
+        // dp[j][1] = Math.max(dp[j][1], dp[j][0] + prices[i]);
+
+        int[][] dp = new int[k][2];
+
+        // 初始化
+
+        for(int i = 0;i < k;i++){
+
+            dp[i][0] = -prices[0];
+
+        }
+
+        for(int i = 0;i < prices.length;i++){
+
+            dp[0][0] = Math.max(dp[0][0], -prices[i]);
+
+            dp[0][1] = Math.max(dp[0][1], dp[0][0] + prices[i]);
+
+            for(int j = 1;j < k;j++){
+
+                dp[j][0] = Math.max(dp[j][0], dp[j - 1][1] - prices[i]);
+
+                dp[j][1] = Math.max(dp[j][1], dp[j][0] + prices[i]);
+
+            }
+
+        }
+
+        int max = 0;
+
+        for(int i = 0;i < k;i++){
+
+            max = Math.max(max, dp[i][1]);
+
+        }
+
+        return max;
+
+    }
+
+}
 ```
+### 309.买卖股票的最佳时间含冷冻期
+见hot100
+### 714.买卖股票的最佳时间含手续费
+![](714.png)
+时间99.76%，空间80.96%
+```java
+class Solution {
+
+    public int maxProfit(int[] prices, int fee) {
+
+        // 每天要么在买，要么在卖
+
+        // 每一天的没必要都记住，记住最大的就行了，所以其实只要两个变量
+
+        // 和II的区别就是有个手续费了，感觉在每次买的时候考虑一下手续费就好了
+
+        // 买的话能获得的最大利润 = max(之前买的最大利润, 前面卖的最大利润 - 当天股票价格 - 手续费)
+
+        // 卖的话能获得的最大利润 = max(之前卖的最大利润, 前面买的最大利润 + 当天股票价格)
+
+        // 当天确实也可以多次买卖，不过不是白亏手续费嘛，没必要
+
+        int sellMax = 0;
+
+        int buyMax = -prices[0] - fee;
+
+        for(int i = 1;i < prices.length;i++){
+
+            buyMax = Math.max(buyMax, sellMax - prices[i] - fee);
+
+            sellMax = Math.max(sellMax, buyMax + prices[i]);
+
+        }
+
+        return sellMax;
+
+    }
+
+}
+```
+### 300.最长递增子序列
+见hot100
+### 674.最长连续递增子序列
+![](674.png)
+时间47.66%，空间26.47%
+```java
+class Solution {
+
+    public int findLengthOfLCIS(int[] nums) {
+
+        // 定义dp[i]为以下标i为结尾的最长连续递增序列的长度
+
+        // if nums[i] > nums[i - 1] dp[i] = dp[i - 1] + 1;
+
+        // else dp[i] = 1;
+
+        int n = nums.length;
+
+        int[] dp = new int[n];
+
+        dp[0] = 1;
+
+        int max = 1;
+
+        for(int i = 1;i < n;i++){
+
+            if (nums[i] > nums[i - 1]) {
+
+                dp[i] = dp[i - 1] + 1;
+
+            } else {
+
+                dp[i] = 1;
+
+            }
+
+            max = Math.max(max, dp[i]);
+
+        }
+
+        return max;
+
+    }
+
+}
+```
+dp\[i]只和前一个有关可以简化到只用一个变量
+时间100.00%，空间13.05%
+```java
+class Solution {
+
+    public int findLengthOfLCIS(int[] nums) {
+
+        int n = nums.length;
+
+        int curr = 1;
+
+        int max = 1;
+
+        for(int i = 1;i < n;i++){
+
+            if (nums[i] > nums[i - 1]) {
+
+                curr++;
+
+            } else {
+
+                curr = 1;
+
+            }
+
+            max = Math.max(max, curr);
+
+        }
+
+        return max;
+
+    }
+
+}
+```
+### ★★★718.最长重复子数组
+```java
+class Solution {
+
+    public int findLength(int[] nums1, int[] nums2) {
+
+        // 定义dp[i][j] 表示 nums1[0:i] nums2[0:j]的最长公共后缀
+
+        // 直接定义两个区间的公共子数组不好搞，转到公共前/后缀就可以了
+
+        // 如果nums1[i] = nums2[j] 那么dp[i][j] = dp[i - 1][j - 1] + 1
+
+        // 否则就为0，其中的最大值就是所求
+
+        int max = 0;
+
+        int n1 = nums1.length;
+
+        int n2 = nums2.length;
+
+        int[][] dp = new int[n1][n2];
+
+        for(int i = 0;i < n1;i++){
+
+            if(nums1[i] == nums2[0]){
+
+                dp[i][0] = 1;
+
+                max = 1;
+
+            }
+
+        }
+
+        for(int j = 0;j < n2;j++){
+
+            if(nums1[0] == nums2[j]){
+
+                dp[0][j] = 1;
+
+                max = 1;
+
+            }
+
+        }
+
+        for(int i = 1;i < n1;i++){
+
+            for(int j = 1;j < n2;j++){
+
+                if(nums1[i] == nums2[j]){
+
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+
+                    max = Math.max(max, dp[i][j]);
+
+                }
+
+            }
+
+        }
+
+        return max;
+
+    }
+
+}
+```
+### ★★★1143.最长公共子序列
+![](1143.png)
+时间93.81%，空间87.10%
+```java
+class Solution {
+
+    public int longestCommonSubsequence(String text1, String text2) {
+
+        // 定义dp[i][j]表示text1[0:i]和text2[0:j]的最长公共子序列的长度
+
+        // 如果有text1[i] == text2[j] 有dp[i][j] = dp[i - 1][j - 1] + 1
+
+        // 如果不等于呢，这时候其中一个字符串可能引入了另外一个前面的字符(以j+为例)
+
+        // 最长公共子序列还是会加，这种情况包括在了dp[i - 1][j]
+
+        // 和dp[i][j - 1]中了，取其中最大的就行了
+
+        // 可以理解为，j是多引入了另外一个的前面的字符嘛
+
+        // 那么这个情况是在前面（dp[前面的相同字符处][j]）是会记录到的
+
+        // 而这个情况是会一直传递到后面
+
+        // dp[i - 1][j]和dp[i][j - 1]就是取前面的情况了
+
+        int l1 = text1.length();
+
+        int l2 = text2.length();
+
+        int[][] dp = new int[l1][l2];
+
+        char[] c1 = text1.toCharArray();
+
+        char[] c2 = text2.toCharArray();
+
+        dp[0][0] = c1[0] == c2[0] ? 1:0;
+
+        for(int i = 1;i < l1;i++){
+
+            if(c1[i] == c2[0]) dp[i][0] = 1;
+
+            else dp[i][0] = dp[i - 1][0];
+
+        }
+
+        for(int j = 1;j < l2;j++){
+
+            if(c1[0] == c2[j]) dp[0][j] = 1;
+
+            else dp[0][j] = dp[0][j - 1];
+
+        }
+
+        for(int i = 1;i < l1;i++){
+
+            for(int j = 1;j < l2;j++){
+
+                if(c1[i] == c2[j]) dp[i][j] = dp[i - 1][j - 1] + 1;
+
+                else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+
+            }
+
+        }
+
+        return dp[l1 - 1][l2 - 1];
+
+    }
+
+}
+```
+### 1035.不相交的线
+![](1035.png)
+时间93.32%，空间91.95%
+```java
+class Solution {
+
+    public int maxUncrossedLines(int[] nums1, int[] nums2) {
+
+        // 只要一个个按顺序连，那么线之间就不会相交
+
+        // 这其实就可以转化为1143.最长公共子序列
+
+        // 定义dp[i][j] 表示nums1[0:i]和nums2[0:j]的最长公共子序列
+
+        // nums1[i] == nums2[j] dp[i][j] = dp[i - 1]dp[j - 1] + 1
+
+        // != -> dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j])
+
+        int n1 = nums1.length;
+
+        int n2 = nums2.length;
+
+        int[][] dp = new int[n1][n2];
+
+        dp[0][0] = nums1[0] == nums2[0] ? 1:0;
+
+        for(int i = 1;i < n1;i++){
+
+            if(nums1[i] == nums2[0]) dp[i][0] = 1;
+
+            else dp[i][0] = dp[i - 1][0];
+
+        }
+
+        for(int j = 1;j < n2;j++){
+
+            if(nums1[0] == nums2[j]) dp[0][j] = 1;
+
+            else dp[0][j] = dp[0][j - 1];
+
+        }
+
+        for(int i = 1;i < n1;i++){
+
+            for(int j = 1;j < n2;j++){
+
+                if(nums1[i] == nums2[j]) dp[i][j] = dp[i - 1][j - 1] + 1;
+
+                else dp[i][j] = Math.max(dp[i- 1][j], dp[i][j - 1]);
+
+            }
+
+        }
+
+        return dp[n1 - 1][n2 - 1];
+
+    }
+
+}
+```
+### 53.最大子数组和
+见hot100
+### 392.判断子序列
+![](392.png)
+时间92.25%，空间33.62%
+```java
+class Solution {
+
+    public boolean isSubsequence(String s, String t) {
+
+       // t中能按顺序出现s中的字符，那么s就是t的子序列了
+
+       // 哪怕有重复也是没关系的，比如s = abc  t = ababc
+
+       // 前两个ab把find移动到2了也是没事的，没影响，后面只要还有c就行
+
+       int sl = s.length();
+
+       int tl = t.length();
+
+       if(sl > tl) return false;
+
+       int find = 0; // t中按顺序来也已经有了s中的多少个字符
+
+       for(int i = 0;i < tl;i++){
+
+            if(find == sl) return true;
+
+            if(t.charAt(i) == s.charAt(find)) find++;
+
+       }
+
+       return find == sl;
+
+    }
+
+}
+```
+### ★★★115.不同的子序列
+思路：
+![](115_mind.png)
+时间54.34%，空间34.91%
+```java
+class Solution {
+
+    public int numDistinct(String s, String t) {
+
+        int sl = s.length();
+
+        int tl = t.length();
+
+        if(sl < tl) return 0;
+
+        int[][] dp = new int[sl][tl];
+
+        int count = 0;
+
+        for(int i = 0;i < sl;i++){
+
+            if(s.charAt(i) == t.charAt(0)) count++;
+
+            dp[i][0] = count;
+
+        }
+
+        for(int i = 1;i < sl;i++){
+
+            for(int j = 1;j < tl;j++){
+
+                if(s.charAt(i) == t.charAt(j)){
+
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+
+                } else dp[i][j] = dp[i - 1][j];
+
+            }
+
+        }
+
+        return dp[sl - 1][tl - 1];
+
+    }
+
+}
+```
+### 583.两个字符串的删除操作
+![](583.png)
+时间70.50%，空间5.19%
+```java
+class Solution {
+
+    public int minDistance(String word1, String word2) {
+
+        // 还是找最长公共子序列，求出其长度
+
+        // 然后两个字符串都减去这个长度再相加就可以了
+
+        int l1 = word1.length();
+
+        int l2 = word2.length();
+
+        int[][] dp = new int[l1][l2];
+
+        dp[0][0] = word1.charAt(0) == word2.charAt(0) ? 1:0;
+
+        for(int i = 1;i < l1;i++){
+
+            if(word1.charAt(i) == word2.charAt(0)) dp[i][0] = 1;
+
+            else dp[i][0] = dp[i - 1][0];
+
+        }
+
+        for(int j = 1;j < l2;j++){
+
+            if(word1.charAt(0) == word2.charAt(j)) dp[0][j] = 1;
+
+            else dp[0][j] = dp[0][j - 1];
+
+        }
+
+        for(int i = 1;i < l1;i++){
+
+            for(int j = 1;j < l2;j++){
+
+                if(word1.charAt(i) == word2.charAt(j)) dp[i][j] = dp[i - 1][j - 1] + 1;
+
+                else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+
+            }
+
+        }
+
+        return l1 + l2 - 2 * dp[l1 - 1][l2 - 1];
+
+    }
+
+}
+```
+### 72.编辑距离
+见hot100
+### 647.回文子串
+见hot100
+### 516.最长回文子序列
+![](516.png)
+时间90.50%，空间32.08%
+```java
+class Solution {
+
+    public int longestPalindromeSubseq(String s) {
+
+        // 定义dp[i][j] 表示[i:j]区间上的最长回文子序列
+
+        // 如果s[i] = s[j] 那么dp[i][j] = dp[i + 1][j - 1] + 2
+
+        // 如果s[i] != s[j] 那么i,j不可能同时作为[i + 1:j - 1]内任何一个回文子序列的首尾
+
+        // 这时dp[i][j] = Math.max(dp[i + 1][j],  dp[i][j - 1])
+
+        // 两边的可能有一个使原来的回文子序列发生了扩展
+
+        char[] sa = s.toCharArray();
+
+        int length = sa.length;
+
+        int[][] dp = new int[length][length];
+
+        for(int i = 0;i <length;i++){
+
+            dp[i][i] = 1;
+
+        }
+
+        for(int i = length - 1;i >= 0;i--){
+
+            for(int j = i + 1;j < length;j++){
+
+                if(sa[i] == sa[j]) dp[i][j] = dp[i + 1][j - 1] + 2;
+
+                else dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+
+            }
+
+        }
+
+        return dp[0][length - 1];
+
+    }
+
+}
+```
+## 单调栈
+### 739.每日温度
+见hot100
+### 496.下一个更大元素I
+![](496.png)
+自己想的
+时间99.01%，空间88.19%
+```java
+class Solution {
+
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+
+        // 找到位置后再往后找下一个更大元素
+
+        // 没有重复的话可以用哈希表记住位置
+
+        Map<Integer, Integer> queryPos = new HashMap<>();
+
+        for(int i = 0;i < nums2.length;i++){
+
+            queryPos.put(nums2[i], i);
+
+        }
+
+  
+
+        int[] res = new int[nums1.length];
+
+        for(int i = 0;i < nums1.length;i++){
+
+            res[i] = findNext(nums1[i], nums2, queryPos.get(nums1[i]));
+
+        }
+
+        return res;
+
+    }
+
+  
+
+    private int findNext(int num, int[] nums2, int pos){
+
+        for(int i = pos + 1;i < nums2.length;i++){
+
+            if(nums2[i] > num) return nums2[i];
+
+        }
+
+        return -1;
+
+    }
+
+}
+```
+题解：单调栈+哈希表
+时间80.28%，空间78.94%
+```java
+class Solution {
+
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+
+        // 借助单调栈把nums2中每个数的下一个更大元素找出来，用哈希表存一下
+
+        // 然后遍历nums1，把结果查出来组织一下就是
+
+        Map<Integer, Integer> queryRes = new HashMap<>();
+
+        Stack<Integer> tool = new Stack<>();
+
+        // 每个元素把前面小的元素都弹出栈去（栈内元素是 小->大）
+
+        // 被弹元素一定是被它的下一个更大的元素弹的（而且是一定能弹出去的）
+
+        // 记住它们两个就行了
+
+        for(int i = 0;i < nums2.length;i++){
+
+            while(!tool.isEmpty() && tool.peek() < nums2[i]){
+
+                queryRes.put(tool.pop(), nums2[i]);
+
+            }
+
+            tool.push(nums2[i]);
+
+        }
+
+        int[] res = new int[nums1.length];
+
+        for(int i = 0;i < nums1.length;i++){
+
+            if(queryRes.containsKey(nums1[i])) res[i] = queryRes.get(nums1[i]);
+
+            else res[i] = -1;
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 503.下一个更大元素II
+![](503.png)
+时间35.13%，空间12.08%
+```java
+class Solution {
+
+    public int[] nextGreaterElements(int[] nums) {
+
+        // 这里需要按索引来填下一个最大的数
+
+        // 所以stack里面放索引会好一点，毕竟数有重复了，而且数可以通过索引获得
+
+        int n = nums.length;
+
+        int[] res = new int[n];
+
+        Stack<Integer> tool = new Stack<>();
+
+        for(int i = 0;i < n;i++){
+
+            while(!tool.isEmpty() && nums[tool.peek()] < nums[i]){
+
+                res[tool.pop()] = nums[i];
+
+            }
+
+            tool.push(i);
+
+        }
+
+        // II是循环数组，所以后面没排出去的元素需要再遍历一次找到第一个比他们大的数
+
+        // 把他们排出去，这里第二轮的数不用入栈，只需要排别人
+
+        for(int i = 0;i < n;i++){
+
+            while(!tool.isEmpty() && nums[i] > nums[tool.peek()]){
+
+                res[tool.pop()] = nums[i];
+
+            }
+
+        }
+
+        // 会剩下最大的数，把它们置为-1
+
+        while(!tool.isEmpty()){
+
+            res[tool.pop()] = -1;
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 42.接雨水
+见hot100
+### 84.柱状图中的最大矩形
+见hot100
 
 
 
