@@ -219,6 +219,92 @@ After deletion
 The "is_deleted" field of the relevant data can be correctly modified.
 **PR Status**
 Open
+### Issue \#12106 -> Pr \#12107
+**Issue Description**
+When creating an access in the data access module, you can select the corresponding MQ type to create a data flow group.
+![](12106_1.png)
+Even without a corresponding MQ cluster, new connections can still be established and submitted for approval. However, issues may arise when deleting because there is no corresponding MQ cluster.
+![](12106_2.png)
+The reasons are as follows
+Deletion process
+InlongGroupController.delete(...)
+-> InlongGroupProcessService.deleteProcess(String groupId, String operator)
+-> InlongGroupProcessService.invokeDeleteProcess(...)
+-> workflowService.start(ProcessName.DELETE_GROUP_PROCESS, operator, form)
+The workflow will call DeleteGroupWorkflowDefinition.defineProcess(), which includes the DeleteMQ task in the deletion process.
+This task will execute QueueResourceListener.listen(...)
+In the DELETE case, it calls queueOperator.deleteQueueForGroup(groupInfo, operator);
+This method has different implementations for different MQs.
+In Kafka
+```java
+ClusterInfo clusterInfo = clusterService.getOne(groupInfo.getInlongClusterTag(), null, ClusterType.KAFKA);
+
+@Override  
+public ClusterInfo getOne(String clusterTag, String name, String type) {  
+    List<InlongClusterEntity> entityList = clusterMapper.selectByKey(clusterTag, name, type);  
+    if (CollectionUtils.isEmpty(entityList)) {  
+        throw new BusinessException(String.format("cluster not found by tag=%s, name=%s, type=%s",  
+                clusterTag, name, type));  
+    }  
+  
+    InlongClusterEntity entity = entityList.get(0);  
+    InlongClusterOperator instance = clusterOperatorFactory.getInstance(entity.getType());  
+    ClusterInfo result = instance.getFromEntity(entity);  
+    LOGGER.debug("success to get inlong cluster by tag={}, name={}, type={}", clusterTag, name, type);  
+    return result;  
+}
+```
+An exception will be thrown if no cluster of the corresponding type is found.
+In the log
+```
+[ ] 2026-03-30 05:53:58.572 -ERROR [http-nio-8083-exec-10] a.i.m.w.e.LogableEventListener:88 - execute listener WorkflowEventLogEntity(id=null, processId=48, processName=DELETE_GROUP_PROCESS, processDisplayName=Delete Group, inlongGroupId=test_group_id, taskId=130, elementName=DeleteMQ, elementDisplayName=Group-DeleteMQ, eventType=TaskEvent, event=COMPLETE, listener=QueueResourceListener, startTime=Mon Mar 30 05:53:58 UTC 2026, endTime=null, status=-1, async=0, ip=172.18.0.7, remark=null, exception=cluster not found by tag=null, name=null, type=KAFKA) error:
+org.apache.inlong.manager.common.exceptions.BusinessException: cluster not found by tag=null, name=null, type=KAFKA
+at org.apache.inlong.manager.service.cluster.InlongClusterServiceImpl.getOne(InlongClusterServiceImpl.java:545) ~[manager-service-2.3.0.jar:2.3.0]
+```
+In Pulsar
+```java
+List<ClusterInfo> clusterInfos = clusterService.listByTagAndType(clusterTag, ClusterType.PULSAR);
+
+@Override  
+public List<ClusterInfo> listByTagAndType(String clusterTag, String clusterType) {  
+    List<InlongClusterEntity> clusterEntities = clusterMapper.selectByKey(clusterTag, null, clusterType);  
+    if (CollectionUtils.isEmpty(clusterEntities)) {  
+        throw new BusinessException(String.format("cannot find any cluster by tag %s and type %s",  
+                clusterTag, clusterType));  
+    }  
+  
+    List<ClusterInfo> clusterInfos = clusterEntities.stream()  
+            .map(entity -> {  
+                InlongClusterOperator operator = clusterOperatorFactory.getInstance(entity.getType());  
+                return operator.getFromEntity(entity);  
+            })  
+            .collect(Collectors.toList());  
+  
+    LOGGER.debug("success to list inlong cluster by tag={}", clusterTag);  
+    return clusterInfos;  
+}
+```
+The TubeMQ deletion process has not been implemented yet, so no exception will be triggered.
+**Component**
+Manager
+**Work**
+1. Before saving the connection, verify if there is a corresponding cluster.
+2. Test
+Adding data access when there is no corresponding MQ cluster
+![](12106_3.png)
+![](12106_4.png)
+![](12106_5.png)
+Can intercept the creation operation
+
+After creating the corresponding MQ cluster
+![](12106_6.png)
+![](12106_7.png)
+
+Success in creation
+![](12106_8.png)
+And it will not affect the creation of data flow groups during data synchronization.
+**PR Status**
+Open
 ### Issue \#xxxxx -> Pr \#xxxxx
 **Issue Description**
 **Component**
