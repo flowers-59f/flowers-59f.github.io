@@ -356,13 +356,203 @@ class Solution {
 
 }
 ```
-### XXX.XXXX
+### 7.整数反转
 题目：
-思路：
-时空：
+![](7.png)
+实现1
+思路：先转字符串反转，然后再转回去
+时空：时间21.77%，空间55.90%
 代码：
 ```java
+class Solution {
 
+    public int reverse(int x) {
+
+        char[] xca = Integer.toString(x).toCharArray();
+
+        int left = x < 0 ? 1:0;
+
+        int right = xca.length - 1;
+
+        while(left < right){
+
+            char temp = xca[left];
+
+            xca[left] = xca[right];
+
+            xca[right] = temp;
+
+            left++;
+
+            right--;
+
+        }
+
+        int res = 0;
+
+        // .parseInt抛异常就是超出了整数范围了，返回0
+
+        try{
+
+            res = Integer.parseInt(new String(xca));
+
+        }catch(Exception e){
+
+            return res;
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+实现2
+思路：获取到新的一位后，把前面的 * 10 + 新的一位就好了，这样最终可以获取到反转后的结果。然后每次乘之前判断一下乘完会不会溢出。
+时空：时间97.31%，空间77.13%
+代码：
+```java
+class Solution {
+
+    public int reverse(int x) {
+
+        int xabs = Math.abs(x);
+
+        int res = 0;
+
+        while(xabs > 0){
+
+            int pop = xabs % 10;
+
+            // 如果 res > Integer.MAX_VALUE / 10，那么 *10 必定溢出
+
+            // 如果 res == Integer.MAX_VALUE / 10，且 pop > 7
+
+            // (因为 MAX_VALUE 最后一位是7)，则溢出
+
+            if (res > Integer.MAX_VALUE / 10
+
+                || (res == Integer.MAX_VALUE / 10 && pop > 7)) {
+
+                return 0;
+
+            }
+
+            res = res * 10 + pop;
+
+            xabs /= 10;
+
+        }
+
+        return x < 0 ? -1 * res:res;
+
+    }
+
+}
+```
+### 8.字符串转换整数（atoi）
+题目：
+![](8_1.png)
+![](8_2.png)
+![](8_3.png)
+思路：按题目说的步骤一步步模拟就是
+时空：时间100.00%，空间88.70%
+代码：
+```java
+class Solution {
+
+    public int myAtoi(String s) {
+
+        char[] sa = s.toCharArray();
+
+        int l = sa.length;
+
+        int i = 0; // 当前处理到第几位了
+
+        // 空格
+
+        while(i < l && sa[i] == ' '){
+
+            i++;
+
+        }
+
+  
+
+        // 符号
+
+        boolean flag = true; // 看是正数还是负数 true -> 正数 false -> 负数
+
+        if (i < l && sa[i] == '+') {
+
+            i++;
+
+        } else if (i < l && sa[i] == '-') {
+
+            i++;
+
+            flag = false;
+
+        }
+
+        // 转换
+
+        int res = 0;
+
+        // 跳过前导0
+
+        while(i < l && sa[i] == '0'){
+
+            i++;
+
+        }
+
+        while(i < l){
+
+            // 是数字
+
+            if (sa[i] >= '0' && sa[i]<= '9') {
+
+                int now = sa[i] - '0';
+
+                if (flag) {
+
+                    if(res > Integer.MAX_VALUE / 10 ||
+
+                    (res == Integer.MAX_VALUE / 10 && now >= 7)){
+
+                        return Integer.MAX_VALUE;
+
+                    }
+
+                } else {
+
+                    if(res > Integer.MAX_VALUE / 10 ||
+
+                    (res == Integer.MAX_VALUE / 10 && now >= 8)){
+
+                        return Integer.MIN_VALUE;
+
+                    }
+
+                }
+
+                res = res * 10 + now;
+
+            } else break;
+
+            i++;
+
+        }
+
+        if (flag) return res;
+
+        else return -1 * res;
+
+    }
+
+}
 ```
 ### XXX.XXXX
 题目：
