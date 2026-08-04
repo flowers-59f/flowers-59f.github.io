@@ -103,7 +103,7 @@ Manager
 **Work**
 Change the method "isNotBlank" -> "isBlank"
 **PR Status**
-Open
+Pull request successfully merged and closed
 ### Issue \#12104 -> Pr \#12105
 **Issue Description**
 When deleting the data flow group, the related data in the tables schedule_config and inlong_stream did not perform the logical deletion correctly.
@@ -218,7 +218,7 @@ After deletion
 ![](12104_18.png)
 The "is_deleted" field of the relevant data can be correctly modified.
 **PR Status**
-Open
+Pull request successfully merged and closed
 ### Issue \#12106 -> Pr \#12107
 **Issue Description**
 When creating an access in the data access module, you can select the corresponding MQ type to create a data flow group.

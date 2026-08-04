@@ -10,25 +10,25 @@ tags:
 ### 查询
 #### 1757.可回收且低脂的产品
 ![](1757.png)
-```
+```sql
 SELECT product_id FROM Products WHERE low_fats = 'Y' AND recyclable = 'Y'
 ```
 #### 584.寻找用户推荐人
 ![](584.png)
-```
+```sql
 # 对空值的判断是IS / IS NOT NULL
  SELECT name FROM Customer WHERE referee_id != 2 or referee_id IS NULL
 ```
 #### 595.大的国家
 ![](595.png)
-```
+```sql
 SELECT name, population, area 
 FROM World 
 where area >= 3000000 or population >= 25000000
 ```
 #### 1148. 文章浏览|
 ![](1148.png)
-```
+```sql
 #这题不懂怎么去重 关键字 DISTINCT 用来查询某个字段不重复的记录
 SELECT DISTINCT author_id as id
 FROM Views
@@ -37,7 +37,7 @@ ORDER BY id
 ```
 #### 1683.无效的推文
 ![](1683.png)
-```
+```sql
 #判断字符串长度用length函数
 SELECT tweet_id FROM Tweets WHERE length(content) > 15
 ```
@@ -71,14 +71,14 @@ CROSS JOIN是求A和B的笛卡尔积
 ![](1378_2.png)
 LEFT JOIN     返回左表所有的行，右表有匹配就一起输出了，没有就返回null
 RIGHT JOIN  返回右表所有的行，左表有匹配就一起输出了，没有就返回null
-```
+```sql
 # 这题不太懂没有unique ID的怎么用null填充 是用LEFT JOIN实现
 SELECT EmployeeUNI.unique_id, Employees.name FROM Employees LEFT JOIN EmployeeUNI ON Employees.id = EmployeeUNI.id
 ```
 #### 1068.产品销售分析|
 ![](1068_1.png)
 ![](1068_2.png)
-```
+```sql
 SELECT Product.product_name, Sales.year, Sales.price 
 FROM Sales 
 JOIN Product 
@@ -91,7 +91,7 @@ ON Sales.product_id = Product.product_id
  表Visits->访问记录：哪个顾客来访了，并给这个记录分配了一个自增的id
  表Transactions->对每次访问的购买进行了记录：记录每次访问购买了几次商品及其对应的金额
  我们想要统计的是来了但是没买东西的顾客，顾客id在第一张表，而购买记录在第二张表，所以我们总是要把它们连接起来的，第二张表是购买了才记录，而我们要关注的是没有购买的，它们是不存在于第二张表，所以应该采用LEFT JOIN把没有购买的访问记录也给打出来，然后通过null进行筛选，最后进行分组和记次即可。
-```
+```sql
 # GROUP BY customer_id 按customer_id进行了分组，这个分组并不是就是排在一起
 # 而是带了一点合并的操作，打印出来其实只能看到一行了
 # 这时候的其他属性，往往直接不可见了，只能通过聚合函数来统计一下
@@ -105,7 +105,7 @@ GROUP BY customer_id
 ```
 #### 197.上升的温度
 ![](197.png)
-```
+```sql
 SELECT w1.id
 FROM Weather AS w1
 LEFT JOIN Weather AS w2
@@ -113,7 +113,7 @@ ON w1.recordDate = DATE_ADD(w2.recordDate, INTERVAL 1 DAY)
 WHERE w1.Temperature > w2.Temperature
 ```
 下面补充一些date参数操作的相关函数
-```
+```sql
 SELECT NOW(); -- 示例输出: 2023-03-11 15:32:45
 
 SELECT CURDATE(); -- 示例输出: 2023-03-11
@@ -154,7 +154,7 @@ SELECT SUBDATE('2023-03-11', INTERVAL 7 DAY);
 #### 1661.每台机器的进程平均运行时间
 ![](1661_1.png)
 ![](1161_2.png)
-```
+```sql
 #ROUND 可以指定保留的小数点位数（基于四舍五入）
 
 SELECT a1.machine_id as machine_id,
@@ -174,7 +174,7 @@ GROUP BY a1.machine_id
 #### 577.员工奖金
 ![](577_1.png)
 ![](577_2.png)
-```
+```sql
 SELECT name, bonus
 
 FROM Employee
@@ -188,7 +188,7 @@ WHERE bonus IS NULL OR bonus < 1000
 #### 1280.学生们参加各科测试的次数
 ![](1280_1.png)
 ![](1280_2.png)
-```
+```sql
 SELECT Students.student_id, Students.student_name, Subjects.subject_name, count(Examinations.subject_name) AS attended_exams
 
 FROM Students
@@ -216,7 +216,7 @@ ORDER BY Students.student_id, Subjects.subject_name
 #### 570.至少有5名直接下属的经理
 ![](570_1.png)
 ![](570_2.png)
-```
+```sql
 SELECT e1.name
 
 FROM Employee AS e1
@@ -233,7 +233,7 @@ HAVING count(*) >= 5
 ![](1934_1.png)
 
 ![](1934_2.png)
-```
+```sql
 # SUM() 计算某列的总和
 
 # IF() 根据表达式的结果 返回不同的值
@@ -325,7 +325,7 @@ FROM employee;
 ```
 #### 620.有趣的电影
 ![](620.png)
-```
+```sql
 SELECT id, movie, description, rating
 
 FROM cinema
@@ -341,7 +341,7 @@ ORDER BY rating DESC
 #### 1251.平均售价
 ![](1251_1.png)
 ![](1251_2.png)
-```
+```sql
 SELECT
 
     Prices.product_id AS product_id,
@@ -373,7 +373,7 @@ GROUP BY
 #### 1075.项目员工I
 ![](1075_1.png)
 ![](1075_2.png)
-```
+```sql
 SELECT
 
     Project.project_id AS project_id,
@@ -399,7 +399,7 @@ GROUP BY
 #### 1633.各赛事的用户注册率
 ![](1633_1.png)
 ![](1633_2.png)
-```
+```sql
 SELECT
 
     contest_id,
@@ -423,7 +423,7 @@ ORDER BY
 #### 1211.查询结果的质量和占比
 ![](1211_1.png)
 ![](1211_2.png)
-```
+```sql
 SELECT
 
     query_name,
@@ -444,7 +444,7 @@ GROUP BY
 ```
 #### 1193.每月交易I
 ![](1193.png)
-```
+```sql
 SELECT
 
     DATE_FORMAT(trans_date, '%Y-%m') AS month,
@@ -469,7 +469,7 @@ GROUP BY
 ```
 #### 1174.即时食物配送II
 ![](1174.png)
-```
+```sql
 SELECT
 
     ROUND(SUM(
@@ -502,7 +502,7 @@ WHERE
 ```
 #### 550.游戏玩法分析 IV
 ![](550.png)
-```
+```sql
 SELECT
 
     ROUND(COUNT(*) /
@@ -536,7 +536,7 @@ WHERE
 ### 排序和分组
 #### 2356.每位教师所教授的科目种类的数量
 ![](2356.png)
-```
+```sql
 SELECT
 
     teacher_id,
@@ -553,7 +553,7 @@ GROUP BY
 ```
 #### 1141.查询近30天活跃用户数
 ![](1141.png)
-```
+```sql
 SELECT
 
     activity_date AS day,
@@ -581,7 +581,7 @@ ORDER BY
 #### 1084.销售分析III
 ![](1084_1.png)
 ![](1084_2.png)
-```
+```sql
 SELECT
 
     Product.product_id,
@@ -609,6 +609,109 @@ HAVING
     SUM(Sales.sale_date BETWEEN "2019-01-01" AND "2019-03-31")
 
     = COUNT(*)
+```
+#### 596超过5名学生的课
+![](596.png)
+```sql
+SELECT
+
+    class
+
+FROM
+
+    Courses
+
+GROUP BY
+
+    class
+
+HAVING
+
+    count(*) >= 5
+```
+### 1729.求关注者的数量
+![](1729.png)
+```sql
+SELECT
+
+    user_id, COUNT(*) AS followers_count
+
+FROM
+
+    Followers
+
+GROUP BY
+
+    user_id
+
+ORDER BY
+
+    user_id
+```
+### 619.只出现一次的最大数字
+![](619.png)
+比较难的一个点是如果不存在单一数字，则返回null，这时候可以借助聚合函数
+下面表格为输入为null时，各函数输出情况
+
+|          | SUM  | AVG  | MAX  | MIN  | COUNT | IFNULL | SELECT           | LIMIT | 窗口函数 |
+| -------- | ---- | ---- | ---- | ---- | ----- | ------ | ---------------- | ----- | ---- |
+| 空表格      | Null | Null | Null | Null | 0     | 空      | (from)空/(\\)null | 空     | Null |
+| 表格值为null | Null | Null | Null | Null | 0     | \      | Null             | Null  | Null |
+所以如果没有符合要求的num时，用聚合函数MAX去返回最大值的话就可以返回null
+
+下面这个是返回符合要求里面每一组中的最大值，是错的
+```sql
+SELECT
+
+    MAX(num)
+
+FROM
+
+    MyNumbers
+
+GROUP BY
+
+    num
+
+HAVING
+
+    COUNT(*) = 1
+```
+
+正确
+注意子查询必须起别名
+```sql
+SELECT
+
+    MAX(num) AS num
+
+FROM
+
+    (SELECT
+
+        num
+
+    FROM
+
+        MyNumbers
+
+    GROUP BY
+
+        num
+
+    HAVING
+
+        COUNT(*) = 1) AS t
+```
+### 1045.买下所有产品的客户
+![](1045_1.png)
+![](1045_2.png)
+```sql
+
+```
+### X.
+```sql
+
 ```
 
 

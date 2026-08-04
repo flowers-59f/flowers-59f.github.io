@@ -6,7 +6,7 @@ categories:
 tags:
   - Hot100
 ---
-## API补充
+# API补充
 数组排序
 ```java
 Arrays.sort(数组, (o1, o2) -> {
@@ -36,6 +36,190 @@ stack.push(10); // 往栈顶添加元素
 stack.peek(); // 查看栈顶元素
 stack.pop();  // 移除栈顶元素
 ```
+快速排序
+普通随机快排
+```java
+class Solution {
+
+    public int[] sortArray(int[] nums) {
+
+        quickSort(nums, 0, nums.length - 1);
+
+        return nums;
+
+    }
+
+  
+
+    private void quickSort(int[] nums, int left, int right){
+
+        if(left < right){
+
+            int pivotIndex = partition(nums, left, right);
+
+            quickSort(nums, left, pivotIndex - 1);
+
+            quickSort(nums, pivotIndex + 1, right);
+
+        }
+
+    }
+
+  
+
+    // 为什么要随机选一个基准值?
+
+    // 避免数组已经是升序的这种特殊情况
+
+    // 升序时每次区间只缩小一个元素，然后每次排区间要遍历区间长度 n + n - 1 + n - 2 + .. = n(n + 1)/2
+
+    // 不过是全重复数的时候还是会到 n ^ 2 优化三路快排
+
+    private void randomPivot(int[] nums, int left, int right) {
+
+        int i = new Random().nextInt(right - left + 1) + left; // 随机选一个作为基准值
+
+        swap(nums, right, i);
+
+    }
+
+  
+
+    private int partition(int[] nums, int left, int right){
+
+        randomPivot(nums, left, right);
+
+        int pivot = nums[right]; // 选最右边的元素的基准值
+
+        int i = left; // 记下一个小于基准值的元素应该排到哪
+
+        for(int j = left;j < right;j++){
+
+            // 用<可以减少元素全相等情况下swap的次数
+
+            if(nums[j] < pivot){
+
+                swap(nums, i, j);
+
+                i++;
+
+            }
+
+        }
+
+        swap(nums, i, right);
+
+        return i;
+
+    }
+
+  
+
+    private void swap(int[] nums, int i, int j){
+
+        int temp = nums[i];
+
+        nums[i] = nums[j];
+
+        nums[j] = temp;
+
+    }
+
+}
+```
+三路快排
+```java
+class Solution {
+
+    public int[] sortArray(int[] nums) {
+
+        quickSort(nums, 0, nums.length - 1);
+
+        return nums;
+
+    }
+
+  
+
+    private void quickSort(int[] nums, int left, int right){
+
+        if(left < right){
+
+            int[] LR = partition(nums, left, right);
+
+            quickSort(nums, left, LR[0] - 1);
+
+            quickSort(nums, LR[1] + 1, right);
+
+        }
+
+    }
+
+  
+
+    private void randomPivot(int[] nums, int left, int right) {
+
+        int i = new Random().nextInt(right - left + 1) + left; // 随机选一个作为基准值
+
+        swap(nums, left, i);
+
+    }
+
+  
+
+    private int[] partition(int[] nums, int left, int right){
+
+        randomPivot(nums, left, right);
+
+        int pivot = nums[left]; // 选最左边的元素的基准值
+
+        int l = left; // 小于基准值的元素排到哪了
+
+        int eq = left; // 当前正在检查的元素
+
+        int r = right; // 大于基准值的元素排到哪了
+
+        while(eq <= r){
+
+            if(nums[eq] < pivot){
+
+                // 交换过来的一定是等值不用校验了
+
+                swap(nums, eq, l);
+
+                l++;
+
+                eq++;
+
+            } else if(nums[eq] > pivot){
+
+                swap(nums, eq, r);
+
+                r--;
+
+            } else eq++;
+
+        }
+
+        return new int[]{l, r};
+
+    }
+
+  
+
+    private void swap(int[] nums, int i, int j){
+
+        int temp = nums[i];
+
+        nums[i] = nums[j];
+
+        nums[j] = temp;
+
+    }
+
+}
+```
+# Java
 ## Easy
 ### 160.相交链表
 题目：
@@ -1999,11 +2183,348 @@ class Solution {
 
 }
 ```
+### 142.环形链表II
+题目：![](142.png)
+时空：时间100.00%，空间26.12%
+思路：假设链表中有环，起点到入环点的距离为a，引入快慢指针，有环它们总会相遇，设入环点到相遇点的距离为b，环中剩下的距离为c。那么相遇时，快指针总是超了慢指针n圈，那么有 
+2(a + b)= a + b + n(b + c)，整理得a = c + (n - 1)(b + c)，据此关系，新建一个tool指针，从head出发，slow继续往后走，它们相遇点就是入环点
+代码：
+```java
+public class Solution {
+
+    public ListNode detectCycle(ListNode head) {
+
+        if(head == null || head.next == null || head.next.next == null) return null;
+
+        ListNode fast = head.next.next;
+
+        ListNode slow = head.next;
+
+        while (fast != slow){
+
+            if(fast.next == null || fast.next.next == null) return null;
+
+            fast = fast.next.next;
+
+            slow = slow.next;
+
+        }
+
+        ListNode tool = head;
+
+        while(tool != slow){
+
+            tool = tool.next;
+
+            slow = slow.next;
+
+        }
+
+        return tool;
+
+    }
+
+}
+```
+### 146.LRU缓存
+题目：
+时空：
+思路：
+代码：
+```java
+
+```
+### 148.排序链表
+题目：
+时空：
+思路：
+代码：
+```java
+
+```
+### 152.乘积最大子数组
+题目：![](152.png)
+时空：时间92.88%，空间5.06%
+思路：设currMax表示以当前下标为结尾的连续子数组最大的乘积，如果它可能是当前数与前面最大值相乘得来（正数），也可能是当前数与前面最小值相乘得来（负数），也可能就是当前数本身（前面的积累无效），不管怎么样，从这三种情况中取最大的，就是currMax。currMin同理，那么全部currMax中最大的就是答案嘛。
+代码：
+```java
+class Solution {
+
+    public int maxProduct(int[] nums) {
+
+        int res = nums[0];
+
+        int currMax = nums[0];
+
+        int currMin = nums[0];
+
+        for(int i = 1;i < nums.length;i++){
+
+            int num1 = nums[i] * currMax;
+
+            int num2 = nums[i] * currMin;
+
+            currMax = Math.max(Math.max(num1, num2), nums[i]);
+
+            currMin = Math.min(Math.min(num1, num2), nums[i]);
+
+            res = Math.max(res, currMax);
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 155.最小栈
+题目：
+时空：
+思路：
+代码：
+```java
+
+```
+### 198.打家劫舍
+题目：![](198.png)
+时空：时间100.00%，空间18.27%
+思路：动态规划，定义dp\[i]\[0/1]表示前i+1个屋子中不偷/偷最后一个屋子所能获得的最大金额，这样dp\[n - 1]\[0],dp\[n - 1]\[1]中的较大值就是答案了嘛。递推也很简单，偷当前屋子，前面一间就肯定不能偷，所以dp\[i]\[1] = dp\[i - 1]\[0] + nums\[i]，不偷当前屋子，前面一个屋子偷不偷都可以，所以dp\[i]\[0] = Math.max(dp\[i - 1]\[1], dp\[i - 1]\[0])。这个意思其实就是，对于每个屋子，你都可以选择偷或者不偷，就是要不触发警报就是，这个动态规划就是相比于遍历所有情况，每次都取其中的最好情况来处理，来进行下一步，就省了一些步骤。
+代码：
+```java
+class Solution {
+
+    public int rob(int[] nums) {
+
+        int n = nums.length;
+
+        int[][] dp = new int[n][2]; // dp[i][0/1]表示前i + 1个房屋中，不偷/偷最后一个屋子所能
+
+        // 获得的最大金额
+
+        dp[0][1] = nums[0];
+
+        for(int i = 1;i < n;i++){
+
+            dp[i][0] = Math.max(dp[i - 1][1], dp[i - 1][0]);
+
+            dp[i][1] = dp[i - 1][0] + nums[i];
+
+        }
+
+        return Math.max(dp[n - 1][0], dp[n - 1][1]);
+
+    }
+
+}
+```
+### 739.每日温度
+题目：
+![](739.png)
+时空：时间94.09%，空间100.00%
+思路：单调栈，依次遍历温度，每遍历到一个温度就把前面的比较小的温度踢出去（每个温度一定是比后面第一个比它大的温度顶出去的，所以计算距离存储就行），踢完之后放入当前温度，这样也保证了栈中元素是从大到小排列的，所以这样一个个顶是可以的，能把前面所有小的都顶出去。
+代码：
+```java
+class Solution {
+
+    public int[] dailyTemperatures(int[] temperatures) {
+
+        int n = temperatures.length;
+
+        int[] res = new int[n];
+
+        //从小到大排序
+
+        //每进来一个数字，把比它小的都滚了，然后插进去
+
+        List<int[]> stack = new LinkedList<>();
+
+        for(int i = 0;i < n;i++){
+
+            while(!stack.isEmpty() && temperatures[i] > stack.getLast()[1]){
+
+                int beRemoved = stack.removeLast()[0];
+
+                res[beRemoved] = i - beRemoved;
+
+            }
+
+            stack.addLast(new int[]{i, temperatures[i]});
+
+        }
+
+        return res;
+
+    }
+
+}
+```
+### 647.回文子串
+题目：
+时空：
+思路：
+代码：
+```java
+
+```
 ### x.xx
 题目：
 时空：
 思路：
 代码：
 ```java
+
+```
+
+# Python
+## Easy
+### 1.两数之和
+```python
+class Solution:
+
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+
+        d = {} # 值 当key 索引当 value
+
+        for i in range(len(nums)):
+
+            if (target - nums[i]) in d:
+
+                return [d.get(target - nums[i]), i]
+
+            d[nums[i]] = i
+
+        return [-1, -1]
+```
+### 20.有效的括号
+```python
+class Solution:
+
+    def isValid(self, s: str) -> bool:
+
+        stack = []
+
+        for i in s:
+
+            if i == "(" or i == "[" or i == "{":
+
+                stack.append(i)
+
+            elif i == ")":
+
+                if stack and stack[-1] == "(":
+
+                    stack.pop()
+
+                else:
+
+                    return False
+
+            elif i == "]":
+
+                if stack and stack[-1] == "[":
+
+                    stack.pop()
+
+                else:
+
+                    return False
+
+            else:
+
+                if stack and stack[-1] == "{":
+
+                    stack.pop()
+
+                else:
+
+                    return False
+
+        return len(stack) == 0
+```
+### 11.盛最多水的容器
+```python
+class Solution:
+
+    def maxArea(self, height: List[int]) -> int:
+
+        left = 0
+
+        right = len(height) - 1
+
+        res = 0
+
+        while left < right:
+
+            h = height[left]
+
+            if height[left] <= height[right]:
+
+                left += 1
+
+            else:
+
+                h = height[right]
+
+                right -= 1
+
+            # 这里的 +1 是因为左右已经移动过一次了，要统计的是移动前的所以 + 1
+
+            res = max(res, (right - left + 1) * h)
+
+        return res
+```
+### 15.三数之和
+```python
+class Solution:
+
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+
+        nums.sort()
+
+        n = len(nums)
+
+        res: list[list[int]] = []
+
+        for index in range(n):
+
+            if index > 0 and nums[index] == nums[index - 1]:
+
+                continue
+
+            left = index + 1
+
+            right = n - 1
+
+            while left < right:
+
+                if nums[index] + nums[left] + nums[right] == 0:
+
+                    res.append([nums[index], nums[left], nums[right]])
+
+                    while left < right and nums[left + 1] == nums[left]:
+
+                        left = left + 1
+
+                    left = left + 1
+
+                    while right > left and nums[right - 1] == nums[right]:
+
+                        right = right - 1
+
+                    right = right - 1
+
+                elif nums[index] + nums[left] + nums[right] < 0:
+
+                    left += 1
+
+                else:
+
+                    right -= 1
+
+        return res
+```
+### x.xxx
+```python
 
 ```
