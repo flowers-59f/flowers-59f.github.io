@@ -1,0 +1,146 @@
+{{- define "main" }}
+<style>
+  .friends {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--gap);
+    margin: 28px 0 8px;
+  }
+
+  /* 好友卡片 */
+  .friend-card {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--gap);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .friend-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* 头像 + 名称/网址 */
+  .friend-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .friend-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+    overflow: hidden;
+  }
+
+  .friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .friend-avatar span {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--secondary);
+  }
+
+  .friend-meta {
+    min-width: 0;
+  }
+
+  .friend-name {
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--content);
+    line-height: 1.4;
+  }
+
+  /* 关系标签 */
+  .friend-rel {
+    display: inline-block;
+    margin-inline-start: 8px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: 999px;
+    background: var(--code-bg);
+    color: var(--secondary);
+    vertical-align: middle;
+  }
+
+  .friend-url {
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 简介 */
+  .friend-desc {
+    margin: 12px 0 16px;
+    font-size: 14px;
+    color: var(--secondary);
+    line-height: 1.75;
+  }
+
+  /* 多行简介（空行分段）时统一段落间距 */
+  .friend-desc p {
+    margin: 0 0 6px;
+  }
+
+  .friend-desc p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* 访问按钮 */
+  .friend-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: var(--radius);
+    background: var(--code-bg);
+    color: var(--content);
+    font-size: 15px;
+    text-align: center;
+    transition: background 0.15s, opacity 0.15s;
+  }
+
+  .friend-btn:hover {
+    background: var(--border);
+    opacity: 0.85;
+  }
+
+  .friends-empty {
+    color: var(--secondary);
+  }
+</style>
+
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{- if .Description }}
+  <div class="post-description">
+    {{ .Description }}
+  </div>
+  {{- end }}
+</header>
+
+{{- if .Content }}
+<div class="friends">
+  {{ .Content }}
+</div>
+{{- else }}
+<p class="friends-empty">暂无友链</p>
+{{- end }}
+
+{{- end }}{{/* end main */}}

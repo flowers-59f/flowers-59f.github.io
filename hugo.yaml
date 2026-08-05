@@ -49,12 +49,15 @@
         - name: 搜索
           pageRef: search/
           weight: 20
+        - name: 友链
+          pageRef: friends/
+          weight: 21
         - name: 关于
           pageRef: about/
-          weight: 21
+          weight: 22
         - name: 记录
           pageRef: timeline/
-          weight: 22
+          weight: 23
 # https://github.com/adityatelange/hugo-PaperMod/wiki/Features#search-page
  outputs:
   home:
