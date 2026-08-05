@@ -7,6 +7,10 @@
 {{- if findRE `\]\(https?://[^)]+\)` $url }}
   {{- $url = replaceRE `^.*?\]\((https?://[^)]+)\).*$` `$1` $url }}
 {{- end }}
+{{- /* 漏写协议时自动补 https://（浏览器会把无协议地址当相对路径） */}}
+{{- if and $url (not (hasPrefix $url "http")) }}
+  {{- $url = printf "https://%s" $url }}
+{{- end }}
 {{- /* 本地路径解析为 bundle 资源，找不到则显示首字占位 */}}
 {{- if and $avatar (not (hasPrefix $avatar "http")) }}
   {{- with .Page.Resources.GetMatch $avatar }}

@@ -13,7 +13,7 @@ url: "/friends/"
      2. 网络图片：avatar 直接填 http 开头的链接
      不填 avatar 时头像位置会显示名字的第一个字。 -->
 
-{{< friend name="Nozom1ff" url="nozom1-mizuh0.vercel.app/" avatar="avatars/fanjiaming.jpg" rel="Friend" >}}
+{{< friend name="Nozom1ff" url="https://nozom1-mizuh0.vercel.app/" avatar="avatars/fanjiaming.jpg" rel="Friend" >}}
 Chase AI infra, evolve perpetually.
 {{< /friend >}}
 
