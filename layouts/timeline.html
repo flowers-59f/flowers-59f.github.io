@@ -1,0 +1,92 @@
+{{- define "main" }}
+<style>
+  .timeline {
+    position: relative;
+    margin: 28px 0 8px;
+  }
+
+  /* 左侧竖直时间线 */
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+    border-radius: 1px;
+  }
+
+  /* 时间点：日期标题 */
+  .timeline h2 {
+    position: relative;
+    margin: 28px 0 6px;
+    padding-left: 24px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--content);
+  }
+
+  .timeline h2:first-child {
+    margin-top: 0;
+  }
+
+  /* 时间点上的圆点 */
+  .timeline h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+  }
+
+  /* 事件描述 */
+  .timeline p {
+    margin: 0 0 6px;
+    padding-left: 24px;
+    color: var(--secondary);
+    line-height: 1.8;
+  }
+
+  .timeline ul,
+  .timeline ol {
+    margin: 0 0 6px;
+    padding-left: 24px;
+    list-style-position: inside;
+    color: var(--secondary);
+    line-height: 1.8;
+  }
+
+  .timeline a {
+    box-shadow: 0 1px 0;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .timeline-empty {
+    color: var(--secondary);
+  }
+</style>
+
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{- if .Description }}
+  <div class="post-description">
+    {{ .Description }}
+  </div>
+  {{- end }}
+</header>
+
+{{- if .Content }}
+<div class="timeline">
+  {{ .Content }}
+</div>
+{{- else }}
+<p class="timeline-empty">暂无记录</p>
+{{- end }}
+
+{{- end }}{{/* end main */}}
