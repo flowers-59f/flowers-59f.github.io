@@ -3,6 +3,10 @@
 {{- $avatar := .Get "avatar" | default "" }}
 {{- $rel := .Get "rel" | default "" }}
 {{- $initial := $name | truncate 1 "" }}
+{{- /* 兼容误填 markdown 链接格式 [文字](https://...) ，自动提取出真正的网址 */}}
+{{- if findRE `\]\(https?://[^)]+\)` $url }}
+  {{- $url = replaceRE `^.*?\]\((https?://[^)]+)\).*$` `$1` $url }}
+{{- end }}
 {{- /* 本地路径解析为 bundle 资源，找不到则显示首字占位 */}}
 {{- if and $avatar (not (hasPrefix $avatar "http")) }}
   {{- with .Page.Resources.GetMatch $avatar }}
