@@ -1,7 +1,12 @@
 {{- define "main" }}
 <style>
+  /* 与列表页（首页/归档等）保持一致的底色，深浅色自动切换 */
   body {
-    background-color: #f0f0f0;
+    background-color: var(--code-bg);
+  }
+
+  [data-theme="dark"] body {
+    background-color: var(--theme);
   }
 </style>
 <header class="page-header">

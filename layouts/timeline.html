@@ -1,5 +1,14 @@
 {{- define "main" }}
 <style>
+  /* 与列表页（首页/归档等）保持一致的底色 */
+  body {
+    background-color: var(--code-bg);
+  }
+
+  [data-theme="dark"] body {
+    background-color: var(--theme);
+  }
+
   .timeline {
     position: relative;
     margin: 28px 0 8px;
