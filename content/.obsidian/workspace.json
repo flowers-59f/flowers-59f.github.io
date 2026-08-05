@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "friends/index.md",
+                "file": "timeline.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "timeline"
             }
           }
         ]
@@ -187,8 +187,8 @@
   },
   "active": "fe0970395883b308",
   "lastOpenFiles": [
-    "friends/avatars/zhangsan.jpg",
     "friends/index.md",
+    "friends/avatars/zhangsan.jpg",
     "friends/avatars/fanjiaming.jpg",
     "friends/avatars",
     "friends",

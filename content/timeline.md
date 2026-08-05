@@ -15,7 +15,7 @@ url: "/timeline/"
 简单学习了一下微服务，看的是尚硅谷的教程[Spring Cloud](https://www.bilibili.com/video/BV1UJc2ezEFU?spm_id_from=333.1387.favlist.content.click)。
 
 ## 2026-03-02至2026-04-01
-刷代码随想录，同时准备蓝桥杯。
+刷代码随想录，同时准备蓝桥杯。然后尝试着给开源项目做贡献，成为了Apache Inlong的contributor。
 
 ## 2026-01-07至2026-03-02
 第一段实习-小厂远程实习-java后端开发实习生。
