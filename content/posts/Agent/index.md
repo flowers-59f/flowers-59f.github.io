@@ -7541,6 +7541,38 @@ ns,nt -> **kwargs 接收若干带名称的参数  包裹关键字参数
 然后顺序是必须要按这个顺序来的
 """
 ```
+# 其他
+## 通过礼品卡充值chat gpt
+### 前置准备
+先去[注册](https://account.apple.com/account) 一个苹果美区ID，邮箱绑一个国内没用过的就行，手机号可以用之前绑定过的，国内手机号就行，地区选美国就好了。
+
+还需要一张可以境外支付的卡，我是用的招商万事达。
+### 礼品卡购买及兑换
+前往[美国Apple Store](https://www.apple.com/us/store) (登录美区账号or不登录都可以)点右上角点搜索按钮搜索Apple Gift Card -> Shop Now -> Buy
+然后到达购买界面会让你选一些东西
+**How would you like to send it?**
+Email
+**Choose a design.**
+随意选一个
+**Choose an amount.**
+选择你想要充值的金额
+**Enter your delivery details.**
+**Who’s it for?**
+随便填
+填一个接收邮箱，也就是接收这个礼品卡邮件的邮箱，邮件里面有领取链接和兑换码。
+**Who’s it from?**
+随便填
+随便填一个别的或者和上面一样好像也可以
+**Want to add a personalized message?**
+No message
+
+然后下一步就到了支付页面，有登录选择Checkout的支付方式（Apple Pay我老是提示修改邮寄账单地址，走不了这个，不过也可以试试）。没登录就选银行卡的支付方式。然后先填好银行卡信息。账单地址填国内的就好，手机号也用国内的就行。
+![](账单地址填写.png)
+### 充值
+完成之后就会收到一个邮件，在手机/电脑上先登录美区账号的App Store，再去邮件里面点击领取，或者在登录的美区账号的App Store里面输入邮件里面的兑换码。
+
+然后到手机端先用美区账号下载一下ChatGpt，然后登录。设置 -> 升级套餐 -> 通过Apple升级就可以使用账号余额了。
+
 
 
 

@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "2fef069e8f1ee072",
+        "id": "15d6f8272cdfa8b7",
         "type": "tabs",
         "children": [
           {
-            "id": "fe0970395883b308",
+            "id": "f33b9b18371075ed",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "meld-encrypted-view",
               "state": {
-                "file": "friends/index.md",
+                "file": "posts/实习工作总结/index.mdenc",
                 "mode": "source",
                 "source": false
               },
@@ -182,13 +182,26 @@
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false
+      "command-palette:打开命令面板": false,
+      "meld-encrypt:New encrypted note": false,
+      "meld-encrypt:Lock and Close all open encrypted notes": false,
+      "meld-encrypt:Convert to or from an Encrypted note": false,
+      "meld-encrypt:Encrypt Selection": false,
+      "meld-encrypt:Decrypt at Cursor": false
     }
   },
-  "active": "fe0970395883b308",
+  "active": "f33b9b18371075ed",
   "lastOpenFiles": [
-    "timeline.md",
+    "posts/实习工作总结/测试数据.png",
+    "posts/实习工作总结/测试中心.png",
+    "posts/Git.md",
+    "posts/实习工作总结/index.mdenc",
+    "posts/实习工作总结/各部分超时时间配置.png",
+    "posts/Agent/index.md",
+    "posts/Agent/账单地址填写.png",
+    "posts/Agent/Skill路由.png",
     "friends/index.md",
+    "timeline.md",
     "friends/avatars/zhangsan.jpg",
     "friends/avatars/fanjiaming.jpg",
     "friends/avatars",
@@ -200,14 +213,9 @@
     "posts/代码随想录学习/替换数字.png",
     "posts/代码随想录学习/459.png",
     "posts/代码随想录学习/28.png",
-    "posts/代码随想录学习/KMP_7.png",
-    "posts/代码随想录学习/KMP_6.png",
-    "posts/代码随想录学习/KMP_5.png",
-    "posts/代码随想录学习/KMP_4.png",
     "posts/开源项目学习-novel-cloud/index.md",
     "posts/SQL题/index.md",
     "posts/RabbitMQ/index.md",
-    "posts/Git.md",
     "posts/开源项目学习-novel-cloud/新建 文本文档.txt",
     "posts/开源项目学习-novel-cloud",
     "posts/小说网站开源项目学习",
