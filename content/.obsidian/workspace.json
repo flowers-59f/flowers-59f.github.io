@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "15d6f8272cdfa8b7",
+        "id": "2f6f569298146463",
         "type": "tabs",
         "children": [
           {
-            "id": "f33b9b18371075ed",
+            "id": "62c8c7638aaebc8d",
             "type": "leaf",
             "state": {
-              "type": "meld-encrypted-view",
+              "type": "markdown",
               "state": {
-                "file": "posts/实习工作总结/index.mdenc",
+                "file": "posts/Agent/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -80,7 +80,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "17ef64b2dd834161",
@@ -190,14 +191,15 @@
       "meld-encrypt:Decrypt at Cursor": false
     }
   },
-  "active": "f33b9b18371075ed",
+  "active": "62c8c7638aaebc8d",
   "lastOpenFiles": [
+    "posts/Agent/TurnAndStep.png",
+    "posts/Agent/index.md",
+    "posts/实习工作总结/index.mdenc",
     "posts/实习工作总结/测试数据.png",
     "posts/实习工作总结/测试中心.png",
     "posts/Git.md",
-    "posts/实习工作总结/index.mdenc",
     "posts/实习工作总结/各部分超时时间配置.png",
-    "posts/Agent/index.md",
     "posts/Agent/账单地址填写.png",
     "posts/Agent/Skill路由.png",
     "friends/index.md",
@@ -211,8 +213,6 @@
     "未命名.base",
     "posts/代码随想录学习/index.md",
     "posts/代码随想录学习/替换数字.png",
-    "posts/代码随想录学习/459.png",
-    "posts/代码随想录学习/28.png",
     "posts/开源项目学习-novel-cloud/index.md",
     "posts/SQL题/index.md",
     "posts/RabbitMQ/index.md",
