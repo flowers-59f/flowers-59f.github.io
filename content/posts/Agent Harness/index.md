@@ -709,3 +709,4 @@ dsh 的安全设计是三层各管一件事：
 |**同一世界内的进程约束**|用 `sandbox` 家族，不换世界|
 |**真正隔离的远程环境**|直接换 Provider，不再套本机沙箱|
 # Claude Code Harness 
+# DeerFlow Harness
