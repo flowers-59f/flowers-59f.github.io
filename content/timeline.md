@@ -8,6 +8,9 @@ url: "/timeline/"
      从上到下按时间从新到旧排列，新增的写在最上面。
      事件支持普通 markdown，如加粗、行内链接 [Apache InLong](https://inlong.apache.org)。 -->
 
+## 2026-06-30至今
+第二段实习-迈瑞医疗-AI应用开发实习生。
+
 ## 2026-05-09至2026-06-05
 学习agent相关内容。主要是vibe coding了一个简单项目，学习了两个开源项目 [仿cc](https://github.com/Windy3f3f3f3f/claude-code-from-scratch)和[智能食谱agent](https://github.com/skygazer42/GustoBot )，背了一下JavaGuide上[AI应用开发](https://javaguide.cn/ai/) 的八股，其他就是复习了一下后端的一些内容和hot100的mid。
 

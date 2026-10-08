@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Spring Cloud/index.md",
+                "file": "Agent 八股/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -189,6 +189,13 @@
   },
   "active": "cfc4ec603eed7a5e",
   "lastOpenFiles": [
+    "Agent Harness/index.md",
+    "Agent Project/index.md",
+    "Agent 八股/index.md",
+    "Agent Project",
+    "未命名文件夹",
+    "vibe coding/index.md",
+    "Spring Cloud/index.md",
     "Spring Cloud/按group显示.png",
     "timeline.md",
     "个人面试题总结/index.md",
@@ -204,7 +211,6 @@
     "Agent/分层校验策略.png",
     "Agent/Skill路由.png",
     "Apache-InLong社区贡献/12104_7.png",
-    "Agent/传统RAG的局限性.png",
     "SQL题/index.md",
     "八股/index.md",
     "实习工作总结/index.mdenc",
@@ -212,7 +218,6 @@
     "RabbitMQ/index.md",
     "开源项目学习-novel-cloud/index.md",
     "力扣Top250剩余题目/index.md",
-    "Spring Cloud/index.md",
     "Docker/index.md",
     "力扣TOP250剩余题目/index.md",
     "蓝桥杯备赛/index.md",
@@ -227,8 +232,6 @@
     "Docker/新建 文本文档.txt",
     "Docker",
     "代码随想录学习/开发商购买土地.png.crdownload",
-    "代码随想录学习/区间和.png.crdownload",
-    "代码随想录学习/59.png.crdownload",
     "代码随想录学习.md"
   ]
 }

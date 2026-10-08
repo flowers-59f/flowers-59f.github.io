@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "2f6f569298146463",
+        "id": "9859626cd084d8ad",
         "type": "tabs",
         "children": [
           {
-            "id": "62c8c7638aaebc8d",
+            "id": "ee0d8c087b31c07e",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -80,8 +80,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "17ef64b2dd834161",
@@ -191,10 +190,11 @@
       "meld-encrypt:Decrypt at Cursor": false
     }
   },
-  "active": "62c8c7638aaebc8d",
+  "active": "ee0d8c087b31c07e",
   "lastOpenFiles": [
-    "posts/Agent/TurnAndStep.png",
+    "posts/Agent/dsh架构.png",
     "posts/Agent/index.md",
+    "posts/Agent/TurnAndStep.png",
     "posts/实习工作总结/index.mdenc",
     "posts/实习工作总结/测试数据.png",
     "posts/实习工作总结/测试中心.png",
@@ -212,7 +212,6 @@
     "about.md",
     "未命名.base",
     "posts/代码随想录学习/index.md",
-    "posts/代码随想录学习/替换数字.png",
     "posts/开源项目学习-novel-cloud/index.md",
     "posts/SQL题/index.md",
     "posts/RabbitMQ/index.md",
