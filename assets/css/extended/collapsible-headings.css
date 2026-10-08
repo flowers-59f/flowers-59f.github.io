@@ -1,0 +1,169 @@
+/* ==========================================================================
+   标题折叠 / Collapsible headings (Obsidian 风格)
+   --------------------------------------------------------------------------
+   PaperMod 会自动把 assets/css/extended/*.css 合并进主样式表，
+   所以这里不需要在模板里额外 <link>。
+
+   结构（由 assets/js/collapsible-headings.js 生成）：
+
+     .post-content
+       └─ section.ch-section[data-ch-level="2"]
+            ├─ h2.ch-heading          ← 标题本身（内含 button.ch-toggle）
+            └─ div.ch-body            ← 该标题下属的所有内容
+                 └─ section.ch-section[data-ch-level="3"]   ← 嵌套的子标题
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 首屏防闪烁
+   JS 跑起来之前，先把「除标题以外的正文」藏起来，避免出现
+   「先全部展开 → 再突然折叠」的闪动。JS 完成后会给 <html> 加上
+   .ch-built，本节规则立即失效；如果 JS 没能加载，extend_head.html 里的
+   兜底定时器会移除 .ch-js，正文会重新显示。
+
+   注意：.ch-js 只会加在「正文里确实有标题的页面」上（由 extend_head.html
+   判断），所以没有标题的文章完全不受影响。
+   -------------------------------------------------------------------------- */
+html.ch-js:not(.ch-built) .post-content > :not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
+   2. 折叠结构
+   -------------------------------------------------------------------------- */
+.post-content .ch-section {
+    display: block;
+}
+
+.post-content .ch-body {
+    display: block;
+}
+
+/* 折叠时只隐藏「自己那一层」的 body，
+   嵌套层级更深的 body 一并被隐藏，展开父级后子级仍保持它自己的状态 */
+.post-content .ch-section.is-collapsed > .ch-body {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. 标题与折叠箭头
+   -------------------------------------------------------------------------- */
+.post-content .ch-heading {
+    /* 整行可点：点标题文字也能折叠（点标题里的链接除外） */
+    cursor: pointer;
+}
+
+.post-content .ch-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    /* 跟着标题字号缩放，但限制在 15~22px，免得 h1/h2 的箭头过于笨重 */
+    width: 1.05em;
+    height: 1.05em;
+    min-width: 15px;
+    min-height: 15px;
+    max-width: 22px;
+    max-height: 22px;
+    margin: 0 0.3em 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--secondary);
+    font: inherit;
+    line-height: 1;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.post-content .ch-toggle > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* 折叠时朝右，展开时转成朝下 */
+    transform: rotate(0deg);
+    transform-origin: 50% 50%;
+    transition: transform 0.18s ease;
+}
+
+.post-content .ch-section:not(.is-collapsed) > .ch-heading > .ch-toggle > svg {
+    transform: rotate(90deg);
+}
+
+.post-content .ch-toggle:hover,
+.post-content .ch-toggle:focus-visible {
+    color: var(--primary);
+    background-color: var(--tertiary);
+    outline: none;
+}
+
+/* 标题下面没有任何内容的「空章节」：箭头只占位、不可点，
+   这样标题文字依然和其它标题左对齐 */
+.post-content .ch-section.ch-empty > .ch-heading {
+    cursor: default;
+}
+
+.post-content .ch-section.ch-empty > .ch-heading > .ch-toggle {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   4. 顶部「展开全部 / 折叠全部」工具条
+   -------------------------------------------------------------------------- */
+.post-content .ch-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 0 0 18px;
+    font-size: 13px;
+}
+
+.post-content .ch-toolbar button {
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--entry);
+    color: var(--secondary);
+    font: inherit;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.post-content .ch-toolbar button:hover,
+.post-content .ch-toolbar button:focus-visible {
+    color: var(--primary);
+    border-color: var(--secondary);
+    outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. 打印 / 降低动效
+   -------------------------------------------------------------------------- */
+@media print {
+    .post-content .ch-section.is-collapsed > .ch-body {
+        display: block !important;
+    }
+
+    .post-content .ch-toggle,
+    .post-content .ch-toolbar {
+        display: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .post-content .ch-toggle,
+    .post-content .ch-toggle > svg {
+        transition: none;
+    }
+}

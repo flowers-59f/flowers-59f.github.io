@@ -2,4 +2,35 @@
 {{- /*     Insert any custom code (web-analytics, resources, etc.) - it will appear in the <head></head> section of every page. */ -}}
 {{- /*     Can be overwritten by partial with the same name in the global layouts. */ -}}
 {{ partial "mathjax.html" . }}
+
+{{- /* ===================================================================
+       标题折叠（Obsidian 风格）
+       样式：assets/css/extended/collapsible-headings.css
+             —— PaperMod 会自动把 assets/css/extended/*.css 合并进主样式表，不用写 <link>
+       脚本：assets/js/collapsible-headings.js
+       =================================================================== */ -}}
+{{- $foldHeadings := false -}}
+{{- if eq .Kind "page" -}}
+{{- if findRE `<h[1-6][ >]` .Content 1 -}}
+{{- $foldHeadings = true -}}
+{{- end -}}
+{{- end -}}
+{{- if $foldHeadings }}
+{{- with resources.Get "js/collapsible-headings.js" }}
+{{- $chJS := . | fingerprint "sha256" }}
+<script defer src="{{ $chJS.RelPermalink }}"></script>
+{{- end }}
+<script>
+    /* 首屏防闪烁：正文要由脚本折叠，这里先给 <html> 挂上 .ch-js，
+       配合 CSS 暂时藏起「尚未折叠的正文」，避免出现「先全展开、再突然收起」的闪动。
+       万一脚本没加载成功，4 秒后自动摘掉 .ch-js，正文照常完整显示。 */
+    (function () {
+        var root = document.documentElement;
+        root.classList.add('ch-js');
+        window.setTimeout(function () {
+            if (!root.classList.contains('ch-built')) root.classList.remove('ch-js');
+        }, 4000);
+    })();
+</script>
+{{- end }}
 {{- /* Head custom content area end */ -}}
