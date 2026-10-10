@@ -4,19 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "175da199db7e0c35",
+        "id": "f8891a94b728889c",
         "type": "tabs",
         "children": [
           {
-            "id": "cfc4ec603eed7a5e",
+            "id": "e107e79b65aa0e2a",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "Agent Harness/TurnAndStep.png"
+                "file": "Agent Harness/index.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "TurnAndStep"
+              "icon": "lucide-file",
+              "title": "index"
             }
           }
         ]
@@ -185,31 +187,31 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "cfc4ec603eed7a5e",
+  "active": "e107e79b65aa0e2a",
   "lastOpenFiles": [
-    "Agent Harness/dsh架构.png",
-    "Agent Project/Coding Helper.png",
-    "Agent Project/Simmer智能食谱客服.png",
-    "Agent Project/index.md",
+    "Agent Harness/Multi-Agent 5条原则.png",
+    "Agent Harness/Claude Code Coordinator 四条设计原则.png",
+    "Agent Harness/Claude Code Coordinator、常规模式系统形态.png",
+    "Agent Harness/Claude Code Coordinator vs 常规.png",
+    "Agent Harness/Claude Code Agent 档案.png",
     "Agent Harness/index.md",
-    "Agent Harness/TurnAndStep.png",
+    "Agent Harness/协调者一定要理解全局再安排.png",
+    "Agent Harness/Claude Code 协调者任务流水线.png",
+    "Agent Harness/Claude Code Coordinator模式.png",
+    "Agent Harness/成本下降可以带来能力扩张.png",
+    "Agent Harness/缓存命中要求字节完全相同.png",
+    "Agent Harness/Claude Code 父Agent向子Agent发送消息流程.png",
+    "Agent Project/index.md",
     "Agent 八股/index.md",
     "Agent Project",
     "未命名文件夹",
     "vibe coding/index.md",
     "Spring Cloud/index.md",
-    "Spring Cloud/按group显示.png",
     "timeline.md",
     "个人面试题总结/index.md",
     "Agent/index.md",
     "Git.md",
-    "Agent/LLM wiki生成的文档.png",
-    "Agent/LLM wiki关系图.png",
     "Hot100/index.md",
-    "Agent/向量索引算法分类.png",
-    "Agent/Agent记忆分类全景图.png",
-    "Agent/RAG场景：为什么需要向量数据库.png",
-    "Agent/Embedding&向量检索.png",
     "SQL题/index.md",
     "八股/index.md",
     "实习工作总结/index.mdenc",
