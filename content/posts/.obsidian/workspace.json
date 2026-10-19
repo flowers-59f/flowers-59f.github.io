@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "f8891a94b728889c",
+        "id": "57d224e311ce8c41",
         "type": "tabs",
         "children": [
           {
-            "id": "e107e79b65aa0e2a",
+            "id": "f777cd5dc11b46b1",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -187,20 +187,21 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "e107e79b65aa0e2a",
+  "active": "cbf72519717ac037",
   "lastOpenFiles": [
-    "Agent Harness/Multi-Agent 5条原则.png",
-    "Agent Harness/Claude Code Coordinator 四条设计原则.png",
-    "Agent Harness/Claude Code Coordinator、常规模式系统形态.png",
-    "Agent Harness/Claude Code Coordinator vs 常规.png",
-    "Agent Harness/Claude Code Agent 档案.png",
+    "Agent Harness/Claude Code Skill清单准备.png",
+    "Agent Harness/Claude Code slash command&skill.png",
+    "Agent Harness/Claude Code Skill 调用流程.png",
+    "Agent Harness/Claude Code 工具描述加载多级处理.png",
+    "Agent Harness/skill三层结构.png",
+    "Agent Harness/style-check skill.png",
+    "Agent Harness/Skill结构.png",
+    "Agent Harness/Agent 多轮循环 vs RAG.png",
+    "Agent Harness/Claude Code 搜索工具三件套组合工作流.png",
+    "Agent Harness/RAG 切片.png",
+    "Agent Harness/异常处理才是主循环的主要工作.png",
     "Agent Harness/index.md",
-    "Agent Harness/协调者一定要理解全局再安排.png",
-    "Agent Harness/Claude Code 协调者任务流水线.png",
-    "Agent Harness/Claude Code Coordinator模式.png",
-    "Agent Harness/成本下降可以带来能力扩张.png",
-    "Agent Harness/缓存命中要求字节完全相同.png",
-    "Agent Harness/Claude Code 父Agent向子Agent发送消息流程.png",
+    "Apache-InLong社区贡献/index.md",
     "Agent Project/index.md",
     "Agent 八股/index.md",
     "Agent Project",
@@ -215,7 +216,6 @@
     "SQL题/index.md",
     "八股/index.md",
     "实习工作总结/index.mdenc",
-    "Apache-InLong社区贡献/index.md",
     "RabbitMQ/index.md",
     "开源项目学习-novel-cloud/index.md",
     "力扣Top250剩余题目/index.md",
