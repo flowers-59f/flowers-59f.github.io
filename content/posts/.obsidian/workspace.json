@@ -4,19 +4,18 @@
     "type": "split",
     "children": [
       {
-        "id": "e01fc00446442645",
+        "id": "d2c4bc02381f7c6f",
         "type": "tabs",
         "children": [
           {
-            "id": "8bc548fbcd3e7aa4",
+            "id": "ab63c5fce4b95057",
             "type": "leaf",
             "state": {
-              "type": "meld-encrypted-view",
+              "type": "markdown",
               "state": {
-                "file": "实习工作总结/index.mdenc",
+                "file": "Agent Project/index.md",
                 "mode": "source",
-                "source": false,
-                "backlinks": false
+                "source": false
               },
               "icon": "lucide-file",
               "title": "index"
@@ -188,31 +187,32 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "8bc548fbcd3e7aa4",
+  "active": "ab63c5fce4b95057",
   "lastOpenFiles": [
-    "实习工作总结/各部分超时时间配置.png",
-    "实习工作总结/index.mdenc",
-    "实习工作总结/测试中心.png",
+    "Agent Project/Hive 个人多智能体专家团.png",
+    "Agent Project/index.md",
+    "Agent Project/Hive 个人多智能体专家团.png",
     "Agent Harness/index.md",
+    "Agent 评测/index.md",
+    "实习工作总结/index.mdenc",
+    "实习工作总结/MMR计算公式.png",
+    "Agent 评测/Pasted image 20261027091411.png",
+    "2026-11-05.md",
+    "实习工作总结/各部分超时时间配置.png",
+    "实习工作总结/测试中心.png",
     "Agent 八股/index.md",
     "Agent Harness/Pasted image 20261103093540.png",
     "Agent Harness/dsh架构.png",
     "Agent Harness/TurnAndStep.png",
     "Agent Harness/Tool-Use Loop.png",
-    "Agent Harness/Codex 上下文压缩总结.png",
-    "Agent Harness/Codex 长期记忆遗忘.png",
-    "Agent Harness/Codex 记忆渐进式读取.png",
-    "Agent Harness/Codex 长期记忆的三层结构.png",
     "vibe coding/index.md",
     "Apache-InLong社区贡献/index.md",
-    "Agent 评测/index.md",
     "Git.md",
     "Docker/index.md",
     "Agent 评测",
     "未命名文件夹",
     "LLM 基础知识/index.md",
     "LLM 基础知识",
-    "Agent Project/index.md",
     "Agent Project",
     "Spring Cloud/index.md",
     "timeline.md",
@@ -229,7 +229,6 @@
     "代码随想录学习/index.md",
     "Apache-InLong社区贡献/Apache-InLong社区贡献.md",
     "Gleaner积微学习助手项目文档/index.md",
-    "my-first/post.md",
     "实习工作总结/未命名.base",
     "实习工作总结/新建 文本文档.txt",
     "实习工作总结",
